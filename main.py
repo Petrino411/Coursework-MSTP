@@ -4,6 +4,7 @@ from add import *
 import sqlite3
 
 # Устанавливаем соединение с базой данных
+# Устанавливаем соединение с базой данных
 connection = sqlite3.connect('tasks.db')
 cursor = connection.cursor()
 
