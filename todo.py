@@ -93,14 +93,11 @@ class MainWindow(QMainWindow):
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.horizontalLayout_2.addWidget(self.label_2)
-        self.label_4 = QtWidgets.QLabel(parent=self.widget1)
+
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.label_4.setFont(font)
-        self.label_4.setText("")
-        self.label_4.setObjectName("label_4")
-        self.horizontalLayout_2.addWidget(self.label_4)
+
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
         self.label_5 = QtWidgets.QLabel(parent=self.widget1)
         font = QtGui.QFont()
@@ -201,9 +198,15 @@ class MainWindow(QMainWindow):
         self.addButton.clicked.connect(self.add)
         self.editButton.clicked.connect(self.edit)
 
+        self.listWidget.itemSelectionChanged.connect(self.getDescription)
+
+
+        self.dateEdit = QtWidgets.QDateEdit()
+
         self.msg_add = Add()
         self.msg_edit = Edit()
 
+        self.lst_do = [tuple]
         #Data.create__()
         #Data.clear__()
         #db.list_tasks()
@@ -211,11 +214,24 @@ class MainWindow(QMainWindow):
 
 
     def dateview(self):
-        self.label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toPyDate()))
+        self.label.setText(f'Current date: {self.calendarWidget.selectedDate().toString()}')
 
     def dateList(self):
         self.listWidget.clear()
-        self.listWidget.addItem(db.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate())))
+        self.lst_do = db.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate()))
+        for i in range(len(self.lst_do)):
+            self.listWidget.addItem(f'{i+1}: {self.lst_do[i][0]} {self.lst_do[i][1]}\n')
+        self.listWidget.currentIndex()
+
+
+    def getDescription(self):
+        text = self.listWidget.currentItem().text()
+        index = int(text[:text.find(':')])
+        desc = self.lst_do[index-1][2]
+        self.textBrowser.setText(str(desc))
+        self.label_2.setText(f'Current matter: {str(self.lst_do[index-1][1])}')
+
+
 
     def add(self):
         self.msg_add.show(self.calendarWidget)

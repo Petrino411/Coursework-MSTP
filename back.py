@@ -47,11 +47,11 @@ class Data():
         cls.connection.commit()
 
     @classmethod
-    def get_List_tasks(cls, date):
-        query = 'SELECT time, title FROM Tasks WHERE Date = ?'
+    def get_List_tasks(cls, date) -> list[tuple]:
+        query = 'SELECT time, title, description FROM Tasks WHERE Date = ?'
         cls.cursor.execute(query, (date,))
         tasks = cls.cursor.fetchall()
-        return str(tasks)
+        return tasks
 
     @classmethod
     def remove_task(cls):
