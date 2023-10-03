@@ -205,9 +205,10 @@ class MainWindow(QMainWindow):
         self.msg_add = Add()
         self.msg_edit = Edit()
 
-        self.data = Data()
-        self.data.add_task('01.01.01', '12.12', 'ujdyj', 'dfgdfg')
-        self.data.list_tasks()
+        #Data.create__()
+        Data.clear__()
+        Data.list_tasks()
+
 
 
     def dateview(self):

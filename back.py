@@ -2,13 +2,11 @@ import sqlite3
 
 
 class Data():
-    def __init__(self):
-        super().__init__()
-        self.connection = sqlite3.connect('data/tasks.db')
-        self.cursor = self.connection.cursor()
-
-        # Создаем таблицу Tasks
-        self.cursor.execute('''
+    @classmethod
+    def create__(cls):
+        connection = sqlite3.connect('data/tasks.db')
+        cursor = connection.cursor()
+        cursor.execute('''
         CREATE TABLE IF NOT EXISTS Tasks (
         id INTEGER PRIMARY KEY,
         date TEXT NOT NULL,
@@ -18,28 +16,39 @@ class Data():
         )''')
 
 
-        # Функция для добавления новой задачи
-
-    def add_task(self,date, time, title, description):
-        self.cursor.execute('INSERT INTO Tasks (date, time, title, description) VALUES (?,?,?,?)', (date, time, title, description,))
-        self.connection.commit()
-
-
-    # Функция для обновления статуса задачи
-
-    def edit_task(self,task_id, status):
-        self.cursor.execute('UPDATE Tasks SET status = ? WHERE id = ?', (status, task_id))
-        self.connection.commit()
+    @classmethod
+    def add_task(cls,date, time, title, description):
+        connection = sqlite3.connect('data/tasks.db')
+        cursor = connection.cursor()
+        cursor.execute('INSERT INTO Tasks (date, time, title, description) VALUES (?,?,?,?)', (date, time, title, description,))
+        connection.commit()
+        connection.close()
 
 
-    # Функция для вывода списка задач
+    @classmethod
+    def edit_task(cls,task_id, status):
+        connection = sqlite3.connect('data/tasks.db')
+        cursor = connection.cursor()
+        cursor.execute('UPDATE Tasks SET status = ? WHERE id = ?', (status, task_id))
+        connection.commit()
+        connection.close()
 
-    def list_tasks(self,):
-        self.cursor.execute('SELECT * FROM Tasks')
-        tasks = self.cursor.fetchall()
+
+    @classmethod
+    def list_tasks(cls):
+        connection = sqlite3.connect('data/tasks.db')
+        cursor = connection.cursor()
+        cursor.execute('SELECT * FROM Tasks')
+        tasks = cursor.fetchall()
         for task in tasks:
             print(task)
+        connection.close()
 
+    @classmethod
+    def clear__(cls):
+        connection = sqlite3.connect('data/tasks.db')
+        cursor = connection.cursor()
+        cursor.execute('DELETE FROM Tasks')
+        connection.commit()
+        connection.close()
 
-
-        self.connection.close()
