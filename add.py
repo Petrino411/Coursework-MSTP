@@ -1,6 +1,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QWidget
 from back import *
+from todo import *
 
 
 class Add(QWidget):
@@ -126,6 +127,8 @@ class Add(QWidget):
         self.label_4.setText(_translate("Form", "Title"))
         self.label_3.setText(_translate("Form", "Notes:"))
         self.pushButton.setText(_translate("Form", "Add"))
+
+        self.dateEdit.setDate(MainWindow.selectedDate)
 
 
 

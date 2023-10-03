@@ -52,3 +52,21 @@ class Data():
         connection.commit()
         connection.close()
 
+
+    @classmethod
+    def get_List_tasks(cls, date):
+        connection = sqlite3.connect('data/tasks.db')
+        cursor = connection.cursor()
+        query ='SELECT time, title FROM Tasks WHERE Date = ?'
+        cursor.execute(query, (date,))
+        tasks = cursor.fetchall()
+        connection.close()
+        return str(tasks)
+    @classmethod
+    def remove_task(cls):
+        connection = sqlite3.connect('data/tasks.db')
+        cursor = connection.cursor()
+        cursor.execute('DELETE FROM Tasks')
+        connection.commit()
+        connection.close()
+
