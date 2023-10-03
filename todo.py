@@ -1,7 +1,8 @@
 from PyQt6.QtWidgets import QMainWindow
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import *
-
+from edit import *
+from back import *
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -199,16 +200,26 @@ class MainWindow(QMainWindow):
         self.label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toPyDate()))
         self.pushButton.clicked.connect(self.add)
 
-        self.msg = Add()
+        self.pushButton_2.clicked.connect(self.edit)
 
+        self.msg_add = Add()
+        self.msg_edit = Edit()
 
+        self.data = Data()
+        self.data.add_task('01.01.01', '12.12', 'ujdyj', 'dfgdfg')
+        self.data.list_tasks()
 
 
     def dateview(self):
         self.label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toPyDate()))
 
+
     def add(self):
-        self.msg.show()
+        self.msg_add.show()
+        self.blockSignals(True)
+
+    def edit(self):
+        self.msg_edit.show()
         self.blockSignals(True)
 
 

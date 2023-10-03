@@ -5,7 +5,6 @@ from PyQt6.QtWidgets import QWidget
 class Add(QWidget):
     def __init__(self):
         super().__init__()
-
         self.setObjectName("Form")
         self.resize(351, 300)
         self.setFixedSize(self.size())
