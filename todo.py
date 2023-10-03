@@ -1,11 +1,8 @@
 from PyQt6.QtWidgets import QMainWindow
-from PyQt6 import QtCore, QtGui, QtWidgets
-from add import *
-from edit import *
 from back import *
-
-global SELECTED_DATE
-
+from PyQt6 import QtCore, QtGui, QtWidgets
+from add import Add
+from edit import Edit
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -207,25 +204,24 @@ class MainWindow(QMainWindow):
         self.msg_add = Add()
         self.msg_edit = Edit()
 
-        # Data.create__()
-        # Data.clear__()
-        # Data.list_tasks()
+        #Data.create__()
+        #Data.clear__()
+        #db.list_tasks()
 
-    @property
-    def selectedDate(self):
-        return self.calendarWidget.selectedDate()
+
 
     def dateview(self):
         self.label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toPyDate()))
 
     def dateList(self):
         self.listWidget.clear()
-        self.listWidget.addItem(Data.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate())))
+        self.listWidget.addItem(db.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate())))
 
     def add(self):
-        self.msg_add.show()
-        self.blockSignals(True)
+        self.msg_add.show(self.calendarWidget)
 
     def edit(self):
-        self.msg_edit.show()
-        self.blockSignals(True)
+        self.msg_edit.show(self.calendarWidget)
+
+
+

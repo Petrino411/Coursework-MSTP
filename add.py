@@ -1,21 +1,22 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QWidget
 from back import *
-from todo import *
 
 
-class Add(QWidget):
+
+
+class Add():
     def __init__(self):
-        super().__init__()
-        self.setObjectName("Form")
-        self.resize(328, 365)
+        self._winAdd = QtWidgets.QWidget()
+        self._winAdd.setObjectName("Form")
+        self._winAdd.resize(328, 365)
 
         font = QtGui.QFont()
         font.setFamily("Calibri Light")
         font.setPointSize(9)
-        self.setFont(font)
-        self.setStyleSheet("background-color: rgb(23, 33, 43);")
-        self.widget = QtWidgets.QWidget(parent=self)
+        self._winAdd.setFont(font)
+        self._winAdd.setStyleSheet("background-color: rgb(23, 33, 43);")
+        self.widget = QtWidgets.QWidget(parent=self._winAdd)
         self.widget.setGeometry(QtCore.QRect(10, 10, 308, 341))
         self.widget.setObjectName("widget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
@@ -118,25 +119,30 @@ class Add(QWidget):
         self.pushButton.setObjectName("pushButton")
         self.verticalLayout.addWidget(self.pushButton)
 
-        QtCore.QMetaObject.connectSlotsByName(self)
+        QtCore.QMetaObject.connectSlotsByName(self._winAdd)
 
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("Form", "Add"))
+        self._winAdd.setWindowTitle(_translate("Form", "Add"))
         self.label.setText(_translate("Form", "Date:"))
         self.label_2.setText(_translate("Form", "Time"))
         self.label_4.setText(_translate("Form", "Title"))
         self.label_3.setText(_translate("Form", "Notes:"))
         self.pushButton.setText(_translate("Form", "Add"))
 
-        self.dateEdit.setDate(MainWindow.selectedDate)
-
-
-
         self.pushButton.clicked.connect(self.ButtonAdd)
 
+
+
+
+
     def ButtonAdd(self):
-        Data.add_task(str(self.dateEdit.date().toPyDate()), str(self.timeEdit.time().toPyTime()), str(self.lineEdit_2.text()),str(self.textEdit.toPlainText()))
-        Data.list_tasks()
+        db.add_task(str(self.dateEdit.date().toPyDate()), str(self.timeEdit.time().toPyTime()), str(self.lineEdit_2.text()),str(self.textEdit.toPlainText()))
+        db.list_tasks()
+
+    def show(self, date: QtWidgets.QCalendarWidget) -> None:
+        self.dateEdit.setDate(date.selectedDate())
+        self._winAdd.show()
+
 
 
 
