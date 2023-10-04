@@ -220,9 +220,10 @@ class MainWindow(QMainWindow):
         self.listWidget.clear()
         self.lst_do = db.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate()))
         for i in range(len(self.lst_do)):
-            self.listWidget.addItem(f'{i+1}: {self.lst_do[i][0]} {self.lst_do[i][1]}\n')
-        self.listWidget.currentIndex()
+            time = self.lst_do[i][0][:self.lst_do[i][0].rfind(':')]
+            self.listWidget.addItem(f'{i+1}: {time} {self.lst_do[i][1]}\n')
 
+        self.listWidget.currentIndex()
 
     def getDescription(self):
         text = self.listWidget.currentItem().text()
@@ -230,8 +231,6 @@ class MainWindow(QMainWindow):
         desc = self.lst_do[index-1][2]
         self.textBrowser.setText(str(desc))
         self.label_2.setText(f'Current matter: {str(self.lst_do[index-1][1])}')
-
-
 
     def add(self):
         self.msg_add.show(self.calendarWidget)
