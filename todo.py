@@ -4,8 +4,11 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
 from edit import Edit
 
+
+"""Главное окно"""
 class MainWindow(QMainWindow):
     def __init__(self):
+        """Интерфейс, сгенерированный с помощью QtDesigner"""
         super().__init__()
         self.setObjectName("MainWindow")
         self.resize(631, 610)
@@ -217,13 +220,13 @@ class MainWindow(QMainWindow):
         #Data.clear__()
         #db.list_tasks()
 
-
-
+    """Отображение выбранной даты"""
     def dateview(self):
 
         self.label.setText(f'Current date: {self.calendarWidget.selectedDate().toString()}')
 
     def dateList(self):
+        """Отображение списка дел по дате"""
         self.label_2.clear()
         self.textBrowser.clear()
         self.listWidget.clear()
@@ -235,7 +238,7 @@ class MainWindow(QMainWindow):
         #self.listWidget.currentIndex()
 
     def getDescription(self):
-
+        """Отображение описание выбранного дела"""
         text = self.listWidget.currentItem().text()
         index = int(text[:text.find(':')])
         desc = self.lst_do[index-1][2]
@@ -243,9 +246,11 @@ class MainWindow(QMainWindow):
         self.label_2.setText(f'Current matter: {str(self.lst_do[index-1][1])}')
 
     def add(self):
+        """Окно добавления"""
         self.msg_add.show(self.calendarWidget)
 
     def edit(self):
+        """Окно редактирования (пока не реализовано)"""
         self.msg_edit.show(self.calendarWidget)
 
 

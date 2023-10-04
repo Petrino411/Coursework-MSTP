@@ -7,6 +7,7 @@ from back import *
 
 class Add():
     def __init__(self):
+        """Интерфейс, сгенерированный с помощью QtDesigner"""
         self._winAdd = QtWidgets.QWidget()
         self._winAdd.setObjectName("Form")
         self._winAdd.resize(328, 365)
@@ -132,10 +133,8 @@ class Add():
         self.pushButton.clicked.connect(self.ButtonAdd)
 
 
-
-
-
     def ButtonAdd(self):
+        """Кнопка добавить данные в БД"""
         db.add_task(str(self.dateEdit.date().toPyDate()), str(self.timeEdit.time().toPyTime()), str(self.lineEdit_2.text()),str(self.textEdit.toPlainText()))
         db.list_tasks()
 

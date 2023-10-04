@@ -11,7 +11,7 @@ class Data():
             cls.object = object.__new__(cls)
         return cls.object
 
-
+    """Создание таблицы"""
     @classmethod
     def create__(cls):
         cls.cursor.execute('''
@@ -23,6 +23,7 @@ class Data():
         description TEXT
         )''')
 
+    """Добавление дела"""
     @classmethod
     def add_task(cls, date, time, title, description):
         cls.cursor.execute('INSERT INTO Tasks (date, time, title, description) VALUES (?,?,?,?)',
@@ -30,10 +31,10 @@ class Data():
         cls.connection.commit()
 
     @classmethod
-    def edit_task(cls, task_id, status):
-        cls.cursor.execute('UPDATE Tasks SET status = ? WHERE id = ?', (status, task_id))
-        cls.connection.commit()
+    def edit_task(cls):
+        None
 
+    """Вывод всех дел"""
     @classmethod
     def list_tasks(cls):
         cls.cursor.execute('SELECT * FROM Tasks')
@@ -41,22 +42,19 @@ class Data():
         for task in tasks:
             print(task)
 
+    """Очистка таблицы"""
     @classmethod
     def clear__(cls):
         cls.cursor.execute('DELETE FROM Tasks')
         cls.connection.commit()
 
+    """Выборка из таблицы по дате"""
     @classmethod
     def get_List_tasks(cls, date) -> list[tuple]:
         query = 'SELECT time, title, description FROM Tasks WHERE Date = ?'
         cls.cursor.execute(query, (date,))
         tasks = cls.cursor.fetchall()
         return tasks
-
-    @classmethod
-    def remove_task(cls):
-        cls.cursor.execute('DELETE FROM Tasks')
-        cls.connection.commit()
 
     def __del__(self):
         self.connection.close()
