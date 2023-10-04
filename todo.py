@@ -216,7 +216,7 @@ class MainWindow(QMainWindow):
     def dateview(self):
         self.label.setText(f'Current date: {self.calendarWidget.selectedDate().toString()}')
 
-    def dateList(self):
+    def dateList(self):#123
         self.listWidget.clear()
         self.lst_do = db.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate()))
         for i in range(len(self.lst_do)):
