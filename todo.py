@@ -192,9 +192,12 @@ class MainWindow(QMainWindow):
         self.editButton.setText(_translate("MainWindow", "Edit"))
         self.addButton.setText(_translate("MainWindow", "Add"))
 
-        self.calendarWidget.selectionChanged.connect(self.dateview)
-        self.calendarWidget.selectionChanged.connect(self.dateList)
-        self.label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toPyDate()))
+        self.calendarWidget.clicked.connect(self.dateview)
+        self.calendarWidget.clicked.connect(self.dateList)
+
+
+
+        self.label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toString()))
         self.addButton.clicked.connect(self.add)
         self.editButton.clicked.connect(self.edit)
 
@@ -202,6 +205,9 @@ class MainWindow(QMainWindow):
 
 
         self.dateEdit = QtWidgets.QDateEdit()
+
+        self.dateList()
+
 
         self.msg_add = Add()
         self.msg_edit = Edit()
@@ -214,18 +220,22 @@ class MainWindow(QMainWindow):
 
 
     def dateview(self):
+
         self.label.setText(f'Current date: {self.calendarWidget.selectedDate().toString()}')
 
-    def dateList(self):#123
+    def dateList(self):
+        self.label_2.clear()
+        self.textBrowser.clear()
         self.listWidget.clear()
         self.lst_do = db.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate()))
         for i in range(len(self.lst_do)):
             time = self.lst_do[i][0][:self.lst_do[i][0].rfind(':')]
             self.listWidget.addItem(f'{i+1}: {time} {self.lst_do[i][1]}\n')
 
-        self.listWidget.currentIndex()
+        #self.listWidget.currentIndex()
 
     def getDescription(self):
+
         text = self.listWidget.currentItem().text()
         index = int(text[:text.find(':')])
         desc = self.lst_do[index-1][2]
@@ -237,6 +247,5 @@ class MainWindow(QMainWindow):
 
     def edit(self):
         self.msg_edit.show(self.calendarWidget)
-
 
 
