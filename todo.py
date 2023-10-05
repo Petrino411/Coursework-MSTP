@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QMainWindow
+from PyQt6.QtWidgets import QMainWindow, QDialog, QMessageBox
 from back import *
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
@@ -14,8 +14,10 @@ class MainWindow(QMainWindow):
         self.resize(631, 610)
         self.setMouseTracking(True)
         self.setFixedSize(self.size())
-        self.setStyleSheet("background-color: rgb(23, 33, 43);\n"
-                           "color: rgb(226, 226, 226);")
+        self.setStyleSheet(
+                                    "background-color: rgb(23, 33, 43);\n"
+                                    "color: rgb(226, 226, 226);"
+                           )
         self.centralwidget = QtWidgets.QWidget(parent=self)
         self.centralwidget.setObjectName("centralwidget")
         self.widget = QtWidgets.QWidget(parent=self.centralwidget)
@@ -258,23 +260,63 @@ class MainWindow(QMainWindow):
         self.msg_add.show(self.calendarWidget)
 
     def edit(self):
-        """Окно редактирования (пока не реализовано)"""
+        """Окно редактирования """
         list = []
-        text = self.listWidget.currentItem().text()
-        index = int(text[:text.find(':')])
-        desc = self.lst_do[index - 1][2]
+        try:
+            text = self.listWidget.currentItem().text()
+            index = int(text[:text.find(':')])
 
-        list.append(self.calendarWidget.selectedDate())
-        list.append(self.lst_do[index-1])
-        self.msg_edit.show(list)
+            list.append(self.calendarWidget.selectedDate())
+            list.append(self.lst_do[index-1])
+            self.msg_edit.show(list)
+        except(Exception):
+            msg = QMessageBox(self)
+            msg.setStyleSheet("QPushButton{\n"
+                                      "    color: rgb(255, 255, 255);\n"
+                                      "     background-color:rgb(24, 37, 51);\n"
+                                      "     border: 1px solid rgb(35, 46, 60);\n"
+                                      "     border-radius:7px;\n"
+                                      "width: 150;\n"
+                                      "height: 30;\n"
+                                      "}\n"
+                                      "QPushButton:hover{\n"
+                                      "background-color:rgb(35, 46, 60);\n"
+                                      "}\n"
+                                      "QPushButton:pressed{\n"
+                                      "background-color:rgb(35, 46, 60);\n"
+                                      "};")
+            msg.setText('Choose smth, idiot')
+            msg.setWindowTitle("Oh shit, not good")
+            msg.exec()
+
 
     def rm_task(self):
         if self.listWidget.currentItem() != None:
-            str = self.listWidget.currentItem().text().split()
-            if len(str) == 3:
-                title = str[2]
-                db.remove(title)
-                self.textDescription.clear()
-                self.label_2.setText('Current matter: ')
+            text = self.listWidget.currentItem().text()
+            index = int(text[:text.find(':')])
+            title = self.lst_do[index-1][1]
+            db.remove(title)
+            self.renderList()
+            self.textDescription.clear()
+            self.label_2.setText('Current matter: ')
+        else:
+            msg = QMessageBox(self)
+            msg.setStyleSheet("QPushButton{\n"
+                              "    color: rgb(255, 255, 255);\n"
+                              "     background-color:rgb(24, 37, 51);\n"
+                              "     border: 1px solid rgb(35, 46, 60);\n"
+                              "     border-radius:7px;\n"
+                              "width: 150;\n"
+                              "height: 30;\n"
+                              "}\n"
+                              "QPushButton:hover{\n"
+                              "background-color:rgb(35, 46, 60);\n"
+                              "}\n"
+                              "QPushButton:pressed{\n"
+                              "background-color:rgb(35, 46, 60);\n"
+                              "};")
+            msg.setText('Choose smth, idiot')
+            msg.setWindowTitle("Oh shit, not good")
+            msg.exec()
 
 

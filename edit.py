@@ -1,4 +1,7 @@
+from PyQt6.QtWidgets import QDialog
+
 from add import *
+
 
 
 class Edit(Add):

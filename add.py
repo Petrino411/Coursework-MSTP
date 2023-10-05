@@ -12,6 +12,8 @@ class Add:
         self._winAdd.setObjectName("Form")
         self._winAdd.resize(328, 365)
 
+        self._winAdd.setFixedSize(328, 365)
+
         font = QtGui.QFont()
         font.setFamily("Calibri Light")
         font.setPointSize(9)
