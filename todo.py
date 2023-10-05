@@ -109,20 +109,20 @@ class MainWindow(QMainWindow):
         self.label_5.setFont(font)
         self.label_5.setObjectName("label_5")
         self.verticalLayout_2.addWidget(self.label_5)
-        self.textBrowser = QtWidgets.QTextBrowser(parent=self.widget1)
-        self.textBrowser.setStyleSheet(" border: 1px solid rgb(35, 46, 60);\n"
+        self.textDescription = QtWidgets.QTextBrowser(parent=self.widget1)
+        self.textDescription.setStyleSheet(" border: 1px solid rgb(35, 46, 60);\n"
                                        "     border-radius:7px;")
-        self.textBrowser.setObjectName("textBrowser")
-        self.verticalLayout_2.addWidget(self.textBrowser)
+        self.textDescription.setObjectName("textBrowser")
+        self.verticalLayout_2.addWidget(self.textDescription)
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
-        self.pushButton_3 = QtWidgets.QPushButton(parent=self.widget1)
+        self.rmButton = QtWidgets.QPushButton(parent=self.widget1)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.pushButton_3.setFont(font)
-        self.pushButton_3.setStyleSheet("QPushButton{\n"
+        self.rmButton.setFont(font)
+        self.rmButton.setStyleSheet("QPushButton{\n"
                                         "    color: rgb(255, 255, 255);\n"
                                         "     background-color:rgb(24, 37, 51);\n"
                                         "     border: 1px solid rgb(35, 46, 60);\n"
@@ -136,8 +136,8 @@ class MainWindow(QMainWindow):
                                         "QPushButton:pressed{\n"
                                         "background-color:rgb(35, 46, 60);\n"
                                         "};")
-        self.pushButton_3.setObjectName("pushButton_3")
-        self.horizontalLayout_4.addWidget(self.pushButton_3)
+        self.rmButton.setObjectName("pushButton_3")
+        self.horizontalLayout_4.addWidget(self.rmButton)
         self.editButton = QtWidgets.QPushButton(parent=self.widget1)
         font = QtGui.QFont()
         font.setFamily("Calibri")
@@ -191,16 +191,19 @@ class MainWindow(QMainWindow):
         self.label_6.setText(_translate("MainWindow", "Plans:"))
         self.label_2.setText(_translate("MainWindow", "Current matter:"))
         self.label_5.setText(_translate("MainWindow", "Description:"))
-        self.pushButton_3.setText(_translate("MainWindow", "Remove"))
+        self.rmButton.setText(_translate("MainWindow", "Remove"))
         self.editButton.setText(_translate("MainWindow", "Edit"))
         self.addButton.setText(_translate("MainWindow", "Add"))
 
         self.calendarWidget.clicked.connect(self.dateview)
-        self.calendarWidget.clicked.connect(self.dateList)
+        self.calendarWidget.clicked.connect(self.renderList)
 
 
 
         self.label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toString()))
+        self.rmButton.clicked.connect(self.rm_task)
+        self.rmButton.clicked.connect(self.renderList)
+
         self.addButton.clicked.connect(self.add)
         self.editButton.clicked.connect(self.edit)
 
@@ -209,13 +212,15 @@ class MainWindow(QMainWindow):
 
         self.dateEdit = QtWidgets.QDateEdit()
 
-        self.dateList()
 
+        self.lst_do = [tuple[str]]
+        self.renderList()
 
         self.msg_add = Add()
+        self.msg_add.pushButton.clicked.connect(self.renderList)
         self.msg_edit = Edit()
+        self.msg_edit.pushButton.clicked.connect(self.renderList)
 
-        self.lst_do = [tuple]
         #Data.create__()
         #Data.clear__()
         #db.list_tasks()
@@ -225,12 +230,13 @@ class MainWindow(QMainWindow):
 
         self.label.setText(f'Current date: {self.calendarWidget.selectedDate().toString()}')
 
-    def dateList(self):
+    def renderList(self):
         """Отображение списка дел по дате"""
-        self.label_2.clear()
-        self.textBrowser.clear()
+        self.label_2.setText('Current matter: ')
+        self.textDescription.clear()
         self.listWidget.clear()
         self.lst_do = db.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate()))
+        self.lst_do = sorted(self.lst_do)
         for i in range(len(self.lst_do)):
             time = self.lst_do[i][0][:self.lst_do[i][0].rfind(':')]
             self.listWidget.addItem(f'{i+1}: {time} {self.lst_do[i][1]}\n')
@@ -242,7 +248,7 @@ class MainWindow(QMainWindow):
         text = self.listWidget.currentItem().text()
         index = int(text[:text.find(':')])
         desc = self.lst_do[index-1][2]
-        self.textBrowser.setText(str(desc))
+        self.textDescription.setText(str(desc))
         self.label_2.setText(f'Current matter: {str(self.lst_do[index-1][1])}')
 
     def add(self):
@@ -251,6 +257,22 @@ class MainWindow(QMainWindow):
 
     def edit(self):
         """Окно редактирования (пока не реализовано)"""
-        self.msg_edit.show(self.calendarWidget)
+        list = []
+        text = self.listWidget.currentItem().text()
+        index = int(text[:text.find(':')])
+        desc = self.lst_do[index - 1][2]
+
+        list.append(self.calendarWidget.selectedDate())
+        list.append(self.lst_do[index-1])
+        self.msg_edit.show(list)
+
+    def rm_task(self):
+        if self.listWidget.currentItem() != None:
+            str = self.listWidget.currentItem().text().split()
+            if len(str) == 3:
+                title = str[2]
+                db.remove(title)
+                self.textDescription.clear()
+                self.label_2.setText('Current matter: ')
 
 

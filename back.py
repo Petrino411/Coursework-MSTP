@@ -56,6 +56,19 @@ class Data():
         tasks = cls.cursor.fetchall()
         return tasks
 
+    @classmethod
+    def remove(cls, title):
+        query = 'DELETE FROM Tasks WHERE title = ?'
+        cls.cursor.execute(query, (title,))
+        cls.connection.commit()
+
+    @classmethod
+    def edit(cls, value: list[str]):
+        value = tuple(value)
+        query = 'UPDATE Tasks SET date = ?, time = ?, title = ?, description = ? WHERE title = ?'
+        cls.cursor.execute(query, (value[0], value[1], value[2], value[3], value[4],))
+        cls.connection.commit()
+
     def __del__(self):
         self.connection.close()
 

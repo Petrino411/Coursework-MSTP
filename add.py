@@ -5,7 +5,7 @@ from back import *
 
 
 
-class Add():
+class Add:
     def __init__(self):
         """Интерфейс, сгенерированный с помощью QtDesigner"""
         self._winAdd = QtWidgets.QWidget()
@@ -25,14 +25,14 @@ class Add():
         self.verticalLayout.setObjectName("verticalLayout")
         self.formLayout = QtWidgets.QFormLayout()
         self.formLayout.setObjectName("formLayout")
-        self.label = QtWidgets.QLabel(parent=self.widget)
+        self.dateLabel = QtWidgets.QLabel(parent=self.widget)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.label.setFont(font)
-        self.label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label.setObjectName("label")
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label)
+        self.dateLabel.setFont(font)
+        self.dateLabel.setStyleSheet("color: rgb(255, 255, 255);")
+        self.dateLabel.setObjectName("label")
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.LabelRole, self.dateLabel)
         self.dateEdit = QtWidgets.QDateEdit(parent=self.widget)
         font = QtGui.QFont()
         font.setFamily("Calibri")
@@ -43,14 +43,14 @@ class Add():
                                     "     border-radius:7px;")
         self.dateEdit.setObjectName("dateEdit")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.FieldRole, self.dateEdit)
-        self.label_2 = QtWidgets.QLabel(parent=self.widget)
+        self.timeLabel = QtWidgets.QLabel(parent=self.widget)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.label_2.setFont(font)
-        self.label_2.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label_2.setObjectName("label_2")
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_2)
+        self.timeLabel.setFont(font)
+        self.timeLabel.setStyleSheet("color: rgb(255, 255, 255);")
+        self.timeLabel.setObjectName("label_2")
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.timeLabel)
         self.timeEdit = QtWidgets.QTimeEdit(parent=self.widget)
         font = QtGui.QFont()
         font.setFamily("Calibri")
@@ -61,42 +61,42 @@ class Add():
                                     "     border-radius:7px;")
         self.timeEdit.setObjectName("timeEdit")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.FieldRole, self.timeEdit)
-        self.label_4 = QtWidgets.QLabel(parent=self.widget)
+        self.titleLabel = QtWidgets.QLabel(parent=self.widget)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.label_4.setFont(font)
-        self.label_4.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label_4.setObjectName("label_4")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_4)
-        self.lineEdit_2 = QtWidgets.QLineEdit(parent=self.widget)
+        self.titleLabel.setFont(font)
+        self.titleLabel.setStyleSheet("color: rgb(255, 255, 255);")
+        self.titleLabel.setObjectName("label_4")
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.LabelRole, self.titleLabel)
+        self.titleLineEdit = QtWidgets.QLineEdit(parent=self.widget)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.lineEdit_2.setFont(font)
-        self.lineEdit_2.setStyleSheet("color: rgb(255, 255, 255);\n"
+        self.titleLineEdit.setFont(font)
+        self.titleLineEdit.setStyleSheet("color: rgb(255, 255, 255);\n"
                                       " border: 1px solid rgb(35, 46, 60);\n"
                                       "     border-radius:7px;")
-        self.lineEdit_2.setObjectName("lineEdit_2")
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.FieldRole, self.lineEdit_2)
-        self.label_3 = QtWidgets.QLabel(parent=self.widget)
+        self.titleLineEdit.setObjectName("lineEdit_2")
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.FieldRole, self.titleLineEdit)
+        self.descLabel = QtWidgets.QLabel(parent=self.widget)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.label_3.setFont(font)
-        self.label_3.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label_3.setObjectName("label_3")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_3)
-        self.textEdit = QtWidgets.QTextEdit(parent=self.widget)
+        self.descLabel.setFont(font)
+        self.descLabel.setStyleSheet("color: rgb(255, 255, 255);")
+        self.descLabel.setObjectName("label_3")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.LabelRole, self.descLabel)
+        self.descEdit = QtWidgets.QTextEdit(parent=self.widget)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
-        self.textEdit.setFont(font)
-        self.textEdit.setStyleSheet("color: rgb(255, 255, 255);\n"
+        self.descEdit.setFont(font)
+        self.descEdit.setStyleSheet("color: rgb(255, 255, 255);\n"
                                     " border: 1px solid rgb(35, 46, 60);\n"
                                     "     border-radius:7px;")
-        self.textEdit.setObjectName("textEdit")
-        self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.textEdit)
+        self.descEdit.setObjectName("textEdit")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.descEdit)
         self.verticalLayout.addLayout(self.formLayout)
         self.pushButton = QtWidgets.QPushButton(parent=self.widget)
         font = QtGui.QFont()
@@ -124,19 +124,20 @@ class Add():
 
         _translate = QtCore.QCoreApplication.translate
         self._winAdd.setWindowTitle(_translate("Form", "Add"))
-        self.label.setText(_translate("Form", "Date:"))
-        self.label_2.setText(_translate("Form", "Time"))
-        self.label_4.setText(_translate("Form", "Title"))
-        self.label_3.setText(_translate("Form", "Notes:"))
+        self.dateLabel.setText(_translate("Form", "Date:"))
+        self.timeLabel.setText(_translate("Form", "Time"))
+        self.titleLabel.setText(_translate("Form", "Title"))
+        self.descLabel.setText(_translate("Form", "Notes:"))
         self.pushButton.setText(_translate("Form", "Add"))
 
-        self.pushButton.clicked.connect(self.ButtonAdd)
+        self.pushButton.clicked.connect(self.execute)
 
 
-    def ButtonAdd(self):
+    def execute(self):
         """Кнопка добавить данные в БД"""
-        db.add_task(str(self.dateEdit.date().toPyDate()), str(self.timeEdit.time().toPyTime()), str(self.lineEdit_2.text()),str(self.textEdit.toPlainText()))
-        db.list_tasks()
+        if self.titleLineEdit.text() != '':
+            db.add_task(str(self.dateEdit.date().toPyDate()), str(self.timeEdit.time().toPyTime()), str(self.titleLineEdit.text()), str(self.descEdit.toPlainText()))
+            db.list_tasks()
 
     def show(self, date: QtWidgets.QCalendarWidget) -> None:
         self.dateEdit.setDate(date.selectedDate())
