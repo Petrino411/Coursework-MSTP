@@ -3,7 +3,6 @@ from PyQt6.QtWidgets import QDialog
 from add import *
 
 
-
 class Edit(Add):
     def __init__(self):
         super().__init__()
@@ -25,8 +24,6 @@ class Edit(Add):
             self._winAdd.hide()
             self.titleLineEdit.clear()
             self.descEdit.clear()
-
-
 
     def show(self, line: list[QtCore.QDate, tuple[str]]) -> None:
         self.dateEdit.setDate(line[0])

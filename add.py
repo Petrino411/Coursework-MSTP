@@ -3,8 +3,6 @@ from PyQt6.QtWidgets import QWidget
 from back import *
 
 
-
-
 class Add:
     def __init__(self):
         """Интерфейс, сгенерированный с помощью QtDesigner"""
@@ -77,8 +75,8 @@ class Add:
         font.setPointSize(12)
         self.titleLineEdit.setFont(font)
         self.titleLineEdit.setStyleSheet("color: rgb(255, 255, 255);\n"
-                                      " border: 1px solid rgb(35, 46, 60);\n"
-                                      "     border-radius:7px;")
+                                         " border: 1px solid rgb(35, 46, 60);\n"
+                                         "     border-radius:7px;")
         self.titleLineEdit.setObjectName("lineEdit_2")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.FieldRole, self.titleLineEdit)
         self.descLabel = QtWidgets.QLabel(parent=self.widget)
@@ -134,22 +132,14 @@ class Add:
 
         self.pushButton.clicked.connect(self.execute)
 
-
     def execute(self):
-
         """Кнопка добавить данные в БД"""
         if self.titleLineEdit.text() != '':
-            db.add_task(str(self.dateEdit.date().toPyDate()), str(self.timeEdit.time().toPyTime()), str(self.titleLineEdit.text()), str(self.descEdit.toPlainText()))
+            db.add_task(str(self.dateEdit.date().toPyDate()), str(self.timeEdit.time().toPyTime()),
+                        str(self.titleLineEdit.text()), str(self.descEdit.toPlainText()))
             self.titleLineEdit.clear()
             self.descEdit.clear()
-
 
     def show(self, date: QtWidgets.QCalendarWidget) -> None:
         self.dateEdit.setDate(date.selectedDate())
         self._winAdd.show()
-
-
-
-
-
-

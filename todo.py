@@ -4,8 +4,9 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
 from edit import Edit
 
-
 """Главное окно"""
+
+
 class MainWindow(QMainWindow):
     def __init__(self):
         """Интерфейс, сгенерированный с помощью QtDesigner"""
@@ -15,9 +16,9 @@ class MainWindow(QMainWindow):
         self.setMouseTracking(True)
         self.setFixedSize(self.size())
         self.setStyleSheet(
-                                    "background-color: rgb(23, 33, 43);\n"
-                                    "color: rgb(226, 226, 226);"
-                           )
+            "background-color: rgb(23, 33, 43);\n"
+            "color: rgb(226, 226, 226);"
+        )
         self.centralwidget = QtWidgets.QWidget(parent=self)
         self.centralwidget.setObjectName("centralwidget")
         self.widget = QtWidgets.QWidget(parent=self.centralwidget)
@@ -113,7 +114,7 @@ class MainWindow(QMainWindow):
         self.verticalLayout_2.addWidget(self.label_5)
         self.textDescription = QtWidgets.QTextBrowser(parent=self.widget1)
         self.textDescription.setStyleSheet(" border: 1px solid rgb(35, 46, 60);\n"
-                                       "     border-radius:7px;")
+                                           "     border-radius:7px;")
         self.textDescription.setObjectName("textBrowser")
         self.verticalLayout_2.addWidget(self.textDescription)
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
@@ -125,19 +126,19 @@ class MainWindow(QMainWindow):
         font.setPointSize(12)
         self.rmButton.setFont(font)
         self.rmButton.setStyleSheet("QPushButton{\n"
-                                        "    color: rgb(255, 255, 255);\n"
-                                        "     background-color:rgb(24, 37, 51);\n"
-                                        "     border: 1px solid rgb(35, 46, 60);\n"
-                                        "     border-radius:7px;\n"
-                                        "width: 230;\n"
-                                        "height: 50;\n"
-                                        "}\n"
-                                        "QPushButton:hover{\n"
-                                        "background-color:rgb(35, 46, 60);\n"
-                                        "}\n"
-                                        "QPushButton:pressed{\n"
-                                        "background-color:rgb(35, 46, 60);\n"
-                                        "};")
+                                    "    color: rgb(255, 255, 255);\n"
+                                    "     background-color:rgb(24, 37, 51);\n"
+                                    "     border: 1px solid rgb(35, 46, 60);\n"
+                                    "     border-radius:7px;\n"
+                                    "width: 230;\n"
+                                    "height: 50;\n"
+                                    "}\n"
+                                    "QPushButton:hover{\n"
+                                    "background-color:rgb(35, 46, 60);\n"
+                                    "}\n"
+                                    "QPushButton:pressed{\n"
+                                    "background-color:rgb(35, 46, 60);\n"
+                                    "};")
         self.rmButton.setObjectName("pushButton_3")
         self.horizontalLayout_4.addWidget(self.rmButton)
         self.editButton = QtWidgets.QPushButton(parent=self.widget1)
@@ -200,8 +201,6 @@ class MainWindow(QMainWindow):
         self.calendarWidget.clicked.connect(self.dateview)
         self.calendarWidget.clicked.connect(self.renderList)
 
-
-
         self.label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toString()))
         self.rmButton.clicked.connect(self.rm_task)
         self.rmButton.clicked.connect(self.renderList)
@@ -211,9 +210,7 @@ class MainWindow(QMainWindow):
 
         self.listWidget.itemSelectionChanged.connect(self.getDescription)
 
-
         self.dateEdit = QtWidgets.QDateEdit()
-
 
         self.lst_do = [tuple[str]]
         self.renderList()
@@ -223,11 +220,12 @@ class MainWindow(QMainWindow):
         self.msg_edit = Edit()
         self.msg_edit.pushButton.clicked.connect(self.renderList)
 
-        #Data.create__()
-        #Data.clear__()
-        #db.list_tasks()
+        # Data.create__()
+        # Data.clear__()
+        # db.list_tasks()
 
     """Отображение выбранной даты"""
+
     def dateview(self):
 
         self.label.setText(f'Current date: {self.calendarWidget.selectedDate().toString()}')
@@ -241,19 +239,19 @@ class MainWindow(QMainWindow):
         self.lst_do = sorted(self.lst_do)
         for i in range(len(self.lst_do)):
             time = self.lst_do[i][0][:self.lst_do[i][0].rfind(':')]
-            self.listWidget.addItem(f'{i+1}: {time} {self.lst_do[i][1]}\n')
+            self.listWidget.addItem(f'{i + 1}: {time} {self.lst_do[i][1]}\n')
         self.textDescription.clear()
         self.label_2.setText('Current matter: ')
 
-        #self.listWidget.currentIndex()
+        # self.listWidget.currentIndex()
 
     def getDescription(self):
         """Отображение описание выбранного дела"""
         text = self.listWidget.currentItem().text()
         index = int(text[:text.find(':')])
-        desc = self.lst_do[index-1][2]
+        desc = self.lst_do[index - 1][2]
         self.textDescription.setText(str(desc))
-        self.label_2.setText(f'Current matter: {str(self.lst_do[index-1][1])}')
+        self.label_2.setText(f'Current matter: {str(self.lst_do[index - 1][1])}')
 
     def add(self):
         """Окно добавления"""
@@ -267,34 +265,33 @@ class MainWindow(QMainWindow):
             index = int(text[:text.find(':')])
 
             list.append(self.calendarWidget.selectedDate())
-            list.append(self.lst_do[index-1])
+            list.append(self.lst_do[index - 1])
             self.msg_edit.show(list)
         except(Exception):
             msg = QMessageBox(self)
             msg.setStyleSheet("QPushButton{\n"
-                                      "    color: rgb(255, 255, 255);\n"
-                                      "     background-color:rgb(24, 37, 51);\n"
-                                      "     border: 1px solid rgb(35, 46, 60);\n"
-                                      "     border-radius:7px;\n"
-                                      "width: 150;\n"
-                                      "height: 30;\n"
-                                      "}\n"
-                                      "QPushButton:hover{\n"
-                                      "background-color:rgb(35, 46, 60);\n"
-                                      "}\n"
-                                      "QPushButton:pressed{\n"
-                                      "background-color:rgb(35, 46, 60);\n"
-                                      "};")
-            msg.setText('Choose smth, idiot')
-            msg.setWindowTitle("Oh shit, not good")
+                              "    color: rgb(255, 255, 255);\n"
+                              "     background-color:rgb(24, 37, 51);\n"
+                              "     border: 1px solid rgb(35, 46, 60);\n"
+                              "     border-radius:7px;\n"
+                              "width: 150;\n"
+                              "height: 30;\n"
+                              "}\n"
+                              "QPushButton:hover{\n"
+                              "background-color:rgb(35, 46, 60);\n"
+                              "}\n"
+                              "QPushButton:pressed{\n"
+                              "background-color:rgb(35, 46, 60);\n"
+                              "};")
+            msg.setText('Select smth, idiot')
+            msg.setWindowTitle("Oh shit")
             msg.exec()
-
 
     def rm_task(self):
         if self.listWidget.currentItem() != None:
             text = self.listWidget.currentItem().text()
             index = int(text[:text.find(':')])
-            title = self.lst_do[index-1][1]
+            title = self.lst_do[index - 1][1]
             db.remove(title)
             self.renderList()
             self.textDescription.clear()
@@ -315,8 +312,6 @@ class MainWindow(QMainWindow):
                               "QPushButton:pressed{\n"
                               "background-color:rgb(35, 46, 60);\n"
                               "};")
-            msg.setText('Choose smth, idiot')
-            msg.setWindowTitle("Oh shit, not good")
+            msg.setText('Select smth, idiot')
+            msg.setWindowTitle("Oh shit")
             msg.exec()
-
-
