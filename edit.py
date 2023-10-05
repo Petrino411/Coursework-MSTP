@@ -19,6 +19,10 @@ class Edit(Add):
             data.append(str(self.descEdit.toPlainText()))
             data.append(str(self.titleFIRST))
             db.edit(data)
+            self._winAdd.hide()
+            self.titleLineEdit.clear()
+            self.descEdit.clear()
+
 
 
     def show(self, line: list[QtCore.QDate, tuple[str]]) -> None:
@@ -28,5 +32,4 @@ class Edit(Add):
 
         self.titleFIRST = line[1][1]
         self.descEdit.setText(line[1][2])
-        print('IN_EDIT.show(): ' + str(self.titleFIRST))
         self._winAdd.show()

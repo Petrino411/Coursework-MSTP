@@ -240,6 +240,8 @@ class MainWindow(QMainWindow):
         for i in range(len(self.lst_do)):
             time = self.lst_do[i][0][:self.lst_do[i][0].rfind(':')]
             self.listWidget.addItem(f'{i+1}: {time} {self.lst_do[i][1]}\n')
+        self.textDescription.clear()
+        self.label_2.setText('Current matter: ')
 
         #self.listWidget.currentIndex()
 

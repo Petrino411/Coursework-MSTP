@@ -134,10 +134,13 @@ class Add:
 
 
     def execute(self):
+
         """Кнопка добавить данные в БД"""
         if self.titleLineEdit.text() != '':
             db.add_task(str(self.dateEdit.date().toPyDate()), str(self.timeEdit.time().toPyTime()), str(self.titleLineEdit.text()), str(self.descEdit.toPlainText()))
-            db.list_tasks()
+            self.titleLineEdit.clear()
+            self.descEdit.clear()
+
 
     def show(self, date: QtWidgets.QCalendarWidget) -> None:
         self.dateEdit.setDate(date.selectedDate())
