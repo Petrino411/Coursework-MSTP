@@ -19,6 +19,9 @@ class MainWindow(QMainWindow):
             "background-color: rgb(23, 33, 43);\n"
             "color: rgb(226, 226, 226);"
         )
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
         self.centralwidget = QtWidgets.QWidget(parent=self)
         self.centralwidget.setObjectName("centralwidget")
         self.widget = QtWidgets.QWidget(parent=self.centralwidget)
@@ -28,9 +31,7 @@ class MainWindow(QMainWindow):
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout_3.setObjectName("horizontalLayout_3")
         self.calendarWidget = QtWidgets.QCalendarWidget(parent=self.widget)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
+
         self.calendarWidget.setFont(font)
         self.calendarWidget.setStyleSheet("background-color: rgb(23, 33, 43);\n"
                                           "alternate-background-color: rgb(35, 46, 60);\n"
@@ -48,29 +49,16 @@ class MainWindow(QMainWindow):
         self.verticalLayout.setObjectName("verticalLayout")
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.horizontalLayout.setObjectName("horizontalLayout")
-        self.label = QtWidgets.QLabel(parent=self.widget)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.label.setFont(font)
-        self.label.setObjectName("label")
-        self.horizontalLayout.addWidget(self.label)
-        self.label_3 = QtWidgets.QLabel(parent=self.widget)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.label_3.setFont(font)
-        self.label_3.setText("")
-        self.label_3.setObjectName("label_3")
-        self.horizontalLayout.addWidget(self.label_3)
+        self.current_date_label = QtWidgets.QLabel(parent=self.widget)
+        self.current_date_label.setFont(font)
+        self.current_date_label.setObjectName("label")
+        self.horizontalLayout.addWidget(self.current_date_label)
+
         self.verticalLayout.addLayout(self.horizontalLayout)
-        self.label_6 = QtWidgets.QLabel(parent=self.widget)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.label_6.setFont(font)
-        self.label_6.setObjectName("label_6")
-        self.verticalLayout.addWidget(self.label_6)
+        self.Plans_label = QtWidgets.QLabel(parent=self.widget)
+        self.Plans_label.setFont(font)
+        self.Plans_label.setObjectName("label_6")
+        self.verticalLayout.addWidget(self.Plans_label)
         self.listWidget = QtWidgets.QListWidget(parent=self.widget)
         self.listWidget.setStyleSheet(" border: 1px solid rgb(35, 46, 60);\n"
                                       "     border-radius:7px;")
@@ -92,26 +80,16 @@ class MainWindow(QMainWindow):
         self.verticalLayout_2.addWidget(self.line_2)
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
-        self.label_2 = QtWidgets.QLabel(parent=self.widget1)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.label_2.setFont(font)
-        self.label_2.setObjectName("label_2")
-        self.horizontalLayout_2.addWidget(self.label_2)
-
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
+        self.current_matter_label = QtWidgets.QLabel(parent=self.widget1)
+        self.current_matter_label.setFont(font)
+        self.current_matter_label.setObjectName("label_2")
+        self.horizontalLayout_2.addWidget(self.current_matter_label)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
-        self.label_5 = QtWidgets.QLabel(parent=self.widget1)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
-        self.label_5.setFont(font)
-        self.label_5.setObjectName("label_5")
-        self.verticalLayout_2.addWidget(self.label_5)
+        self.desc_label = QtWidgets.QLabel(parent=self.widget1)
+        self.desc_label.setFont(font)
+        self.desc_label.setObjectName("label_5")
+        self.verticalLayout_2.addWidget(self.desc_label)
         self.textDescription = QtWidgets.QTextBrowser(parent=self.widget1)
         self.textDescription.setStyleSheet(" border: 1px solid rgb(35, 46, 60);\n"
                                            "     border-radius:7px;")
@@ -121,9 +99,6 @@ class MainWindow(QMainWindow):
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.rmButton = QtWidgets.QPushButton(parent=self.widget1)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
         self.rmButton.setFont(font)
         self.rmButton.setStyleSheet("QPushButton{\n"
                                     "    color: rgb(255, 255, 255);\n"
@@ -142,9 +117,6 @@ class MainWindow(QMainWindow):
         self.rmButton.setObjectName("pushButton_3")
         self.horizontalLayout_4.addWidget(self.rmButton)
         self.editButton = QtWidgets.QPushButton(parent=self.widget1)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
         self.editButton.setFont(font)
         self.editButton.setStyleSheet("QPushButton{\n"
                                       "    color: rgb(255, 255, 255);\n"
@@ -163,9 +135,6 @@ class MainWindow(QMainWindow):
         self.editButton.setObjectName("pushButton_2")
         self.horizontalLayout_4.addWidget(self.editButton)
         self.addButton = QtWidgets.QPushButton(parent=self.widget1)
-        font = QtGui.QFont()
-        font.setFamily("Calibri")
-        font.setPointSize(12)
         self.addButton.setFont(font)
         self.addButton.setStyleSheet("QPushButton{\n"
                                      "    color: rgb(255, 255, 255);\n"
@@ -190,10 +159,10 @@ class MainWindow(QMainWindow):
 
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("MainWindow", "ToDoList"))
-        self.label.setText(_translate("MainWindow", "Current date:"))
-        self.label_6.setText(_translate("MainWindow", "Plans:"))
-        self.label_2.setText(_translate("MainWindow", "Current matter:"))
-        self.label_5.setText(_translate("MainWindow", "Description:"))
+        self.current_date_label.setText(_translate("MainWindow", "Current date:"))
+        self.Plans_label.setText(_translate("MainWindow", "Plans:"))
+        self.current_matter_label.setText(_translate("MainWindow", "Current matter:"))
+        self.desc_label.setText(_translate("MainWindow", "Description:"))
         self.rmButton.setText(_translate("MainWindow", "Remove"))
         self.editButton.setText(_translate("MainWindow", "Edit"))
         self.addButton.setText(_translate("MainWindow", "Add"))
@@ -201,7 +170,7 @@ class MainWindow(QMainWindow):
         self.calendarWidget.clicked.connect(self.dateview)
         self.calendarWidget.clicked.connect(self.renderList)
 
-        self.label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toString()))
+        self.current_date_label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toString()))
         self.rmButton.clicked.connect(self.rm_task)
         self.rmButton.clicked.connect(self.renderList)
 
@@ -228,11 +197,11 @@ class MainWindow(QMainWindow):
 
     def dateview(self):
 
-        self.label.setText(f'Current date: {self.calendarWidget.selectedDate().toString()}')
+        self.current_date_label.setText(f'Current date: {self.calendarWidget.selectedDate().toString()}')
 
     def renderList(self):
         """Отображение списка дел по дате"""
-        self.label_2.setText('Current matter: ')
+        self.current_matter_label.setText('Current matter: ')
         self.textDescription.clear()
         self.listWidget.clear()
         self.lst_do = db.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate()))
@@ -241,7 +210,7 @@ class MainWindow(QMainWindow):
             time = self.lst_do[i][0][:self.lst_do[i][0].rfind(':')]
             self.listWidget.addItem(f'{i + 1}: {time} {self.lst_do[i][1]}\n')
         self.textDescription.clear()
-        self.label_2.setText('Current matter: ')
+        self.current_matter_label.setText('Current matter: ')
 
         # self.listWidget.currentIndex()
 
@@ -251,7 +220,7 @@ class MainWindow(QMainWindow):
         index = int(text[:text.find(':')])
         desc = self.lst_do[index - 1][2]
         self.textDescription.setText(str(desc))
-        self.label_2.setText(f'Current matter: {str(self.lst_do[index - 1][1])}')
+        self.current_matter_label.setText(f'Current matter: {str(self.lst_do[index - 1][1])}')
 
     def add(self):
         """Окно добавления"""
@@ -295,7 +264,7 @@ class MainWindow(QMainWindow):
             db.remove(title)
             self.renderList()
             self.textDescription.clear()
-            self.label_2.setText('Current matter: ')
+            self.current_matter_label.setText('Current matter: ')
         else:
             msg = QMessageBox(self)
             msg.setStyleSheet("QPushButton{\n"
