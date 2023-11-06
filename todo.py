@@ -252,7 +252,7 @@ class MainWindow(QMainWindow):
                               "QPushButton:pressed{\n"
                               "background-color:rgb(35, 46, 60);\n"
                               "};")
-            msg.setText('Select smth, idiot')
+            msg.setText('Select smth...')
             msg.setWindowTitle("Oh shit")
             msg.exec()
 
@@ -281,6 +281,6 @@ class MainWindow(QMainWindow):
                               "QPushButton:pressed{\n"
                               "background-color:rgb(35, 46, 60);\n"
                               "};")
-            msg.setText('Select smth, idiot')
+            msg.setText('Select smth...')
             msg.setWindowTitle("Oh shit")
             msg.exec()
