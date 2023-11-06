@@ -284,3 +284,6 @@ class MainWindow(QMainWindow):
             msg.setText('Select smth...')
             msg.setWindowTitle("Oh shit")
             msg.exec()
+
+
+

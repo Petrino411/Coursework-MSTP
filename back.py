@@ -39,9 +39,7 @@ class Data:
     def list_tasks(cls):
         cls.cursor.execute('SELECT * FROM Tasks')
         tasks = cls.cursor.fetchall()
-        for task in tasks:
-            print(task)
-
+        return tasks
     """Очистка таблицы"""
     @classmethod
     def clear__(cls):
