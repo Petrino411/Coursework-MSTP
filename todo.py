@@ -15,10 +15,7 @@ class MainWindow(QMainWindow):
         self.resize(631, 610)
         self.setMouseTracking(True)
         self.setFixedSize(self.size())
-        self.setStyleSheet(
-            "background-color: rgb(23, 33, 43);\n"
-            "color: rgb(226, 226, 226);"
-        )
+
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
@@ -33,9 +30,7 @@ class MainWindow(QMainWindow):
         self.calendarWidget = QtWidgets.QCalendarWidget(parent=self.widget)
 
         self.calendarWidget.setFont(font)
-        self.calendarWidget.setStyleSheet("background-color: rgb(23, 33, 43);\n"
-                                          "alternate-background-color: rgb(35, 46, 60);\n"
-                                          "")
+
         self.calendarWidget.setLocale(
             QtCore.QLocale(QtCore.QLocale.Language.English, QtCore.QLocale.Country.UnitedKingdom))
         self.calendarWidget.setObjectName("calendarWidget")
@@ -60,8 +55,7 @@ class MainWindow(QMainWindow):
         self.Plans_label.setObjectName("label_6")
         self.verticalLayout.addWidget(self.Plans_label)
         self.listWidget = QtWidgets.QListWidget(parent=self.widget)
-        self.listWidget.setStyleSheet(" border: 1px solid rgb(35, 46, 60);\n"
-                                      "     border-radius:7px;")
+
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
         self.horizontalLayout_3.addLayout(self.verticalLayout)
@@ -91,8 +85,7 @@ class MainWindow(QMainWindow):
         self.desc_label.setObjectName("label_5")
         self.verticalLayout_2.addWidget(self.desc_label)
         self.textDescription = QtWidgets.QTextBrowser(parent=self.widget1)
-        self.textDescription.setStyleSheet(" border: 1px solid rgb(35, 46, 60);\n"
-                                           "     border-radius:7px;")
+
         self.textDescription.setObjectName("textBrowser")
         self.verticalLayout_2.addWidget(self.textDescription)
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
@@ -100,56 +93,14 @@ class MainWindow(QMainWindow):
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.rmButton = QtWidgets.QPushButton(parent=self.widget1)
         self.rmButton.setFont(font)
-        self.rmButton.setStyleSheet("QPushButton{\n"
-                                    "    color: rgb(255, 255, 255);\n"
-                                    "     background-color:rgb(24, 37, 51);\n"
-                                    "     border: 1px solid rgb(35, 46, 60);\n"
-                                    "     border-radius:7px;\n"
-                                    "width: 230;\n"
-                                    "height: 50;\n"
-                                    "}\n"
-                                    "QPushButton:hover{\n"
-                                    "background-color:rgb(35, 46, 60);\n"
-                                    "}\n"
-                                    "QPushButton:pressed{\n"
-                                    "background-color:rgb(35, 46, 60);\n"
-                                    "};")
         self.rmButton.setObjectName("pushButton_3")
         self.horizontalLayout_4.addWidget(self.rmButton)
         self.editButton = QtWidgets.QPushButton(parent=self.widget1)
         self.editButton.setFont(font)
-        self.editButton.setStyleSheet("QPushButton{\n"
-                                      "    color: rgb(255, 255, 255);\n"
-                                      "     background-color:rgb(24, 37, 51);\n"
-                                      "     border: 1px solid rgb(35, 46, 60);\n"
-                                      "     border-radius:7px;\n"
-                                      "width: 230;\n"
-                                      "height: 50;\n"
-                                      "}\n"
-                                      "QPushButton:hover{\n"
-                                      "background-color:rgb(35, 46, 60);\n"
-                                      "}\n"
-                                      "QPushButton:pressed{\n"
-                                      "background-color:rgb(35, 46, 60);\n"
-                                      "};")
         self.editButton.setObjectName("pushButton_2")
         self.horizontalLayout_4.addWidget(self.editButton)
         self.addButton = QtWidgets.QPushButton(parent=self.widget1)
         self.addButton.setFont(font)
-        self.addButton.setStyleSheet("QPushButton{\n"
-                                     "    color: rgb(255, 255, 255);\n"
-                                     "     background-color:rgb(24, 37, 51);\n"
-                                     "     border: 1px solid rgb(35, 46, 60);\n"
-                                     "     border-radius:7px;\n"
-                                     "width: 230;\n"
-                                     "height: 50;\n"
-                                     "}\n"
-                                     "QPushButton:hover{\n"
-                                     "background-color:rgb(35, 46, 60);\n"
-                                     "}\n"
-                                     "QPushButton:pressed{\n"
-                                     "background-color:rgb(35, 46, 60);\n"
-                                     "};")
         self.addButton.setObjectName("pushButton")
         self.horizontalLayout_4.addWidget(self.addButton)
         self.verticalLayout_3.addLayout(self.horizontalLayout_4)
@@ -238,20 +189,6 @@ class MainWindow(QMainWindow):
             self.msg_edit.show(list)
         except(Exception):
             msg = QMessageBox(self)
-            msg.setStyleSheet("QPushButton{\n"
-                              "    color: rgb(255, 255, 255);\n"
-                              "     background-color:rgb(24, 37, 51);\n"
-                              "     border: 1px solid rgb(35, 46, 60);\n"
-                              "     border-radius:7px;\n"
-                              "width: 150;\n"
-                              "height: 30;\n"
-                              "}\n"
-                              "QPushButton:hover{\n"
-                              "background-color:rgb(35, 46, 60);\n"
-                              "}\n"
-                              "QPushButton:pressed{\n"
-                              "background-color:rgb(35, 46, 60);\n"
-                              "};")
             msg.setText('Select smth...')
             msg.setWindowTitle("Oh shit")
             msg.exec()
@@ -267,23 +204,6 @@ class MainWindow(QMainWindow):
             self.current_matter_label.setText('Current matter: ')
         else:
             msg = QMessageBox(self)
-            msg.setStyleSheet("QPushButton{\n"
-                              "    color: rgb(255, 255, 255);\n"
-                              "     background-color:rgb(24, 37, 51);\n"
-                              "     border: 1px solid rgb(35, 46, 60);\n"
-                              "     border-radius:7px;\n"
-                              "width: 150;\n"
-                              "height: 30;\n"
-                              "}\n"
-                              "QPushButton:hover{\n"
-                              "background-color:rgb(35, 46, 60);\n"
-                              "}\n"
-                              "QPushButton:pressed{\n"
-                              "background-color:rgb(35, 46, 60);\n"
-                              "};")
             msg.setText('Select smth...')
             msg.setWindowTitle("Oh shit")
             msg.exec()
-
-
-

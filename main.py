@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from PyQt6.QtCore import QDateTime, QTime
 
 from todo import *
@@ -8,6 +10,7 @@ if __name__ == "__main__":
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
+    app.setStyleSheet(Path('style.сss').read_text())
     mainWindow = MainWindow()
     mainWindow.show()
 
@@ -19,5 +22,3 @@ if __name__ == "__main__":
             print(i)
 
     sys.exit(app.exec())
-
-
