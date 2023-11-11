@@ -3,14 +3,20 @@ from back import *
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
 from edit import Edit
+import requests
+
+BASE_URL = 'http://127.0.0.1:8000'
 
 """Главное окно"""
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, user_id):
         """Интерфейс, сгенерированный с помощью QtDesigner"""
         super().__init__()
+
+        self.user_id = user_id
+
         self.setObjectName("MainWindow")
         self.resize(631, 610)
         self.setMouseTracking(True)

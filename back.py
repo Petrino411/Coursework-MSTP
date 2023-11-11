@@ -2,7 +2,7 @@ import sqlite3
 
 
 class Data:
-    connection = sqlite3.connect('data/tasks.db')
+    connection = sqlite3.connect('tasks.db')
     cursor = connection.cursor()
     object = None
 

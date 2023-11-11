@@ -1,4 +1,5 @@
 from sqlalchemy import *
+from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 __all__ = ['Tasks', 'User', 'session']
@@ -16,6 +17,7 @@ class Tasks(Base):
     time = Column(Time, nullable=False)
     title = Column(Text, nullable=False)
     description = Column(Text, nullable=False)
+    status = Column(Boolean)
     user_id = Column(Integer, ForeignKey('Users.id'))
 
     def __init__(self, d: dict = None):
@@ -34,7 +36,7 @@ class User(Base):
     FIO = Column(String(100), nullable=False)
     login = Column(String(20), nullable=False)
     password = Column(String(16), nullable=False)
-    root = Column(Text, nullable=False)
+    root = Column(Text, nullable=False, default='user')
 
     def __init__(self, d: dict = None):
         if not d:
