@@ -76,15 +76,15 @@ class Login(QWidget):
 
 
     def login(self):
-        #try:
+        try:
             response = requests.get(f"{BASE_URL}/auth?login={self.loginEdit.text()}&password={self.passEdit.text()}")
             user_id = int(response.json()['id'])
             self.mw = MainWindow(user_id)
             self.mw.show()
             self.hide()
-        #except:
-        #    self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
-        #    self.label1.setText('Incorrect username or password.')
+        except:
+            self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
+            self.label1.setText('Incorrect username or password.')
 
     def reg(self):
         print('sadfg')

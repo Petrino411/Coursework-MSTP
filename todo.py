@@ -4,6 +4,7 @@ from back import *
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
 from edit import Edit
+from datetime import datetime
 
 import requests
 
@@ -20,7 +21,7 @@ class MainWindow(QMainWindow):
         self.user_id = user_id
 
         self.setObjectName("MainWindow")
-        self.resize(631, 610)
+        self.resize(670, 610)
         self.setMouseTracking(True)
         self.setFixedSize(self.size())
 
@@ -30,7 +31,7 @@ class MainWindow(QMainWindow):
         self.centralwidget = QtWidgets.QWidget(parent=self)
         self.centralwidget.setObjectName("centralwidget")
         self.widget = QtWidgets.QWidget(parent=self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(30, 10, 587, 248))
+        self.widget.setGeometry(QtCore.QRect(30, 10, 630, 248))
         self.widget.setObjectName("widget")
         self.horizontalLayout_3 = QtWidgets.QHBoxLayout(self.widget)
         self.horizontalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -71,7 +72,7 @@ class MainWindow(QMainWindow):
 
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         self.widget1 = QtWidgets.QWidget(parent=self.centralwidget)
-        self.widget1.setGeometry(QtCore.QRect(20, 280, 591, 317))
+        self.widget1.setGeometry(QtCore.QRect(20, 280, 630, 317))
         self.widget1.setObjectName("widget1")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.widget1)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -132,7 +133,7 @@ class MainWindow(QMainWindow):
         self.calendarWidget.clicked.connect(self.dateview)
         self.calendarWidget.clicked.connect(self.renderList)
 
-        self.current_date_label.setText('Current date: ' + str(self.calendarWidget.selectedDate().toString()))
+        self.dateview()
         self.rmButton.clicked.connect(self.rm_task)
         self.rmButton.clicked.connect(self.renderList)
 
@@ -158,9 +159,14 @@ class MainWindow(QMainWindow):
 
     """Отображение выбранной даты"""
 
-    def dateview(self):
 
-        self.current_date_label.setText(f'Current date: {self.calendarWidget.selectedDate().toString()}')
+    def for_datewiev(self):
+        day = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime("%A")
+        date = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime("%d.%m.%Y")
+        return f"{day} {date}"
+
+    def dateview(self):
+        self.current_date_label.setText(self.for_datewiev())
 
     def renderList(self):
         """Отображение списка дел по дате"""
@@ -168,15 +174,14 @@ class MainWindow(QMainWindow):
         self.textDescription.clear()
         self.listWidget.clear()
         self.lst_do = requests.get(f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&user_id={self.user_id}").json()
-        #self.lst_do = sorted(self.lst_do)
-        self.listWidget.addItem(f'{'№'} {'Time'}\t{'Title'}\t{'Status'}\n')
+        self.listWidget.addItem(f'{'№'} {'Time'}\t{'Title'}\t\t{'Status'}\n')
         for i in range(len(self.lst_do)):
             time = self.lst_do[i]['time'].split(':')
-            self.listWidget.addItem(f'{i+1}:  {time[0]}:{time[1]}\t{self.lst_do[i]['title']}\t{'done' if self.lst_do[i]['status'] == True else 'not done'}\n')
+            self.listWidget.addItem(f'{i+1}:  {time[0]}:{time[1]}\t{self.lst_do[i]['title']}\t\t{'done' if self.lst_do[i]['status'] == True else 'not done'}\n')
         self.textDescription.clear()
         self.current_matter_label.setText('Current matter: ')
 
-    def __getId(self, title):
+    def getId(self, title):
         for i in range(len(self.lst_do)):
             if self.lst_do[i]['title'] == title:
                 return self.lst_do[i]['id']
@@ -188,41 +193,24 @@ class MainWindow(QMainWindow):
         """Отображение описание выбранного дела"""
         for i in range(len(self.lst_do)):
             title = self.listWidget.currentItem().text().split('\t')[1]
-            if self.lst_do[i]['id'] == self.__getId(title):
+            if self.lst_do[i]['id'] == self.getId(title):
                 self.textDescription.setText(self.lst_do[i]['description'])
-        self.current_matter_label.setText(f'Current matter: {str(self.listWidget.currentItem().text().split('\t')[1])}') if str(self.listWidget.currentItem().text().split('\t')[1]) != 'Title' else self.current_matter_label.setText('Current matter: ')
+        self.current_matter_label.setText(f'Current matter: {str(self.listWidget.currentItem().text().split('\t')[1])}') if\
+            str(self.listWidget.currentItem().text().split('\t')[1]) != 'Title' else self.current_matter_label.setText('Current matter: ')
 
     def add(self):
         """Окно добавления"""
-        self.msg_add.show(self.calendarWidget)
+        self.msg_add.show(self.calendarWidget, self.user_id)
 
     def edit(self):
-        """Окно редактирования """
-        list = []
-        try:
-            text = self.listWidget.currentItem().text()
-            index = int(text[:text.find(':')])
-
-            list.append(self.calendarWidget.selectedDate())
-            list.append(self.lst_do[index - 1])
-            self.msg_edit.show(list)
-        except(Exception):
-            msg = QMessageBox(self)
-            msg.setText('Select smth...')
-            msg.setWindowTitle("Oh shit")
-            msg.exec()
+        if self.listWidget.currentItem().text().split('\t')[1] != 'Title':
+            task = None
+            """Окно редактирования """
+            for i in range(len(self.lst_do)):
+                title = self.listWidget.currentItem().text().split('\t')[1]
+                if self.lst_do[i]['id'] == self.getId(title):
+                    task = requests.get(f"{BASE_URL}/list_tasks_by_id/{self.lst_do[i]['id']}").json()
+            self.msg_edit.show(self.user_id,task)
 
     def rm_task(self):
-        if self.listWidget.currentItem() != None:
-            text = self.listWidget.currentItem().text()
-            index = int(text[:text.find(':')])
-            title = self.lst_do[index - 1][1]
-            db.remove(title)
-            self.renderList()
-            self.textDescription.clear()
-            self.current_matter_label.setText('Current matter: ')
-        else:
-            msg = QMessageBox(self)
-            msg.setText('Select smth...')
-            msg.setWindowTitle("Oh shit")
-            msg.exec()
+        pass

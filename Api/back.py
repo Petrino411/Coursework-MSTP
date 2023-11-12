@@ -17,13 +17,13 @@ class Tasks(Base):
     time = Column(Time, nullable=False)
     title = Column(Text, nullable=False)
     description = Column(Text, nullable=False)
-    status = Column(Boolean)
+    status = Column(Integer)
     user_id = Column(Integer, ForeignKey('Users.id'))
 
-    def __init__(self, d: dict = None):
-        if not d:
-            for i in d.items():
-                self.__setattr__(i, d[i])
+    #def __init__(self, d: dict = None):
+    #    if not d:
+    #        for i in d.items():
+    #            self.__setattr__(i, d[i])
 
     def __str__(self):
         return f"{self.id}, {self.date}, {self.time}, {self.title}, {self.description}"
@@ -38,10 +38,10 @@ class User(Base):
     password = Column(String(16), nullable=False)
     root = Column(Text, nullable=False, default='user')
 
-    def __init__(self, d: dict = None):
-        if not d:
-            for i in d.items():
-                self.__setattr__(i, d[i])
+    #def __init__(self, d: dict = None):
+    #    if not d:
+    #        for i in d.items():
+    #            self.__setattr__(i, d[i])
 
     def __str__(self):
         return f"{self.id}, {self.date}, {self.time}, {self.title}, {self.description}"
@@ -49,5 +49,5 @@ class User(Base):
 
 Base.metadata.create_all(engine)
 
-Session = sessionmaker(bind=engine)
-session = Session()
+Sessionlocal = sessionmaker(bind=engine)
+session = Sessionlocal()

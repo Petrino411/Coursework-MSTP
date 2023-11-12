@@ -1,11 +1,17 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QWidget
+
+import requests
+
 from back import *
+
+BASE_URL = 'http://127.0.0.1:8000/add'
 
 
 class Add:
     def __init__(self):
         """Интерфейс, сгенерированный с помощью QtDesigner"""
+        self.user_id = None
         self._winAdd = QtWidgets.QWidget()
         self._winAdd.setObjectName("Form")
         self._winAdd.resize(328, 365)
@@ -86,12 +92,23 @@ class Add:
 
     def execute(self):
         """Кнопка добавить данные в БД"""
+        print(self.descEdit.toPlainText())
         if self.titleLineEdit.text() != '':
-            db.add_task(str(self.dateEdit.date().toPyDate()), str(self.timeEdit.time().toPyTime()),
-                        str(self.titleLineEdit.text()), str(self.descEdit.toPlainText()))
+            data = {
+                'date': str(self.dateEdit.date().toPyDate()),
+                'time': str(self.timeEdit.time().toPyTime()),
+                'title': self.titleLineEdit.text(),
+                'description': str(self.descEdit.toPlainText()),
+                'status': 0,
+                'user_id': self.user_id
+            }
+            resp = requests.post('http://127.0.0.1:8000/add', json=data)
+            print(resp.json())
             self.titleLineEdit.clear()
             self.descEdit.clear()
+            self._winAdd.hide()
 
-    def show(self, date: QtWidgets.QCalendarWidget) -> None:
+    def show(self, date: QtWidgets.QCalendarWidget, user_id) -> None:
+        self.user_id = user_id
         self.dateEdit.setDate(date.selectedDate())
         self._winAdd.show()
