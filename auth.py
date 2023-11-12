@@ -9,8 +9,12 @@ BASE_URL = 'http://127.0.0.1:8000'
 class Login(QWidget):
     def __init__(self):
         super().__init__()
-        self.setObjectName("Form")
+        self.setObjectName("Auth")
         self.resize(295, 233)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.setFont(font)
         self.layoutWidget = QtWidgets.QWidget(parent=self)
         self.layoutWidget.setGeometry(QtCore.QRect(30, 10, 231, 201))
         self.layoutWidget.setObjectName("layoutWidget")
@@ -26,9 +30,9 @@ class Login(QWidget):
         self.passEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
         self.passEdit.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.passEdit)
-        self.pushButton = QtWidgets.QPushButton(parent=self.layoutWidget)
-        self.pushButton.setObjectName("pushButton")
-        self.verticalLayout.addWidget(self.pushButton)
+        self.loginButton = QtWidgets.QPushButton(parent=self.layoutWidget)
+        self.loginButton.setObjectName("pushButton")
+        self.verticalLayout.addWidget(self.loginButton)
         self.label1 = QtWidgets.QLabel(parent=self.layoutWidget)
         self.label1.setObjectName("label")
         self.verticalLayout.addWidget(self.label1, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
@@ -39,39 +43,48 @@ class Login(QWidget):
         QtCore.QMetaObject.connectSlotsByName(self)
 
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "Авторизация"))
+        self.setWindowTitle(_translate("Form", "Auth"))
+        self.label.setText(_translate("Form", "Authorization"))
         self.label1.setText(_translate("Form", ""))
-        self.loginEdit.setText(_translate("Form", "Логин"))
-        self.passEdit.setText(_translate("Form", "Пароль"))
-        self.pushButton.setText(_translate("Form", "Войти"))
-        self.reg_button.setText(_translate("Form", "Зарегистрироваться"))
+        self.loginEdit.setPlaceholderText('Login')
+        self.passEdit.setPlaceholderText('Password')
+        self.loginButton.setText(_translate("Form", "Sing in"))
+        self.reg_button.setText(_translate("Form", "Sign up"))
 
-        self.pushButton.clicked.connect(self.login)
+        self.loginButton.setDefault(True)
+        self.loginButton.clicked.connect(self.login)
 
         self.reg_button.clicked.connect(self.reg)
         self.reg_button.setStyleSheet("""
                     QPushButton {
                         border: none;
+                        color: rgb(27,117,208); 
+                        text-decoration: underline;
                     }
                     QPushButton:hover{
 	                    background-color: none;
-	                    color: rgb(35, 46, 60);
+	                    color: rgb(21,92,162);
                     }
                 """)
+
+    def keyPressEvent(self, event: QtGui.QKeyEvent):
+        if event.key() == QtCore.Qt.Key.Key_Enter or event.key() == QtCore.Qt.Key.Key_Return:
+            self.loginButton.click()
+        else:
+            super().keyPressEvent(event)
 
 
 
     def login(self):
-        try:
+        #try:
             response = requests.get(f"{BASE_URL}/auth?login={self.loginEdit.text()}&password={self.passEdit.text()}")
             user_id = int(response.json()['id'])
             self.mw = MainWindow(user_id)
             self.mw.show()
             self.hide()
-        except:
-            self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
-            self.label1.setText('Неверный логин или пароль')
+        #except:
+        #    self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
+        #    self.label1.setText('Incorrect username or password.')
 
     def reg(self):
         print('sadfg')

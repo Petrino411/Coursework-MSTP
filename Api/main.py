@@ -15,6 +15,14 @@ async def auth(login, password):
     except:
         print('ошибка')
 
+
+@app.get('/list_tasks_by_date')
+async def list_tasks_by_date(date, user_id):
+    try:
+        return session.query(Tasks).filter(and_(Tasks.date == date, Tasks.user_id == user_id)).all()
+    except:
+        print('ошибка')
+
 @app.get('/list_users')
 async def list_tasks():
     return session.query(User).all()

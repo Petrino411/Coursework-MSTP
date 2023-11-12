@@ -1,8 +1,10 @@
+from PyQt6.QtCore import QTime
 from PyQt6.QtWidgets import QMainWindow, QDialog, QMessageBox
 from back import *
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
 from edit import Edit
+
 import requests
 
 BASE_URL = 'http://127.0.0.1:8000'
@@ -64,6 +66,9 @@ class MainWindow(QMainWindow):
 
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
+
+
+
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         self.widget1 = QtWidgets.QWidget(parent=self.centralwidget)
         self.widget1.setGeometry(QtCore.QRect(20, 280, 591, 317))
@@ -138,13 +143,14 @@ class MainWindow(QMainWindow):
 
         self.dateEdit = QtWidgets.QDateEdit()
 
-        self.lst_do = [tuple[str]]
+        self.lst_do = []
         self.renderList()
 
         self.msg_add = Add()
         self.msg_add.pushButton.clicked.connect(self.renderList)
         self.msg_edit = Edit()
         self.msg_edit.pushButton.clicked.connect(self.renderList)
+
 
         # Data.create__()
         # Data.clear__()
@@ -161,23 +167,30 @@ class MainWindow(QMainWindow):
         self.current_matter_label.setText('Current matter: ')
         self.textDescription.clear()
         self.listWidget.clear()
-        self.lst_do = db.get_List_tasks(str(self.calendarWidget.selectedDate().toPyDate()))
-        self.lst_do = sorted(self.lst_do)
+        self.lst_do = requests.get(f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&user_id={self.user_id}").json()
+        #self.lst_do = sorted(self.lst_do)
+        self.listWidget.addItem(f'{'№'} {'Time'}\t{'Title'}\t{'Status'}\n')
         for i in range(len(self.lst_do)):
-            time = self.lst_do[i][0][:self.lst_do[i][0].rfind(':')]
-            self.listWidget.addItem(f'{i + 1}: {time} {self.lst_do[i][1]}\n')
+            time = self.lst_do[i]['time'].split(':')
+            self.listWidget.addItem(f'{i+1}:  {time[0]}:{time[1]}\t{self.lst_do[i]['title']}\t{'done' if self.lst_do[i]['status'] == True else 'not done'}\n')
         self.textDescription.clear()
         self.current_matter_label.setText('Current matter: ')
 
-        # self.listWidget.currentIndex()
+    def __getId(self, title):
+        for i in range(len(self.lst_do)):
+            if self.lst_do[i]['title'] == title:
+                return self.lst_do[i]['id']
+
 
     def getDescription(self):
+        self.current_matter_label.setText('')
+        self.textDescription.setText('')
         """Отображение описание выбранного дела"""
-        text = self.listWidget.currentItem().text()
-        index = int(text[:text.find(':')])
-        desc = self.lst_do[index - 1][2]
-        self.textDescription.setText(str(desc))
-        self.current_matter_label.setText(f'Current matter: {str(self.lst_do[index - 1][1])}')
+        for i in range(len(self.lst_do)):
+            title = self.listWidget.currentItem().text().split('\t')[1]
+            if self.lst_do[i]['id'] == self.__getId(title):
+                self.textDescription.setText(self.lst_do[i]['description'])
+        self.current_matter_label.setText(f'Current matter: {str(self.listWidget.currentItem().text().split('\t')[1])}') if str(self.listWidget.currentItem().text().split('\t')[1]) != 'Title' else self.current_matter_label.setText('Current matter: ')
 
     def add(self):
         """Окно добавления"""
