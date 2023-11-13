@@ -9,6 +9,7 @@ BASE_URL = 'http://127.0.0.1:8000'
 class Login(QWidget):
     def __init__(self):
         super().__init__()
+        self.mw = None
         self.setObjectName("Auth")
         self.resize(295, 233)
         font = QtGui.QFont()

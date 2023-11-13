@@ -1,19 +1,28 @@
 from pathlib import Path
 
-from PyQt6.QtCore import QDateTime, QTime
+from PyQt6.QtCore import QDateTime, QTime, Qt
+from PyQt6.QtGui import QPalette, QColor
 
 from todo import *
 from add import *
 from back import *
 from auth import Login
 
+import qdarktheme
+
+
 if __name__ == "__main__":
 
     import sys
 
     app = QtWidgets.QApplication(sys.argv)
-    app.setStyle('Fusion')
+
+    dark_palette = qdarktheme.load_palette()
+    link_color = dark_palette.link().color()
+    link_rgb = link_color.getRgb()
+    app.setPalette(dark_palette)
     app.setStyleSheet(Path('style.сss').read_text())
+
     auth_window = Login()
     auth_window.show()
 

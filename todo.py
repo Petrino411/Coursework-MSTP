@@ -1,3 +1,6 @@
+import sys
+from pathlib import Path
+
 from PyQt6.QtCore import QTime
 from PyQt6.QtWidgets import QMainWindow, QDialog, QMessageBox
 from back import *
@@ -89,6 +92,7 @@ class MainWindow(QMainWindow):
         self.current_matter_label = QtWidgets.QLabel(parent=self.widget1)
         self.current_matter_label.setFont(font)
         self.current_matter_label.setObjectName("label_2")
+        self.current_date_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.horizontalLayout_2.addWidget(self.current_matter_label)
 
         self.verticalLayout_2.addLayout(self.horizontalLayout_2)
@@ -174,10 +178,10 @@ class MainWindow(QMainWindow):
         self.textDescription.clear()
         self.listWidget.clear()
         self.lst_do = requests.get(f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&user_id={self.user_id}").json()
-        self.listWidget.addItem(f'{'№'} {'Time'}\t{'Title'}\t\t{'Status'}\n')
+        self.listWidget.addItem(f'№ Time\tTitle\t\tStatus\n')
         for i in range(len(self.lst_do)):
             time = self.lst_do[i]['time'].split(':')
-            self.listWidget.addItem(f'{i+1}:  {time[0]}:{time[1]}\t{self.lst_do[i]['title']}\t\t{'done' if self.lst_do[i]['status'] == True else 'not done'}\n')
+            self.listWidget.addItem(f'{i+1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{"done" if self.lst_do[i]["status"] == True else "not done"}\n')
         self.textDescription.clear()
         self.current_matter_label.setText('Current matter: ')
 
@@ -195,12 +199,14 @@ class MainWindow(QMainWindow):
             title = self.listWidget.currentItem().text().split('\t')[1]
             if self.lst_do[i]['id'] == self.getId(title):
                 self.textDescription.setText(self.lst_do[i]['description'])
-        self.current_matter_label.setText(f'Current matter: {str(self.listWidget.currentItem().text().split('\t')[1])}') if\
+        titile = str(self.listWidget.currentItem().text().split("\t")[1])
+        self.current_matter_label.setText(f'Current matter: {titile}') if\
             str(self.listWidget.currentItem().text().split('\t')[1]) != 'Title' else self.current_matter_label.setText('Current matter: ')
 
     def add(self):
         """Окно добавления"""
         self.msg_add.show(self.calendarWidget, self.user_id)
+
 
     def edit(self):
         if self.listWidget.currentItem().text().split('\t')[1] != 'Title':
@@ -213,4 +219,11 @@ class MainWindow(QMainWindow):
             self.msg_edit.show(self.user_id,task)
 
     def rm_task(self):
-        pass
+        for i in range(len(self.lst_do)):
+            title = self.listWidget.currentItem().text().split('\t')[1]
+            if self.lst_do[i]['id'] == self.getId(title):
+                requests.delete(f"{BASE_URL}/tasks/{self.getId(title)}").json()
+                self.renderList()
+
+
+
