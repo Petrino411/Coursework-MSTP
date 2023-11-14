@@ -11,9 +11,23 @@ class Edit(Add):
         self.user_id = None
 
         self.titleFIRST = None
+        self.checkBox = QtWidgets.QCheckBox(parent=self.layoutWidget)
+
+        self.checkBox.setObjectName("checkBox")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.FieldRole, self.checkBox)
+        self.label_5 = QtWidgets.QLabel(parent=self.layoutWidget)
+
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.label_5.setFont(font)
+        self.label_5.setObjectName("label_5")
+        self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_5)
         _translate = QtCore.QCoreApplication.translate
         self._winAdd.setWindowTitle(_translate("Form", "Edit"))
         self.pushButton.setText(_translate("Form", "Edit"))
+        self.checkBox.setText(_translate("Form", "Done"))
+        self.label_5.setText(_translate("Form", "Status"))
 
     def execute(self):
         if self.titleLineEdit.text() != '':
@@ -22,10 +36,12 @@ class Edit(Add):
                 'time': str(self.timeEdit.time().toPyTime()),
                 'title': self.titleLineEdit.text(),
                 'description': str(self.descEdit.toPlainText()),
-                'status': 0,
+                'status': 1 if self.checkBox.isChecked() else 0,
                 'user_id': self.user_id
             }
-            requests.put(f'http://127.0.0.1:8000/edit/{int(self.task['id'])}', json=data)
+            p = requests.put(f'http://127.0.0.1:8000/edit/{self.task["id"]}', json=data)
+            print(self.user_id)
+            print(p.json())
             self._winAdd.hide()
             self.titleLineEdit.clear()
             self.descEdit.clear()

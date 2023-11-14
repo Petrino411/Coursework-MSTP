@@ -57,16 +57,28 @@ async def add(data=Body()):
         print('Ошибка:', e)
 
 
+@app.post('/add_user')
+async def add_user(data=Body()):
+    try:
+        user = User(FIO=data["FIO"], login=data["login"], password=data["password"], root=data["root"])
+        session.add(user)
+        session.commit()
+        session.refresh(user)
+        return user
+    except Exception as e:
+        print('Ошибка:', e)
+
+
+
 @app.put('/edit/{task_id}')
 async def edit(task_id: int, data=Body()):
 
         # Получаем задачу по идентификатору
-        task = session.query(Tasks).filter_by(id=task_id).first()
+        task = session.query(Tasks).filter_by(id=task_id).one()
 
         # Проверяем, найдена ли задача
         if task is None:
             raise HTTPException(status_code=404, detail="Задача не найдена")
-
         # Обновляем поля задачи
         if "date" in data:
             task.date = datetime.strptime(data["date"], '%Y-%m-%d').date()
@@ -78,8 +90,6 @@ async def edit(task_id: int, data=Body()):
             task.description = data["description"]
         if "status" in data:
             task.status = data["status"]
-        if "user_id" in data:
-            task.user_id = data["user_id"]
 
         # Фиксируем изменения в базе данных
         session.commit()
@@ -88,12 +98,16 @@ async def edit(task_id: int, data=Body()):
         return task
 
 
+@app.delete("/tasks/{task_id}")
+async def delete_item(task_id: int):
+    item = session.query(Tasks).filter(Tasks.id == task_id).one()
 
-
-@app.post('/test')
-async def test(data):
-    return data
-
+    if item:
+        session.delete(item)
+        session.commit()
+        return {"message": "Item deleted successfully"}
+    else:
+        raise HTTPException(status_code=404, detail="Item not found")
 
 session.close()
 

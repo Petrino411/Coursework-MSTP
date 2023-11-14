@@ -1,14 +1,16 @@
-
-from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QWidget
 from todo import *
 import requests
+
+from reg import Reg
 
 BASE_URL = 'http://127.0.0.1:8000'
 
 class Login(QWidget):
     def __init__(self):
         super().__init__()
+        self.mw = None
+        self.reg_win = Reg()
         self.setObjectName("Auth")
         self.resize(295, 233)
         font = QtGui.QFont()
@@ -87,6 +89,6 @@ class Login(QWidget):
             self.label1.setText('Incorrect username or password.')
 
     def reg(self):
-        print('sadfg')
+        self.reg_win.show()
 
 

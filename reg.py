@@ -1,10 +1,14 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QWidget
+import requests
+
+from todo import BASE_URL, MainWindow
 
 
 class Reg(QWidget):
     def __init__(self):
         super().__init__()
+        self.mw = None
         self.setObjectName("Form")
         self.resize(295, 192)
         self.layoutWidget = QtWidgets.QWidget(parent=self)
@@ -32,10 +36,28 @@ class Reg(QWidget):
         QtCore.QMetaObject.connectSlotsByName(self)
 
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("Form", "Form"))
-        self.label.setText(_translate("Form", "Регистрация"))
-        self.lineEdit_3.setPlaceholderText(_translate("Form", "Имя"))
-        self.lineEdit.setPlaceholderText(_translate("Form", "Логин"))
-        self.lineEdit_2.setPlaceholderText(_translate("Form", "Пароль"))
-        self.pushButton.setText(_translate("Form", "Зарегестрироваться"))
+        self.setWindowTitle(_translate("Form", "Registration"))
+        self.label.setText(_translate("Form", "Registration"))
+        self.lineEdit_3.setPlaceholderText(_translate("Form", "Name"))
+        self.lineEdit.setPlaceholderText(_translate("Form", "Login"))
+        self.lineEdit_2.setPlaceholderText(_translate("Form", "Password"))
+        self.pushButton.setText(_translate("Form", "Register"))
+
+        self.pushButton.clicked.connect(self.register)
+
+
+    def register(self):
+        try:
+            data = {
+                'FIO': self.lineEdit_3.text(),
+                'login': str(self.lineEdit.text()),
+                'password': self.lineEdit_2.text(),
+                'root': "user",
+            }
+            resp = requests.post('http://127.0.0.1:8000/add_user', json=data)
+            print(resp.json())
+            self.hide()
+        except:
+            print('error')
+
 
