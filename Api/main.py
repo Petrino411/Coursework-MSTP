@@ -1,6 +1,3 @@
-import logging
-import sys
-
 from fastapi import FastAPI, Request, Body, HTTPException
 from back import *
 from sqlalchemy import and_
