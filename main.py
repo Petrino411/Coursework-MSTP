@@ -2,7 +2,6 @@ from PyQt6.QtCore import QDateTime, QTime, Qt
 
 from todo import *
 from add import *
-from back import *
 from auth import Login
 
 import qdarktheme
@@ -24,11 +23,11 @@ if __name__ == "__main__":
     auth_window.show()
 
 
-    cur = QDateTime.currentDateTime().time()
-    for i in db.list_tasks():
-        s = i[2].split(':')
-        time = QTime(int(s[0]), int(s[1]), int(s[2]))
-        if cur < time:
-            print(i)
+    #cur = QDateTime.currentDateTime().time()
+    #for i in db.list_tasks():
+    #    s = i[2].split(':')
+    #    time = QTime(int(s[0]), int(s[1]), int(s[2]))
+    #    if cur < time:
+    #        print(i)
 
     sys.exit(app.exec())

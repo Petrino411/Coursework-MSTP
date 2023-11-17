@@ -2,8 +2,9 @@ import sys
 from pathlib import Path
 
 from PyQt6.QtCore import QTime
-from PyQt6.QtWidgets import QMainWindow, QDialog, QMessageBox
-from back import *
+from PyQt6.QtGui import QAction
+from PyQt6.QtWidgets import QMainWindow, QDialog, QMessageBox, QMenu, QMenuBar
+
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
 from edit import Edit
@@ -18,13 +19,24 @@ BASE_URL = 'http://127.0.0.1:8000'
 
 class MainWindow(QMainWindow):
     def __init__(self, user_id):
-        """Интерфейс, сгенерированный с помощью QtDesigner"""
+
         super().__init__()
+        menubar = QMenuBar()
+
+        self.file_menu = menubar.addMenu('Me')
+
+
+        notifications_action = QAction('Notifications', self)
+        projects_action = QAction('Projects', self)
+        self.file_menu.addAction(notifications_action)
+        self.file_menu.addAction(projects_action)
+
+        self.setMenuBar(menubar)
 
         self.user_id = user_id
 
         self.setObjectName("MainWindow")
-        self.resize(670, 610)
+        self.resize(670, 630)
         self.setMouseTracking(True)
         self.setFixedSize(self.size())
 

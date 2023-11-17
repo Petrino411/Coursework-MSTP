@@ -2,6 +2,8 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QWidget
 import requests
 
+
+
 from todo import BASE_URL, MainWindow
 
 
@@ -45,6 +47,9 @@ class Reg(QWidget):
 
         self.pushButton.clicked.connect(self.register)
 
+        self.isRegd = None
+
+
 
     def register(self):
         try:
@@ -57,6 +62,8 @@ class Reg(QWidget):
             resp = requests.post('http://127.0.0.1:8000/add_user', json=data)
             print(resp.json())
             self.hide()
+            self.isRegd = True
+
         except:
             print('error')
 

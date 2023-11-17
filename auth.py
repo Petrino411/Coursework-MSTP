@@ -89,6 +89,15 @@ class Login(QWidget):
             self.label1.setText('Incorrect username or password.')
 
     def reg(self):
+        #self.hide()
         self.reg_win.show()
+        #if self.reg_win.isRegd:
+        #    self.reg_win.hide()
+        #    response = requests.get(f"{BASE_URL}/auth?login={self.loginEdit.text()}&password={self.passEdit.text()}")
+        #    user_id = int(response.json()['id'])
+        #    self.mw = MainWindow(user_id)
+        #    self.mw.show()
+
+
 
 
