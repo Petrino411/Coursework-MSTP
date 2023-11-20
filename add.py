@@ -1,7 +1,4 @@
-from pathlib import Path
-
 from PyQt6 import QtCore, QtGui, QtWidgets
-from PyQt6.QtWidgets import QWidget
 
 import requests
 
@@ -124,4 +121,5 @@ class Add:
     def show(self, date: QtWidgets.QCalendarWidget, user_id) -> None:
         self.user_id = user_id
         self.dateEdit.setDate(date.selectedDate())
+        self.timeEdit.setTime(self.timeEdit.time().currentTime())
         self._winAdd.show()

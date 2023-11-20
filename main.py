@@ -1,6 +1,3 @@
-from PyQt6.QtCore import QDateTime, QTime, Qt
-
-from todo import *
 from add import *
 from auth import Login
 

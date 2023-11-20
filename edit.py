@@ -1,5 +1,4 @@
 import requests.models
-from PyQt6.QtWidgets import QDialog
 
 from add import *
 

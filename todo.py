@@ -1,9 +1,5 @@
-import sys
-from pathlib import Path
-
-from PyQt6.QtCore import QTime
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QMainWindow, QDialog, QMessageBox, QMenu, QMenuBar
+from PyQt6.QtWidgets import QMainWindow, QMenuBar
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
