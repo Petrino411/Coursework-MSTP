@@ -1,7 +1,7 @@
-from fastapi import FastAPI, Request, Body, HTTPException
+from fastapi import FastAPI, Body, HTTPException
 from back import *
 from sqlalchemy import and_
-from datetime import datetime, date
+from datetime import datetime
 
 app = FastAPI()
 
@@ -14,7 +14,7 @@ async def list_tasks():
 @app.get('/auth')
 async def auth(login, password):
     try:
-        return session.query(User).filter(and_(User.login == login, User.password == password)).one()
+        return session.query(User).filter(and_(User.login == str(login), User.password == str(password))).one()
     except Exception as e:
         print('Ошибка:', e)
 

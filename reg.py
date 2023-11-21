@@ -16,7 +16,7 @@ class Reg(QWidget):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(parent=self.layoutWidget)
-        self.label.setObjectName("label")
+        self.label.setObjectName("current_date_label")
         self.verticalLayout.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.lineEdit_3 = QtWidgets.QLineEdit(parent=self.layoutWidget)
         self.lineEdit_3.setObjectName("lineEdit_3")
@@ -28,7 +28,7 @@ class Reg(QWidget):
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.lineEdit_2)
         self.pushButton = QtWidgets.QPushButton(parent=self.layoutWidget)
-        self.pushButton.setObjectName("pushButton")
+        self.pushButton.setObjectName("addButton")
         self.verticalLayout.addWidget(self.pushButton)
 
         QtCore.QMetaObject.connectSlotsByName(self)

@@ -35,14 +35,14 @@ QTextEdit{
 }
 QLineEdit{
 	color: rgb(255, 255, 255);
-  border: 1px solid rgb(35, 46, 60);
-  border-radius:7px;
+    border: 1px solid rgb(35, 46, 60);
+    border-radius:7px;
 	height: 30;
 }
 QListWidget {
 	color: rgb(255, 255, 255);
-  border: 1px solid rgb(35, 46, 60);
-  border-radius:7px;
+    border: 1px solid rgb(35, 46, 60);
+    border-radius:7px;
 }
 
 QTextBrowser {
@@ -55,8 +55,8 @@ QPushButton{
     background-color:rgb(24, 37, 51);
     border: 1px solid rgb(35, 46, 60);
     border-radius:7px;
-	width: 230;
-	height: 50;
+	width: 130;
+	height: 30;
 }
 QPushButton:hover{
 	background-color:rgb(35, 46, 60);
@@ -69,6 +69,8 @@ QMenuBar
 {
     color: rgb(255, 255, 255);
 	background-color: rgb(23, 33, 43);
+	width: 50;
+	
 }
 QMenuBar::item
 {
@@ -76,6 +78,7 @@ QMenuBar::item
 	background-color: rgb(23, 33, 43);
 	border: 1px solid rgb(35, 46, 60);
     border-radius:5px;
+	width: 100;
 }
 QMenuBar::item::selected
 {
@@ -87,6 +90,7 @@ QMenu
 	background-color: rgb(23, 33, 43);
 	border: 1px solid rgb(35, 46, 60);
     border-radius:5px;
+	width: 100;
 }
 QMenu::item::selected
 {

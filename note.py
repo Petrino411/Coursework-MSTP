@@ -13,7 +13,7 @@ class Note(QWidget):
         self.label.setGeometry(QtCore.QRect(10, 0, 371, 81))
         self.setWindowFlags(Qt.WindowType.FramelessWindowHint | Qt.WindowType.WindowStaysOnTopHint)
         self.label.setStyleSheet("color: rgb(255, 255, 255);")
-        self.label.setObjectName("label")
+        self.label.setObjectName("current_date_label")
         self.pushButton = QtWidgets.QPushButton(parent=self)
         self.pushButton.setGeometry(QtCore.QRect(360, 0, 21, 21))
         self.pushButton.setStyleSheet("QPushButton{\n"
@@ -42,7 +42,7 @@ class Note(QWidget):
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("resources/ico/close_FILL0_wght400_GRAD0_opsz24.png"), QtGui.QIcon.Mode.Normal, QtGui.QIcon.State.Off)
         self.pushButton.setIcon(icon)
-        self.pushButton.setObjectName("pushButton")
+        self.pushButton.setObjectName("addButton")
 
         QtCore.QMetaObject.connectSlotsByName(self)
         _translate = QtCore.QCoreApplication.translate

@@ -31,7 +31,7 @@ class Add:
 
         self.label.setFont(font)
 
-        self.label.setObjectName("label")
+        self.label.setObjectName("current_date_label")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label)
         self.dateEdit = QtWidgets.QDateEdit(parent=self.layoutWidget)
 
@@ -43,7 +43,7 @@ class Add:
 
         self.label_2.setFont(font)
 
-        self.label_2.setObjectName("label_2")
+        self.label_2.setObjectName("current_matter_label")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_2)
         self.timeEdit = QtWidgets.QTimeEdit(parent=self.layoutWidget)
 
@@ -81,7 +81,7 @@ class Add:
 
         self.pushButton.setFont(font)
 
-        self.pushButton.setObjectName("pushButton")
+        self.pushButton.setObjectName("addButton")
         self.verticalLayout.addWidget(self.pushButton)
 
 

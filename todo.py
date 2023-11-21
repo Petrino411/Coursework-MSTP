@@ -6,6 +6,10 @@ from add import Add
 from edit import Edit
 from datetime import datetime
 from chat import Chat
+from profile import Profile
+from project import Project
+from notifications import Note
+
 
 import requests
 
@@ -24,13 +28,15 @@ class MainWindow(QMainWindow):
 
         self.ch_win = Chat()
 
-
         profile = QAction('Profile', self)
         notifications_action = QAction('Notifications', self)
         projects_action = QAction('Projects', self)
-        chat_action = QAction('Chat',self)
+        chat_action = QAction('Chat', self)
 
         chat_action.triggered.connect(self.chat_sh)
+        profile.triggered.connect(self.prof_sh)
+        projects_action.triggered.connect(self.proj_sh)
+        notifications_action.triggered.connect(self.notes_sh)
 
         self.Me.addAction(profile)
         self.Me.addSeparator()
@@ -39,12 +45,114 @@ class MainWindow(QMainWindow):
         self.Me.addSeparator()
         self.Me.addAction(chat_action)
 
-
         self.setMenuBar(menubar)
 
         self.user_id = user_id
 
         self.setObjectName("MainWindow")
+        self.resize(1040, 576)
+        self.setFixedSize(self.size())
+        self.setMouseTracking(True)
+
+        self.centralwidget = QtWidgets.QWidget(parent=self)
+        self.centralwidget.setObjectName("centralwidget")
+        self.line = QtWidgets.QFrame(parent=self.centralwidget)
+        self.line.setGeometry(QtCore.QRect(410, 30, 16, 508))
+        self.line.setFrameShape(QtWidgets.QFrame.Shape.VLine)
+        self.line.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
+        self.line.setObjectName("line")
+        self.widget = QtWidgets.QWidget(parent=self.centralwidget)
+        self.widget.setGeometry(QtCore.QRect(22, 32, 381, 508))
+        self.widget.setObjectName("widget")
+        self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout.setObjectName("verticalLayout")
+        self.calendarWidget = QtWidgets.QCalendarWidget(parent=self.widget)
+        font = QtGui.QFont()
+        font.setFamily("Calibri")
+        font.setPointSize(12)
+        self.calendarWidget.setFont(font)
+
+        self.calendarWidget.setLocale(
+            QtCore.QLocale(QtCore.QLocale.Language.English, QtCore.QLocale.Country.UnitedKingdom))
+        self.calendarWidget.setObjectName("calendarWidget")
+        self.verticalLayout.addWidget(self.calendarWidget)
+        self.line_2 = QtWidgets.QFrame(parent=self.widget)
+        self.line_2.setFrameShape(QtWidgets.QFrame.Shape.HLine)
+        self.line_2.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
+        self.line_2.setObjectName("line_2")
+        self.verticalLayout.addWidget(self.line_2)
+        self.current_matter_label = QtWidgets.QLabel(parent=self.widget)
+
+        self.current_matter_label.setFont(font)
+        self.current_matter_label.setObjectName("current_matter_label")
+        self.verticalLayout.addWidget(self.current_matter_label)
+        self.label_5 = QtWidgets.QLabel(parent=self.widget)
+
+        self.label_5.setFont(font)
+        self.label_5.setObjectName("label_5")
+        self.verticalLayout.addWidget(self.label_5)
+        self.textDescription = QtWidgets.QTextBrowser(parent=self.widget)
+
+        self.textDescription.setObjectName("textDescription")
+        self.verticalLayout.addWidget(self.textDescription)
+        self.horizontalLayout = QtWidgets.QHBoxLayout()
+        self.horizontalLayout.setObjectName("horizontalLayout")
+        self.rmButton = QtWidgets.QPushButton(parent=self.widget)
+
+        self.rmButton.setFont(font)
+
+        self.rmButton.setObjectName("rmButton")
+        self.horizontalLayout.addWidget(self.rmButton)
+        self.editButton = QtWidgets.QPushButton(parent=self.widget)
+
+        self.editButton.setFont(font)
+
+        self.editButton.setObjectName("editButton")
+        self.horizontalLayout.addWidget(self.editButton)
+        self.addButton = QtWidgets.QPushButton(parent=self.widget)
+
+        self.addButton.setFont(font)
+
+        self.addButton.setObjectName("addButton")
+        self.horizontalLayout.addWidget(self.addButton)
+        self.verticalLayout.addLayout(self.horizontalLayout)
+        self.widget1 = QtWidgets.QWidget(parent=self.centralwidget)
+        self.widget1.setGeometry(QtCore.QRect(427, 30, 591, 511))
+        self.widget1.setObjectName("widget1")
+        self.verticalLayout_2 = QtWidgets.QVBoxLayout(self.widget1)
+        self.verticalLayout_2.setContentsMargins(0, 0, 0, 0)
+        self.verticalLayout_2.setObjectName("verticalLayout_2")
+        self.current_date_label = QtWidgets.QLabel(parent=self.widget1)
+
+        self.current_date_label.setFont(font)
+        self.current_date_label.setObjectName("current_date_label")
+        self.verticalLayout_2.addWidget(self.current_date_label)
+        self.label_6 = QtWidgets.QLabel(parent=self.widget1)
+
+        self.label_6.setFont(font)
+        self.label_6.setObjectName("label_6")
+        self.verticalLayout_2.addWidget(self.label_6)
+        self.listWidget = QtWidgets.QListWidget(parent=self.widget1)
+
+        self.listWidget.setObjectName("listWidget")
+        self.verticalLayout_2.addWidget(self.listWidget)
+        self.setCentralWidget(self.centralwidget)
+
+        QtCore.QMetaObject.connectSlotsByName(self)
+
+        _translate = QtCore.QCoreApplication.translate
+        self.setWindowTitle(_translate("MainWindow", "ToDoList"))
+        self.current_matter_label.setText(_translate("MainWindow", "Current matter:"))
+        self.label_5.setText(_translate("MainWindow", "Description:"))
+        self.rmButton.setText(_translate("MainWindow", "Remove"))
+        self.editButton.setText(_translate("MainWindow", "Edit"))
+        self.addButton.setText(_translate("MainWindow", "Add"))
+        self.current_date_label.setText(_translate("MainWindow", "Current date:"))
+        self.current_date_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+        self.label_6.setText(_translate("MainWindow", "Plans:"))
+
+        """self.setObjectName("MainWindow")
         self.resize(670, 630)
         self.setMouseTracking(True)
         self.setFixedSize(self.size())
@@ -79,7 +187,7 @@ class MainWindow(QMainWindow):
         self.horizontalLayout.setObjectName("horizontalLayout")
         self.current_date_label = QtWidgets.QLabel(parent=self.widget)
         self.current_date_label.setFont(font)
-        self.current_date_label.setObjectName("label")
+        self.current_date_label.setObjectName("current_date_label")
         self.horizontalLayout.addWidget(self.current_date_label)
 
         self.verticalLayout.addLayout(self.horizontalLayout)
@@ -110,7 +218,7 @@ class MainWindow(QMainWindow):
         self.horizontalLayout_2.setObjectName("horizontalLayout_2")
         self.current_matter_label = QtWidgets.QLabel(parent=self.widget1)
         self.current_matter_label.setFont(font)
-        self.current_matter_label.setObjectName("label_2")
+        self.current_matter_label.setObjectName("current_matter_label")
         self.current_date_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
         self.horizontalLayout_2.addWidget(self.current_matter_label)
 
@@ -121,22 +229,22 @@ class MainWindow(QMainWindow):
         self.verticalLayout_2.addWidget(self.desc_label)
         self.textDescription = QtWidgets.QTextBrowser(parent=self.widget1)
 
-        self.textDescription.setObjectName("textBrowser")
+        self.textDescription.setObjectName("textDescription")
         self.verticalLayout_2.addWidget(self.textDescription)
         self.verticalLayout_3.addLayout(self.verticalLayout_2)
         self.horizontalLayout_4 = QtWidgets.QHBoxLayout()
         self.horizontalLayout_4.setObjectName("horizontalLayout_4")
         self.rmButton = QtWidgets.QPushButton(parent=self.widget1)
         self.rmButton.setFont(font)
-        self.rmButton.setObjectName("pushButton_3")
+        self.rmButton.setObjectName("rmButton")
         self.horizontalLayout_4.addWidget(self.rmButton)
         self.editButton = QtWidgets.QPushButton(parent=self.widget1)
         self.editButton.setFont(font)
-        self.editButton.setObjectName("pushButton_2")
+        self.editButton.setObjectName("editButton")
         self.horizontalLayout_4.addWidget(self.editButton)
         self.addButton = QtWidgets.QPushButton(parent=self.widget1)
         self.addButton.setFont(font)
-        self.addButton.setObjectName("pushButton")
+        self.addButton.setObjectName("addButton")
         self.horizontalLayout_4.addWidget(self.addButton)
         self.verticalLayout_3.addLayout(self.horizontalLayout_4)
         self.setCentralWidget(self.centralwidget)
@@ -151,7 +259,7 @@ class MainWindow(QMainWindow):
         self.desc_label.setText(_translate("MainWindow", "Description:"))
         self.rmButton.setText(_translate("MainWindow", "Remove"))
         self.editButton.setText(_translate("MainWindow", "Edit"))
-        self.addButton.setText(_translate("MainWindow", "Add"))
+        self.addButton.setText(_translate("MainWindow", "Add"))"""
 
         self.calendarWidget.clicked.connect(self.dateview)
         self.calendarWidget.clicked.connect(self.renderList)
@@ -174,6 +282,12 @@ class MainWindow(QMainWindow):
         self.msg_add.pushButton.clicked.connect(self.renderList)
         self.msg_edit = Edit()
         self.msg_edit.pushButton.clicked.connect(self.renderList)
+
+        self.prof = Profile()
+
+        self.proj = Project()
+
+        self.notes = Note()
 
     def dateview(self):
         """Отображение выбранной даты"""
@@ -204,18 +318,21 @@ class MainWindow(QMainWindow):
                 return self.lst_do[i]['id']
 
     def getDescription(self):
-        """Отображение описание выбранного дела"""
-        self.current_matter_label.setText('')
-        self.textDescription.setText('')
+        try:
+            """Отображение описание выбранного дела"""
+            self.current_matter_label.setText('')
+            self.textDescription.setText('')
 
-        for i in range(len(self.lst_do)):
-            title = self.listWidget.currentItem().text().split('\t')[1]
-            if self.lst_do[i]['id'] == self.getId(title):
-                self.textDescription.setText(self.lst_do[i]['description'])
-        titile = str(self.listWidget.currentItem().text().split("\t")[1])
-        self.current_matter_label.setText(f'Current matter: {titile}') if \
-            str(self.listWidget.currentItem().text().split('\t')[1]) != 'Title' else self.current_matter_label.setText(
-            'Current matter: ')
+            for i in range(len(self.lst_do)):
+                title = self.listWidget.currentItem().text().split('\t')[1]
+                if self.lst_do[i]['id'] == self.getId(title):
+                    self.textDescription.setText(self.lst_do[i]['description'])
+            titile = str(self.listWidget.currentItem().text().split("\t")[1])
+            self.current_matter_label.setText(f'Current matter: {titile}') if \
+                str(self.listWidget.currentItem().text().split('\t')[1]) != 'Title' else self.current_matter_label.setText(
+                'Current matter: ')
+        except:
+            self.current_matter_label.setText('Current matter: ')
 
     def add(self):
         """Окно добавления"""
@@ -248,3 +365,12 @@ class MainWindow(QMainWindow):
 
     def chat_sh(self):
         self.ch_win.show()
+
+    def prof_sh(self):
+        self.prof.show()
+
+    def proj_sh(self):
+        self.proj.show()
+
+    def notes_sh(self):
+        self.notes.show()

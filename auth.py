@@ -6,6 +6,7 @@ from reg import Reg
 
 BASE_URL = 'http://127.0.0.1:8000'
 
+
 class Login(QWidget):
     def __init__(self):
         super().__init__()
@@ -24,7 +25,7 @@ class Login(QWidget):
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(parent=self.layoutWidget)
-        self.label.setObjectName("label")
+        self.label.setObjectName("current_date_label")
         self.verticalLayout.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.loginEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
         self.loginEdit.setObjectName("lineEdit")
@@ -33,13 +34,13 @@ class Login(QWidget):
         self.passEdit.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.passEdit)
         self.loginButton = QtWidgets.QPushButton(parent=self.layoutWidget)
-        self.loginButton.setObjectName("pushButton")
+        self.loginButton.setObjectName("addButton")
         self.verticalLayout.addWidget(self.loginButton)
         self.label1 = QtWidgets.QLabel(parent=self.layoutWidget)
-        self.label1.setObjectName("label")
+        self.label1.setObjectName("current_date_label")
         self.verticalLayout.addWidget(self.label1, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.reg_button = QtWidgets.QPushButton(parent=self.layoutWidget)
-        self.reg_button.setObjectName("label_2")
+        self.reg_button.setObjectName("current_matter_label")
         self.verticalLayout.addWidget(self.reg_button, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
 
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -77,29 +78,24 @@ class Login(QWidget):
         else:
             super().keyPressEvent(event)
 
-
-
     def login(self):
         #try:
-            response = requests.get(f"{BASE_URL}/auth?login={self.loginEdit.text()}&password={self.passEdit.text()}")
+            response = requests.get(f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
             user_id = int(response.json()['id'])
             self.mw = MainWindow(user_id)
             self.mw.show()
             self.hide()
-        #rexcept:
-        #r    self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
-        #r    self.label1.setText('Incorrect username or password.')
+        #except:
+        #    self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
+        #    self.label1.setText('Incorrect username or password.')
+
 
     def reg(self):
-        #self.hide()
+        # self.hide()
         self.reg_win.show()
-        #if self.reg_win.isRegd:
+        # if self.reg_win.isRegd:
         #    self.reg_win.hide()
         #    response = requests.get(f"{BASE_URL}/auth?login={self.loginEdit.text()}&password={self.passEdit.text()}")
         #    user_id = int(response.json()['id'])
         #    self.mw = MainWindow(user_id)
         #    self.mw.show()
-
-
-
-

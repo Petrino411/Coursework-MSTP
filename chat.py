@@ -28,7 +28,7 @@ class Chat(QWidget):
         self.pushButton = QtWidgets.QPushButton(parent=self)
         self.pushButton.setGeometry(QtCore.QRect(360, 280, 31, 23))
         self.pushButton.setText("")
-        self.pushButton.setObjectName("pushButton")
+        self.pushButton.setObjectName("addButton")
 
         QtCore.QMetaObject.connectSlotsByName(self)
 
