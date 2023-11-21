@@ -1,10 +1,11 @@
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QMainWindow, QMenuBar
+from PyQt6.QtWidgets import QMainWindow, QMenuBar, QMessageBox
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
 from edit import Edit
 from datetime import datetime
+from chat import Chat
 
 import requests
 
@@ -19,13 +20,25 @@ class MainWindow(QMainWindow):
         super().__init__()
         menubar = QMenuBar()
 
-        self.file_menu = menubar.addMenu('Me')
+        self.Me = menubar.addMenu('Me')
+
+        self.ch_win = Chat()
 
 
+        profile = QAction('Profile', self)
         notifications_action = QAction('Notifications', self)
         projects_action = QAction('Projects', self)
-        self.file_menu.addAction(notifications_action)
-        self.file_menu.addAction(projects_action)
+        chat_action = QAction('Chat',self)
+
+        chat_action.triggered.connect(self.chat_sh)
+
+        self.Me.addAction(profile)
+        self.Me.addSeparator()
+        self.Me.addAction(notifications_action)
+        self.Me.addAction(projects_action)
+        self.Me.addSeparator()
+        self.Me.addAction(chat_action)
+
 
         self.setMenuBar(menubar)
 
@@ -78,8 +91,6 @@ class MainWindow(QMainWindow):
 
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
-
-
 
         self.horizontalLayout_3.addLayout(self.verticalLayout)
         self.widget1 = QtWidgets.QWidget(parent=self.centralwidget)
@@ -164,74 +175,76 @@ class MainWindow(QMainWindow):
         self.msg_edit = Edit()
         self.msg_edit.pushButton.clicked.connect(self.renderList)
 
-
-        # Data.create__()
-        # Data.clear__()
-        # db.list_tasks()
-
-    """Отображение выбранной даты"""
-
-
-    def for_datewiev(self):
-        day = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime("%A")
-        date = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime("%d.%m.%Y")
-        return f"{day} {date}"
-
     def dateview(self):
-        self.current_date_label.setText(self.for_datewiev())
+        """Отображение выбранной даты"""
+        day = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime("%A")
+        date = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime(
+            "%d.%m.%Y")
+        self.current_date_label.setText(f"{day} {date}")
 
     def renderList(self):
         """Отображение списка дел по дате"""
         self.current_matter_label.setText('Current matter: ')
         self.textDescription.clear()
         self.listWidget.clear()
-        self.lst_do = requests.get(f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&user_id={self.user_id}").json()
+        self.lst_do = requests.get(
+            f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&user_id={self.user_id}").json()
         self.listWidget.addItem(f'№ Time\tTitle\t\tStatus\n')
         for i in range(len(self.lst_do)):
             time = self.lst_do[i]['time'].split(':')
-            self.listWidget.addItem(f'{i+1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{"done" if self.lst_do[i]["status"] == True else "not done"}\n')
+            self.listWidget.addItem(
+                f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{"done" if self.lst_do[i]["status"] == True else "not done"}\n')
         self.textDescription.clear()
         self.current_matter_label.setText('Current matter: ')
 
     def getId(self, title):
+        """Получение id по названию"""
         for i in range(len(self.lst_do)):
             if self.lst_do[i]['title'] == title:
                 return self.lst_do[i]['id']
 
-
     def getDescription(self):
+        """Отображение описание выбранного дела"""
         self.current_matter_label.setText('')
         self.textDescription.setText('')
-        """Отображение описание выбранного дела"""
+
         for i in range(len(self.lst_do)):
             title = self.listWidget.currentItem().text().split('\t')[1]
             if self.lst_do[i]['id'] == self.getId(title):
                 self.textDescription.setText(self.lst_do[i]['description'])
         titile = str(self.listWidget.currentItem().text().split("\t")[1])
-        self.current_matter_label.setText(f'Current matter: {titile}') if\
-            str(self.listWidget.currentItem().text().split('\t')[1]) != 'Title' else self.current_matter_label.setText('Current matter: ')
+        self.current_matter_label.setText(f'Current matter: {titile}') if \
+            str(self.listWidget.currentItem().text().split('\t')[1]) != 'Title' else self.current_matter_label.setText(
+            'Current matter: ')
 
     def add(self):
         """Окно добавления"""
         self.msg_add.show(self.calendarWidget, self.user_id)
 
-
     def edit(self):
-        if self.listWidget.currentItem().text().split('\t')[1] != 'Title':
-            task = None
-            """Окно редактирования """
-            for i in range(len(self.lst_do)):
-                title = self.listWidget.currentItem().text().split('\t')[1]
-                if self.lst_do[i]['id'] == self.getId(title):
-                    task = requests.get(f"{BASE_URL}/list_tasks_by_id/{self.lst_do[i]['id']}").json()
-            self.msg_edit.show(self.user_id,task)
+        """Окно редактирования """
+        try:
+            if self.listWidget.currentItem().text().split('\t')[1] != 'Title':
+                task = None
+
+                for i in range(len(self.lst_do)):
+                    title = self.listWidget.currentItem().text().split('\t')[1]
+                    if self.lst_do[i]['id'] == self.getId(title):
+                        task = requests.get(f"{BASE_URL}/list_tasks_by_id/{self.lst_do[i]['id']}").json()
+                self.msg_edit.show(self.user_id, task)
+        except:
+            msg = QMessageBox(self)
+            msg.setText('Select smth, idiot')
+            msg.setWindowTitle("Oh shit")
+            msg.exec()
 
     def rm_task(self):
+        """ Удаление дела"""
         for i in range(len(self.lst_do)):
             title = self.listWidget.currentItem().text().split('\t')[1]
             if self.lst_do[i]['id'] == self.getId(title):
                 requests.delete(f"{BASE_URL}/tasks/{self.getId(title)}").json()
                 self.renderList()
 
-
-
+    def chat_sh(self):
+        self.ch_win.show()

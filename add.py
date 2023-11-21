@@ -106,14 +106,13 @@ class Add:
         if self.titleLineEdit.text() != '':
             data = {
                 'date': str(self.dateEdit.date().toPyDate()),
-                'time': str(self.timeEdit.time().toPyTime()),
+                'time': str(self.timeEdit.time().currentTime().toPyTime().strftime('%H:%M:%S')),
                 'title': self.titleLineEdit.text(),
                 'description': str(self.descEdit.toPlainText()),
                 'status': 0,
                 'user_id': self.user_id
             }
-            resp = requests.post('http://127.0.0.1:8000/add', json=data)
-            print(resp.json())
+            requests.post('http://127.0.0.1:8000/add', json=data)
             self.titleLineEdit.clear()
             self.descEdit.clear()
             self._winAdd.hide()

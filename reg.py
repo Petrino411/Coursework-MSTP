@@ -3,10 +3,6 @@ from PyQt6.QtWidgets import QWidget
 import requests
 
 
-
-from todo import BASE_URL, MainWindow
-
-
 class Reg(QWidget):
     def __init__(self):
         super().__init__()
@@ -59,8 +55,7 @@ class Reg(QWidget):
                 'password': self.lineEdit_2.text(),
                 'root': "user",
             }
-            resp = requests.post('http://127.0.0.1:8000/add_user', json=data)
-            print(resp.json())
+            requests.post('http://127.0.0.1:8000/add_user', json=data)
             self.hide()
             self.isRegd = True
 

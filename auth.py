@@ -1,4 +1,4 @@
-from PyQt6.QtWidgets import QWidget
+from PyQt6.QtWidgets import QWidget, QLineEdit
 from todo import *
 import requests
 
@@ -50,6 +50,7 @@ class Login(QWidget):
         self.label1.setText(_translate("Form", ""))
         self.loginEdit.setPlaceholderText('Login')
         self.passEdit.setPlaceholderText('Password')
+        self.passEdit.setEchoMode(QLineEdit.EchoMode.Password)
         self.loginButton.setText(_translate("Form", "Sing in"))
         self.reg_button.setText(_translate("Form", "Sign up"))
 
@@ -60,11 +61,12 @@ class Login(QWidget):
         self.reg_button.setStyleSheet("""
                     QPushButton {
                         border: none;
+                        background-color: rgb(23, 33, 43);
                         color: rgb(27,117,208); 
                         text-decoration: underline;
                     }
                     QPushButton:hover{
-	                    background-color: none;
+	                    
 	                    color: rgb(21,92,162);
                     }
                 """)
@@ -78,15 +80,15 @@ class Login(QWidget):
 
 
     def login(self):
-        try:
+        #try:
             response = requests.get(f"{BASE_URL}/auth?login={self.loginEdit.text()}&password={self.passEdit.text()}")
             user_id = int(response.json()['id'])
             self.mw = MainWindow(user_id)
             self.mw.show()
             self.hide()
-        except:
-            self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
-            self.label1.setText('Incorrect username or password.')
+        #rexcept:
+        #r    self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
+        #r    self.label1.setText('Incorrect username or password.')
 
     def reg(self):
         #self.hide()
