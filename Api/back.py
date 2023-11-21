@@ -47,6 +47,17 @@ class User(Base):
         return f"{self.id}, {self.date}, {self.time}, {self.title}, {self.description}"
 
 
+class Chat(Base):
+    __tablename__ = 'chat'
+
+    id = Column(Integer, primary_key=True)
+    sender_id = Column(Integer, nullable=False)
+    reciever_id = Column(Integer, nullable=False)
+    message = Column(String, nullable=False)
+    date = Column(Date, nullable=False)
+    time = Column(Time, nullable=False)
+
+
 Base.metadata.create_all(engine)
 
 Sessionlocal = sessionmaker(bind=engine)
