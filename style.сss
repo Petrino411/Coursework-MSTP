@@ -96,4 +96,15 @@ QMenu::item::selected
 {
     background-color:rgb(35, 46, 60);
 }
+QComboBox::item::selected
+{
+    background-color:rgb(35, 46, 60);
+}
+QComboBox
+{
+	border: 1px solid rgb(35, 46, 60);
+    border-radius:5px;
+
+}
+
 

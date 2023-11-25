@@ -3,6 +3,9 @@ from project import Project
 
 class Note(Project):
     def __init__(self):
-        super().__init__()
-        self.pushButton.hide()
-        self.pushButton_2.hide()
+        Project.__init__(self)
+
+        _translate = QtCore.QCoreApplication.translate
+        self._proj_win.setWindowTitle(_translate("Form", "Notifications"))
+        self.pushButton.setText(_translate("Form", "Accept"))
+        self.pushButton_2.setText(_translate("Form", "Deny"))

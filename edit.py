@@ -41,7 +41,7 @@ class Edit(Add):
             p = requests.put(f'http://127.0.0.1:8000/edit/{self.task["id"]}', json=data)
             print(self.user_id)
             print(p.json())
-            self._winAdd.hide()
+            self._winAdd.close()
             self.titleLineEdit.clear()
             self.descEdit.clear()
 

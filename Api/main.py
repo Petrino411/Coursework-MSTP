@@ -20,9 +20,9 @@ async def auth(login, password):
 
 
 @app.get('/list_tasks_by_date')
-async def list_tasks_by_date(date, user_id):
+async def list_tasks_by_date(date, user_id, proj_id):
     try:
-        return session.query(Tasks).filter(and_(Tasks.date == date, Tasks.user_id == user_id)).all()
+        return session.query(Tasks).filter(and_(Tasks.date == date, Tasks.user_id == user_id, Tasks.project_id == proj_id)).all()
     except Exception as e:
         print('Ошибка:', e)
 
@@ -34,9 +34,28 @@ async def list_tasks_by_date(task_id):
         print('Ошибка:', e)
 
 
+@app.get('/profile/{user_id}')
+async def profile(user_id):
+    try:
+        return session.query(User).where(User.id == user_id).one()
+    except Exception as e:
+        print('Ошибка:', e)
+
+@app.get('/project/{user_id}')
+async def project(user_id):
+    try:
+        return session.query(Project).where(and_(User_project.project_id == Project.id, User_project.user_id == user_id)).all()
+    except Exception as e:
+        print('Ошибка:', e)
+
+
 @app.get('/list_users')
-async def list_tasks():
+async def list_users():
     return session.query(User).all()
+
+@app.get('/list_proj_users/{project_id}')
+async def list_proj_users(project_id):
+    return session.query(User).where(and_(User_project.user_id == User.id, User_project.project_id == project_id)).all()
 
 
 @app.post('/add')
@@ -45,13 +64,27 @@ async def add(data=Body()):
         task = Tasks(date=datetime.strptime(data["date"], '%Y-%m-%d').date(),
                      time=datetime.strptime(data["time"], '%H:%M:%S').time(),
                      title=data["title"], description=data["description"], status=data["status"],
-                     user_id=data["user_id"])
+                     user_id=data["user_id"],
+                     project_id = data['project_id'])
         session.add(task)
         session.commit()
         session.refresh(task)
         return task
     except Exception as e:
         print('Ошибка:', e)
+
+
+@app.post('/add2')
+async def add2(data=Body()):
+    try:
+        req = Request(sender_id = data['sender_id'], reciever_id=data['reciever_id'], task_id=data['task_id'])
+        session.add(req)
+        session.commit()
+        session.refresh(req)
+        return req
+    except Exception as e:
+        print('Ошибка:', e)
+
 
 
 @app.post('/add_user')

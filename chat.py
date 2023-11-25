@@ -21,7 +21,6 @@ class Chat(QWidget):
         self.verticalLayout.addWidget(self.combo)
         self.combo.addItem('asfdghj')
 
-
         self.listWidget = QtWidgets.QListWidget(parent=self.layoutWidget)
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
@@ -34,4 +33,3 @@ class Chat(QWidget):
 
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Form", "Chat"))
-

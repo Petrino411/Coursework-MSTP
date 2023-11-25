@@ -1,5 +1,6 @@
+from PyQt6 import QtGui, QtWidgets, QtCore
 from PyQt6.QtWidgets import QWidget, QLineEdit
-from todo import *
+
 import requests
 
 from reg import Reg
@@ -82,9 +83,12 @@ class Login(QWidget):
         #try:
             response = requests.get(f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
             user_id = int(response.json()['id'])
+
+            from todo import MainWindow
+
             self.mw = MainWindow(user_id)
             self.mw.show()
-            self.hide()
+            self.close()
         #except:
         #    self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
         #    self.label1.setText('Incorrect username or password.')

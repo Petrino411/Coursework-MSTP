@@ -56,7 +56,7 @@ class Reg(QWidget):
                 'root': "user",
             }
             requests.post('http://127.0.0.1:8000/add_user', json=data)
-            self.hide()
+            self.close()
             self.isRegd = True
 
         except:
