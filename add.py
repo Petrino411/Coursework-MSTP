@@ -108,32 +108,28 @@ class Add:
         self.pushButton.clicked.connect(self.execute)
 
     def execute(self):
-        print(self.descEdit.toPlainText())
         if self.titleLineEdit.text() != '':
-            reciever_id = 0
+            u_id = 0
+            for i in self.query:
+                if self.combobox.currentText() == i['FIO']:
+                    u_id = i['id']
             data = {
                 'date': str(self.dateEdit.date().toPyDate()),
                 'time': str(self.timeEdit.time().currentTime().toPyTime().strftime('%H:%M:%S')),
                 'title': self.titleLineEdit.text(),
                 'description': str(self.descEdit.toPlainText()),
-                'status': 0,
-                'user_id': self.user_id,
+                'status': 0 if self.user_id == u_id else 2,
+                'user_id': u_id,
                 'project_id': self.proj_id,
             }
-            ids = [d['id'] for d in self.query if 'id' in d]
-            print(ids)
-            query = requests.post(f'{BASE_URL}/add', json=data)
-            for i in self.query:
-                if i['FIO'] == self.combobox.currentText():
-                    reciever_id = i['id']
-                    break
 
-            data2 = {
-                'sender_id': self.user_id,
-                'task_id': query.json()['id'],
-                'reciever_id': reciever_id
-            }
-            requests.post(f'{BASE_URL}/add2', json=data2)
+            query = requests.post(f'{BASE_URL}/add', json=data)
+            if self.user_id != u_id:
+                data2 = {
+                    'sender_id': self.user_id,
+                    'task_id': query.json()['id'],
+                }
+                requests.post(f'{BASE_URL}/add2', json=data2)
 
             self.titleLineEdit.clear()
             self.descEdit.clear()
@@ -146,6 +142,7 @@ class Add:
         self.timeEdit.setTime(self.timeEdit.time().currentTime())
 
         self.query = requests.get(f"{BASE_URL}/list_proj_users/{self.proj_id}").json()
+        self.combobox.clear()
         if len(self.query) > 0:
             for i in self.query:
                 self.combobox.addItem(i['FIO'])

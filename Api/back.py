@@ -56,7 +56,6 @@ class Request(Base):
 
     id = Column(Integer, primary_key=True)
     sender_id = Column(Integer, ForeignKey('user.id'))
-    reciever_id = Column(Integer, ForeignKey('user.id'))
     task_id = Column(Integer, ForeignKey('task.id'))
 
 

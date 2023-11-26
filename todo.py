@@ -1,5 +1,5 @@
 from PyQt6.QtGui import QAction
-from PyQt6.QtWidgets import QMainWindow, QMenuBar, QMessageBox
+from PyQt6.QtWidgets import QMainWindow, QMenuBar, QMessageBox, QApplication
 
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
@@ -219,14 +219,14 @@ class MainWindow(QMainWindow):
         self.current_matter_label.setText('Current matter: ')
         self.textDescription.clear()
         self.listWidget.clear()
-        print(self.selected_proj)
         self.lst_do = requests.get(
             f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&user_id={self.user_id}&proj_id={self.selected_proj}").json()
         self.listWidget.addItem(f'№ Time\tTitle\t\t\t\tStatus\n')
         for i in range(len(self.lst_do)):
             time = self.lst_do[i]['time'].split(':')
-            self.listWidget.addItem(
-                f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{"done" if self.lst_do[i]["status"] == True else "not done"}\n')
+            if self.lst_do[i]["status"] != 2:
+                self.listWidget.addItem(
+                    f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{"done" if self.lst_do[i]["status"] == True else "not done"}\n')
         self.textDescription.clear()
         self.current_matter_label.setText('Current matter: ')
 
@@ -246,8 +246,8 @@ class MainWindow(QMainWindow):
                 title = self.listWidget.currentItem().text().split('\t')[1]
                 if self.lst_do[i]['id'] == self.getId(title):
                     self.textDescription.setText(self.lst_do[i]['description'])
-            titile = str(self.listWidget.currentItem().text().split("\t")[1])
-            self.current_matter_label.setText(f'Current matter: {titile}') if \
+            title = str(self.listWidget.currentItem().text().split("\t")[1])
+            self.current_matter_label.setText(f'Current matter: {title}') if \
                 str(self.listWidget.currentItem().text().split('\t')[
                         1]) != 'Title' else self.current_matter_label.setText(
                 'Current matter: ')
@@ -285,12 +285,10 @@ class MainWindow(QMainWindow):
 
     def proj_user(self):
         query = requests.get(f"{BASE_URL}/project/{self.user_id}").json()
-        print(query)
         if len(query) > 0:
             for i in query:
                 self.project_combobox.addItem(i['name'])
             self.selected_proj = query[0]['id']
-            print(self.selected_proj)
         else:
             self.project_combobox.addItem('nothing to show')
 
@@ -300,29 +298,32 @@ class MainWindow(QMainWindow):
             if self.project_combobox.currentText() == i['name']:
                 self.selected_proj = i['id']
                 break
-        print(self.selected_proj)
         self.renderList()
 
 
 
     def chat_sh(self):
-        self.ch_win.show()
+        self.ch_win.show(self.user_id, self.selected_proj)
 
     def prof_sh(self):
         query = requests.get(f"{BASE_URL}/profile/{self.user_id}").json()
-        print(query)
         self.prof.show(str(query['FIO']), str(query['login']), str(query['password']))
-
 
 
     def proj_sh(self):
         self.proj.show(self.user_id)
 
     def notes_sh(self):
-        self.notes.show(self.user_id)
+        self.notes.show(self.user_id, self.selected_proj)
 
     def exit(self):
         self.close()
         self.login.show()
 
+    def closeEvent(self, event):
+        for widget in QApplication.topLevelWidgets():
+            if widget != self:
+                widget.close()
+
+        super().closeEvent(event)
 

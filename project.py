@@ -39,9 +39,8 @@ class Project:
 
         self.pushButton_2.clicked.connect(self.add)
 
-    def show(self, user_id):
+    def show(self, user_id, proj_id = 0):
         self.user_id = user_id
-        print('render')
         query = requests.get(f"{BASE_URL}/project/{self.user_id}").json()
         self.listWidget.clear()
         for i in query:

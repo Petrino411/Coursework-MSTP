@@ -6,6 +6,7 @@ import requests
 class Reg(QWidget):
     def __init__(self):
         super().__init__()
+        self.pr = []
         self.mw = None
         self.setObjectName("Form")
         self.resize(295, 192)
@@ -27,6 +28,10 @@ class Reg(QWidget):
         self.lineEdit_2 = QtWidgets.QLineEdit(parent=self.layoutWidget)
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.lineEdit_2)
+        self.combo = QtWidgets.QComboBox(parent=self.layoutWidget)
+        self.combo.setObjectName("combo")
+        self.verticalLayout.addWidget(self.combo)
+
         self.pushButton = QtWidgets.QPushButton(parent=self.layoutWidget)
         self.pushButton.setObjectName("addButton")
         self.verticalLayout.addWidget(self.pushButton)
@@ -43,9 +48,12 @@ class Reg(QWidget):
 
         self.pushButton.clicked.connect(self.register)
 
-        self.isRegd = None
+        self.render_pr()
 
-
+    def render_pr(self):
+        self.pr = requests.get('http://127.0.0.1:8000/list_projects').json()
+        for i in self.pr:
+            self.combo.addItem(str(i['name']))
 
     def register(self):
         try:
@@ -55,11 +63,21 @@ class Reg(QWidget):
                 'password': self.lineEdit_2.text(),
                 'root': "user",
             }
-            requests.post('http://127.0.0.1:8000/add_user', json=data)
+            q = requests.post('http://127.0.0.1:8000/add_user', json=data).json()
+
+            pr_id = 0
+            for i in self.pr:
+                if self.combo.currentText() == i['name']:
+                    pr_id = i['id']
+
+            data2 = {
+                'user_id': q['id'],
+                'project_id': pr_id
+            }
+            requests.post('http://127.0.0.1:8000/user_to_project', json=data2)
+
             self.close()
-            self.isRegd = True
+
 
         except:
             print('error')
-
-
