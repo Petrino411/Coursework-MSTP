@@ -80,8 +80,9 @@ class Login(QWidget):
             super().keyPressEvent(event)
 
     def login(self):
-        #try:
-            response = requests.get(f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
+        try:
+            response = requests.get(
+                f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
             user_id = int(response.json()['id'])
 
             from todo import MainWindow
@@ -89,17 +90,11 @@ class Login(QWidget):
             self.mw = MainWindow(user_id)
             self.mw.show()
             self.close()
-        #except:
-        #    self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
-        #    self.label1.setText('Incorrect username or password.')
-
+        except:
+           self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
+           self.label1.setText('Incorrect username or password.')
 
     def reg(self):
-        # self.hide()
+        self.close()
         self.reg_win.show()
-        # if self.reg_win.isRegd:
-        #    self.reg_win.hide()
-        #    response = requests.get(f"{BASE_URL}/auth?login={self.loginEdit.text()}&password={self.passEdit.text()}")
-        #    user_id = int(response.json()['id'])
-        #    self.mw = MainWindow(user_id)
-        #    self.mw.show()
+
