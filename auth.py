@@ -3,8 +3,6 @@ from PyQt6.QtWidgets import QWidget, QLineEdit
 
 import requests
 
-from reg import Reg
-
 BASE_URL = 'http://127.0.0.1:8000'
 
 
@@ -12,9 +10,8 @@ class Login(QWidget):
     def __init__(self):
         super().__init__()
         self.mw = None
-        self.reg_win = Reg()
         self.setObjectName("Auth")
-        self.resize(295, 233)
+        self.resize(295, 200)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
@@ -40,9 +37,8 @@ class Login(QWidget):
         self.label1 = QtWidgets.QLabel(parent=self.layoutWidget)
         self.label1.setObjectName("current_date_label")
         self.verticalLayout.addWidget(self.label1, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
-        self.reg_button = QtWidgets.QPushButton(parent=self.layoutWidget)
-        self.reg_button.setObjectName("current_matter_label")
-        self.verticalLayout.addWidget(self.reg_button, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
+
+
 
         QtCore.QMetaObject.connectSlotsByName(self)
 
@@ -54,24 +50,13 @@ class Login(QWidget):
         self.passEdit.setPlaceholderText('Password')
         self.passEdit.setEchoMode(QLineEdit.EchoMode.Password)
         self.loginButton.setText(_translate("Form", "Sing in"))
-        self.reg_button.setText(_translate("Form", "Sign up"))
+
 
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.login)
 
-        self.reg_button.clicked.connect(self.reg)
-        self.reg_button.setStyleSheet("""
-                    QPushButton {
-                        border: none;
-                        background-color: rgb(23, 33, 43);
-                        color: rgb(27,117,208); 
-                        text-decoration: underline;
-                    }
-                    QPushButton:hover{
-	                    
-	                    color: rgb(21,92,162);
-                    }
-                """)
+
+
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == QtCore.Qt.Key.Key_Enter or event.key() == QtCore.Qt.Key.Key_Return:
@@ -84,17 +69,16 @@ class Login(QWidget):
             response = requests.get(
                 f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
             user_id = int(response.json()['id'])
+            permission = response.json()['root']
 
             from todo import MainWindow
 
-            self.mw = MainWindow(user_id)
+            self.mw = MainWindow(user_id, permission)
             self.mw.show()
             self.close()
         except:
            self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
            self.label1.setText('Incorrect username or password.')
 
-    def reg(self):
-        self.close()
-        self.reg_win.show()
+
 

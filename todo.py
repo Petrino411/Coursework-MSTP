@@ -19,7 +19,7 @@ BASE_URL = 'http://127.0.0.1:8000'
 
 
 class MainWindow(QMainWindow):
-    def __init__(self, user_id):
+    def __init__(self, user_id, permission):
 
         super().__init__()
         menubar = QMenuBar()
@@ -33,12 +33,15 @@ class MainWindow(QMainWindow):
         projects_action = QAction('Projects', self)
         chat_action = QAction('Chat', self)
         exit_action = QAction('Exit', self)
+        reg_action = QAction('Add user', self)
 
         exit_action.triggered.connect(self.exit)
         chat_action.triggered.connect(self.chat_sh)
         profile.triggered.connect(self.prof_sh)
         projects_action.triggered.connect(self.proj_sh)
         notifications_action.triggered.connect(self.notes_sh)
+        reg_action.triggered.connect(self.reg)
+
 
         self.Me.addAction(profile)
         self.Me.addSeparator()
@@ -46,8 +49,10 @@ class MainWindow(QMainWindow):
         self.Me.addAction(projects_action)
         self.Me.addSeparator()
         self.Me.addAction(chat_action)
+        self.Me.addAction(reg_action)
         self.Me.addSeparator()
         self.Me.addAction(exit_action)
+
 
         self.setMenuBar(menubar)
 
@@ -207,6 +212,7 @@ class MainWindow(QMainWindow):
 
 
 
+
     def dateview(self):
         """Отображение выбранной даты"""
         day = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime("%A")
@@ -327,3 +333,8 @@ class MainWindow(QMainWindow):
 
         super().closeEvent(event)
 
+
+    def reg(self):
+        from reg import Reg
+        self.reg_win = Reg()
+        self.reg_win.show()

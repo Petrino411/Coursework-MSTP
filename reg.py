@@ -76,13 +76,6 @@ class Reg(QWidget):
             }
             requests.post('http://127.0.0.1:8000/user_to_project', json=data2)
 
-            response = requests.get(
-                f"http://127.0.0.1:8000/auth?login={str(self.lineEdit.text())}&password={self.lineEdit_2.text()}")
-            user_id = int(response.json()['id'])
-            from todo import MainWindow
-            self.mw = MainWindow(user_id)
-            self.mw.show()
-
             self.close()
             return True
 
