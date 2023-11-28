@@ -22,41 +22,44 @@ class MainWindow(QMainWindow):
     def __init__(self, user_id, permission):
 
         super().__init__()
+        self.task_user = None
         menubar = QMenuBar()
 
         self.Me = menubar.addMenu('Me')
 
         self.ch_win = Chat()
 
-        profile = QAction('Profile', self)
-        notifications_action = QAction('Notifications', self)
-        projects_action = QAction('Projects', self)
-        chat_action = QAction('Chat', self)
-        exit_action = QAction('Exit', self)
-        reg_action = QAction('Add user', self)
+        self.profile = QAction('Profile', self)
+        self.notifications_action = QAction('Notifications', self)
+        self.projects_action = QAction('Projects', self)
+        self.chat_action = QAction('Chat', self)
+        self.exit_action = QAction('Exit', self)
+        self.reg_action = QAction('Add user', self)
 
-        exit_action.triggered.connect(self.exit)
-        chat_action.triggered.connect(self.chat_sh)
-        profile.triggered.connect(self.prof_sh)
-        projects_action.triggered.connect(self.proj_sh)
-        notifications_action.triggered.connect(self.notes_sh)
-        reg_action.triggered.connect(self.reg)
+        self.exit_action.triggered.connect(self.exit)
+        self.chat_action.triggered.connect(self.chat_sh)
+        self.profile.triggered.connect(self.prof_sh)
+        self.projects_action.triggered.connect(self.proj_sh)
+        self.notifications_action.triggered.connect(self.notes_sh)
+        self.reg_action.triggered.connect(self.reg)
 
 
-        self.Me.addAction(profile)
+        self.Me.addAction(self.profile)
         self.Me.addSeparator()
-        self.Me.addAction(notifications_action)
-        self.Me.addAction(projects_action)
+        self.Me.addAction(self.notifications_action)
+        self.Me.addAction(self.projects_action)
         self.Me.addSeparator()
-        self.Me.addAction(chat_action)
-        self.Me.addAction(reg_action)
+        self.Me.addAction(self.chat_action)
+        self.Me.addAction(self.reg_action)
         self.Me.addSeparator()
-        self.Me.addAction(exit_action)
+        self.Me.addAction(self.exit_action)
 
 
         self.setMenuBar(menubar)
 
         self.user_id = user_id
+
+        self.permission = permission
 
         self.setObjectName("MainWindow")
         self.resize(1040, 576)
@@ -205,12 +208,20 @@ class MainWindow(QMainWindow):
         self.proj = Project()
 
         self.notes = Note()
+        self.notes.pushButton.clicked.connect(self.renderList)
 
         self.project_combobox.currentTextChanged.connect(self.change_project)
 
         self.login = Login()
+        self.for_permission()
 
 
+
+    def for_permission(self):
+        if self.permission == 'user':
+            self.Me.removeAction(self.reg_action)
+            self.addButton.close()
+            self.rmButton.close()
 
 
     def dateview(self):
@@ -226,13 +237,20 @@ class MainWindow(QMainWindow):
         self.textDescription.clear()
         self.listWidget.clear()
         self.lst_do = requests.get(
-            f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&user_id={self.user_id}&proj_id={self.selected_proj}").json()
-        self.listWidget.addItem(f'№ Time\tTitle\t\t\t\tStatus\n')
+            f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&proj_id={self.selected_proj}").json()
+        if self.permission == 'admin':
+            self.listWidget.addItem(f'№ Time\tTitle\t\tEmployer\t\tStatus\n')
+        else:
+            self.listWidget.addItem(f'№ Time\tTitle\t\tStatus\n')
         for i in range(len(self.lst_do)):
             time = self.lst_do[i]['time'].split(':')
-            if self.lst_do[i]["status"] != 2:
+            if self.lst_do[i]["status"] != 2 and self.permission == 'user':
                 self.listWidget.addItem(
                     f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{"done" if self.lst_do[i]["status"] == True else "not done"}\n')
+            elif self.permission == 'admin':
+                user = requests.get(f"{BASE_URL}/list_users?user_id={self.lst_do[i]['user_id']}").json()
+                self.listWidget.addItem(
+                    f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{user['FIO']}\t\t{"done" if self.lst_do[i]["status"] == True else "not done"}\n')
         self.textDescription.clear()
         self.current_matter_label.setText('Current matter: ')
 
@@ -262,7 +280,7 @@ class MainWindow(QMainWindow):
 
     def add(self):
         """Окно добавления"""
-        self.msg_add.show(self.calendarWidget, self.user_id, self.selected_proj)
+        self.msg_add.show(self.calendarWidget, self.user_id, self.selected_proj, self.permission)
 
     def edit(self):
         """Окно редактирования """
@@ -274,7 +292,7 @@ class MainWindow(QMainWindow):
                     title = self.listWidget.currentItem().text().split('\t')[1]
                     if self.lst_do[i]['id'] == self.getId(title):
                         task = requests.get(f"{BASE_URL}/list_tasks_by_id/{self.lst_do[i]['id']}").json()
-                self.msg_edit.show(self.user_id, task)
+                self.msg_edit.show(self.user_id, task, self.selected_proj, self.permission)
         except:
             msg = QMessageBox(self)
             msg.setText('Select smth, idiot')
@@ -290,7 +308,8 @@ class MainWindow(QMainWindow):
                 self.renderList()
 
     def proj_user(self):
-        query = requests.get(f"{BASE_URL}/project/{self.user_id}").json()
+        query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
+            f"{BASE_URL}/project/{self.user_id}").json()
         if len(query) > 0:
             for i in query:
                 self.project_combobox.addItem(i['name'])
@@ -299,7 +318,8 @@ class MainWindow(QMainWindow):
             self.project_combobox.addItem('nothing to show')
 
     def change_project(self):
-        query = requests.get(f"{BASE_URL}/project/{self.user_id}").json()
+        query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
+            f"{BASE_URL}/project/{self.user_id}").json()
         for i in query:
             if self.project_combobox.currentText() == i['name']:
                 self.selected_proj = i['id']
@@ -312,12 +332,12 @@ class MainWindow(QMainWindow):
         self.ch_win.show(self.user_id, self.selected_proj)
 
     def prof_sh(self):
-        query = requests.get(f"{BASE_URL}/profile/{self.user_id}").json()
-        self.prof.show(str(query['FIO']), str(query['login']), str(query['password']))
+        requests.get(f"{BASE_URL}/profile/{self.user_id}").json()
+        self.prof.show(self.user_id)
 
 
     def proj_sh(self):
-        self.proj.show(self.user_id)
+        self.proj.show(self.user_id, self.permission)
 
     def notes_sh(self):
         self.notes.show(self.user_id, self.selected_proj)

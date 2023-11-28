@@ -2,6 +2,7 @@ from fastapi import FastAPI, Body, HTTPException
 from back import *
 from sqlalchemy import and_, or_
 from datetime import datetime
+import requests
 
 app = FastAPI()
 
@@ -24,17 +25,19 @@ async def auth(login, password):
 
 
 @app.get('/list_tasks_by_date')
-async def list_tasks_by_date(date, user_id, proj_id):
+async def list_tasks_by_date(date, proj_id):
     try:
         return session.query(Tasks).filter(
-            and_(Tasks.date == date, Tasks.user_id == user_id, Tasks.project_id == proj_id)).all()
+            and_(Tasks.date == date, Tasks.project_id == proj_id)).all()
     except Exception as e:
         print('Ошибка:', e)
 
 @app.get('/get_name_for_notes')
-async def get_name_for_notes():
+async def get_name_for_notes(task_id):
     try:
-        return session.query(Request).all()
+        q = session.query(Request).filter(Request.task_id == task_id).one()
+        u = session.query(User).filter(User.id == q.sender_id).one()
+        return u.FIO
     except Exception as e:
         print('Ошибка:', e)
 
@@ -65,9 +68,18 @@ async def project(user_id):
         print('Ошибка:', e)
 
 
+@app.get('/project_for_admin')
+async def project_for_admin():
+    try:
+        return session.query(Project).all()
+    except Exception as e:
+        print('Ошибка:', e)
+
+
+
 @app.get('/list_users')
-async def list_users():
-    return session.query(User).all()
+async def list_users(user_id):
+    return session.query(User).filter(User.id == user_id).one()
 
 
 @app.get('/history_chat')
@@ -98,6 +110,18 @@ async def add(data=Body()):
         session.commit()
         session.refresh(task)
         return task
+    except Exception as e:
+        print('Ошибка:', e)
+
+@app.post('/add_project')
+async def add_project(data=Body()):
+    try:
+        pr = Project(
+                     name=data["name"], desc=data["desc"])
+        session.add(pr)
+        session.commit()
+        session.refresh(pr)
+        return pr
     except Exception as e:
         print('Ошибка:', e)
 
@@ -171,12 +195,15 @@ async def edit(task_id: int, data=Body()):
         task.description = data["description"]
     if "status" in data:
         task.status = data["status"]
+    if "user_id" in data:
+        task.user_id = data["user_id"]
 
     # Фиксируем изменения в базе данных
     session.commit()
     session.refresh(task)
 
     return task
+
 
 @app.put('/update_st')
 async def update_st(task_id: int, st):
@@ -192,6 +219,27 @@ async def update_st(task_id: int, st):
     session.refresh(task)
 
     return task
+
+@app.put('/update_profile')
+async def update_st(data=Body()):
+    pr = session.query(User).filter_by(id=data['id']).one()
+
+    # Проверяем, найдена ли задача
+    if pr is None:
+        raise HTTPException(status_code=404, detail="Задача не найдена")
+    # Обновляем поля задачи
+    if "FIO" in data:
+        pr.FIO = data['FIO']
+    if "login" in data:
+        pr.login = data['login']
+    if "password" in data:
+        pr.password = data['password']
+
+    session.commit()
+    session.refresh(pr)
+
+    return pr
+
 
 
 

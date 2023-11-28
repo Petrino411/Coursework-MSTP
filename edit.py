@@ -6,6 +6,7 @@ from add import *
 class Edit(Add):
     def __init__(self):
         super().__init__()
+        self.permission = None
         self.task = None
         self.user_id = None
 
@@ -29,7 +30,33 @@ class Edit(Add):
         self.label_5.setText(_translate("Form", "Status"))
 
     def execute(self):
-        if self.titleLineEdit.text() != '':
+        if self.permission == "admin":
+            if self.titleLineEdit.text() != '':
+                u_id = 0
+                for i in self.query:
+                    if self.combobox.currentText() == i['FIO']:
+                        u_id = i['id']
+                data = {
+                    'date': str(self.dateEdit.date().toPyDate()),
+                    'time': str(self.timeEdit.time().toPyTime()),
+                    'title': self.titleLineEdit.text(),
+                    'description': str(self.descEdit.toPlainText()),
+                    'status': 1 if self.checkBox.isChecked() else 0,
+                    'user_id': u_id
+                }
+                if self.user_id != u_id:
+                    data2 = {
+                        'sender_id': self.user_id,
+                        'task_id': self.task["id"],
+                    }
+                    data['status'] = 2
+                    requests.post(f'{BASE_URL}/add2', json=data2)
+                requests.put(f'{BASE_URL}/edit/{self.task["id"]}', json=data)
+
+                self._winAdd.close()
+                self.titleLineEdit.clear()
+                self.descEdit.clear()
+        else:
             data = {
                 'date': str(self.dateEdit.date().toPyDate()),
                 'time': str(self.timeEdit.time().toPyTime()),
@@ -38,16 +65,21 @@ class Edit(Add):
                 'status': 1 if self.checkBox.isChecked() else 0,
                 'user_id': self.user_id
             }
-            p = requests.put(f'http://127.0.0.1:8000/edit/{self.task["id"]}', json=data)
-            print(self.user_id)
-            print(p.json())
-            self._winAdd.close()
-            self.titleLineEdit.clear()
-            self.descEdit.clear()
+            requests.put(f'{BASE_URL}/edit/{self.task["id"]}', json=data)
 
-    def show(self, user_id, task) -> None:
+    def show(self, user_id, task, proj_id, permission) -> None:
         self.task = task
         self.user_id = user_id
+        self.proj_id = proj_id
+        self.permission = permission
+        if self.permission == 'user':
+            self.dateEdit.setDisabled(True)
+            self.timeEdit.setDisabled(True)
+            self.titleLineEdit.setDisabled(True)
+            self.descEdit.setDisabled(True)
+            self.combobox.close()
+            self.label_for.close()
+
         date = task['date'].split('-')
         self.dateEdit.setDate(QtCore.QDate(int(date[0]),int(date[1]),int(date[2])))
 
@@ -56,4 +88,16 @@ class Edit(Add):
 #
         self.titleFIRST = task['date']
         self.descEdit.setText(task['description'])
+        #self.combobox.close()
+        #self.label_for.close()
+
+        self.query = requests.get(f"{BASE_URL}/list_proj_users/{self.proj_id}").json()
+        self.combobox.clear()
+        if len(self.query) > 0:
+            for i in self.query:
+                if i['id'] != self.user_id:
+                    self.combobox.addItem(i['FIO'])
+        else:
+            self.combobox.addItem('nothing to show')
+
         self._winAdd.show()

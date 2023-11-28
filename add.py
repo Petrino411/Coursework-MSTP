@@ -135,7 +135,7 @@ class Add:
             self.descEdit.clear()
             self._winAdd.close()
 
-    def show(self, date: QtWidgets.QCalendarWidget, user_id, proj_id) -> None:
+    def show(self, date: QtWidgets.QCalendarWidget, user_id, proj_id, permission) -> None:
         self.user_id = user_id
         self.proj_id = proj_id
         self.dateEdit.setDate(date.selectedDate())
@@ -145,7 +145,8 @@ class Add:
         self.combobox.clear()
         if len(self.query) > 0:
             for i in self.query:
-                self.combobox.addItem(i['FIO'])
+                if i['id'] != self.user_id:
+                    self.combobox.addItem(i['FIO'])
         else:
             self.combobox.addItem('nothing to show')
 

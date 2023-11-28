@@ -7,6 +7,8 @@ class Note(Project):
     def __init__(self):
         Project.__init__(self)
 
+        self.notes = None
+        self.query = None
         self.proj_id = None
         _translate = QtCore.QCoreApplication.translate
         self._proj_win.setWindowTitle(_translate("Form", "Notifications"))
@@ -21,7 +23,7 @@ class Note(Project):
         self.listWidget.addItem(f"title\t Deadline\t\t From \t status ")
         for i in self.notes:
             self.listWidget.addItem(
-                f"{i['title']}\t {i['date']} {i['time']}\t {'fr'}\t {'not accepted' if i['status'] == 2 else 'accepted'}")
+                f"{i['title']}\t {i['date']} {i['time']}\t {requests.get(f"{BASE_URL}/get_name_for_notes?task_id={i['id']}").json()}\t {'not accepted' if i['status'] == 2 else 'accepted'}")
 
     def show(self, user_id, proj_id=0):
         self.user_id = user_id

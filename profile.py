@@ -1,16 +1,18 @@
+import requests
 from PyQt6 import QtCore, QtWidgets
-
-
+BASE_URL = 'http://127.0.0.1:8000'
 
 class Profile:
     def __init__(self):
         super().__init__()
+        self.user_id = None
+        self.query = None
         self._prof_win = QtWidgets.QWidget()
 
         self._prof_win.setObjectName("Form")
         self._prof_win.resize(291, 131)
         self.widget = QtWidgets.QWidget(parent=self._prof_win)
-        self.widget.setGeometry(QtCore.QRect(90, 10, 193, 109))
+        self.widget.setGeometry(QtCore.QRect(50, 10, 193, 109))
         self.widget.setObjectName("widget")
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout_3.setContentsMargins(0, 0, 0, 0)
@@ -66,10 +68,38 @@ class Profile:
         self.lineEdit.setDisabled(True)
         self.lineEdit_2.setDisabled(True)
 
-    def show(self, fio='', login='', password=''):
+        self.pushButton.clicked.connect(self.edit)
+        self.pushButton_2.clicked.connect(self.ok)
+        self.pushButton_2.close()
+
+    def edit(self):
+        self.lineEdit_3.setDisabled(False)
+        self.lineEdit.setDisabled(False)
+        self.lineEdit_2.setDisabled(False)
+        self.pushButton_2.show()
+        self.pushButton.close()
+
+    def ok(self):
+        data = {
+            'FIO': self.lineEdit_2.text(),
+            'login': self.lineEdit.text(),
+            'password': self.lineEdit_3.text(),
+            'id': self.query['id']
+        }
+        requests.put(f'{BASE_URL}/update_profile', json=data)
+        self.lineEdit_3.setDisabled(True)
+        self.lineEdit.setDisabled(True)
+        self.lineEdit_2.setDisabled(True)
+        self._prof_win.close()
+
+    def render(self):
+        self.query = requests.get(f"{BASE_URL}/profile/{self.user_id}").json()
+        fio, login, password = str(self.query['FIO']), str(self.query['login']), str(self.query['password'])
         self.lineEdit_2.setText(fio)
         self.lineEdit.setText(login)
         self.lineEdit_3.setText(password)
+
+    def show(self, user_id):
+        self.user_id = user_id
+        self.render()
         self._prof_win.show()
-
-
