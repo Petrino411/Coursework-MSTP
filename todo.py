@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import QMainWindow, QMenuBar, QMessageBox, QApplication
 
@@ -20,7 +22,6 @@ BASE_URL = 'http://127.0.0.1:8000'
 
 class MainWindow(QMainWindow):
     def __init__(self, user_id, permission):
-
         super().__init__()
         self.task_user = None
         menubar = QMenuBar()
@@ -358,3 +359,5 @@ class MainWindow(QMainWindow):
         from reg import Reg
         self.reg_win = Reg()
         self.reg_win.show()
+
+

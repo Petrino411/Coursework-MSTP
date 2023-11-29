@@ -1,4 +1,5 @@
 from PyQt6 import QtGui, QtWidgets, QtCore
+from PyQt6.QtGui import QPalette
 from PyQt6.QtWidgets import QWidget, QLineEdit
 
 import requests
@@ -9,6 +10,7 @@ BASE_URL = 'http://127.0.0.1:8000'
 class Login(QWidget):
     def __init__(self):
         super().__init__()
+
         self.mw = None
         self.setObjectName("Auth")
         self.resize(295, 200)
@@ -58,6 +60,7 @@ class Login(QWidget):
 
 
 
+
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == QtCore.Qt.Key.Key_Enter or event.key() == QtCore.Qt.Key.Key_Return:
             self.loginButton.click()
@@ -79,6 +82,5 @@ class Login(QWidget):
         #except:
         #   self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
         #   self.label1.setText('Incorrect username or password.')
-
-
+#
 

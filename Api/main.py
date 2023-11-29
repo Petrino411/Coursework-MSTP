@@ -2,7 +2,7 @@ from fastapi import FastAPI, Body, HTTPException
 from back import *
 from sqlalchemy import and_, or_
 from datetime import datetime
-import requests
+
 
 app = FastAPI()
 

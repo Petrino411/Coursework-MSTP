@@ -1,6 +1,7 @@
 from PyQt6 import QtCore, QtGui, QtWidgets
 
 import requests
+from PyQt6.QtWidgets import QMessageBox
 
 BASE_URL = 'http://127.0.0.1:8000'
 
@@ -113,27 +114,35 @@ class Add:
             for i in self.query:
                 if self.combobox.currentText() == i['FIO']:
                     u_id = i['id']
-            data = {
-                'date': str(self.dateEdit.date().toPyDate()),
-                'time': str(self.timeEdit.time().currentTime().toPyTime().strftime('%H:%M:%S')),
-                'title': self.titleLineEdit.text(),
-                'description': str(self.descEdit.toPlainText()),
-                'status': 0 if self.user_id == u_id else 2,
-                'user_id': u_id,
-                'project_id': self.proj_id,
-            }
-
-            query = requests.post(f'{BASE_URL}/add', json=data)
-            if self.user_id != u_id:
-                data2 = {
-                    'sender_id': self.user_id,
-                    'task_id': query.json()['id'],
+            print(self.combobox.currentText() )
+            if self.combobox.currentText() == 'nothing to show':
+                msg = QMessageBox(self._winAdd)
+                msg.setText('You can not add smth for empty employer.\n'
+                            'Check you have employers in selected project')
+                msg.setWindowTitle("Oh shit")
+                msg.exec()
+            else:
+                data = {
+                    'date': str(self.dateEdit.date().toPyDate()),
+                    'time': str(self.timeEdit.time().currentTime().toPyTime().strftime('%H:%M:%S')),
+                    'title': self.titleLineEdit.text(),
+                    'description': str(self.descEdit.toPlainText()),
+                    'status': 0 if self.user_id == u_id else 2,
+                    'user_id': u_id,
+                    'project_id': self.proj_id,
                 }
-                requests.post(f'{BASE_URL}/add2', json=data2)
 
-            self.titleLineEdit.clear()
-            self.descEdit.clear()
-            self._winAdd.close()
+                query = requests.post(f'{BASE_URL}/add', json=data)
+                if self.user_id != u_id:
+                    data2 = {
+                        'sender_id': self.user_id,
+                        'task_id': query.json()['id'],
+                    }
+                    requests.post(f'{BASE_URL}/add2', json=data2)
+
+                self.titleLineEdit.clear()
+                self.descEdit.clear()
+                self._winAdd.close()
 
     def show(self, date: QtWidgets.QCalendarWidget, user_id, proj_id, permission) -> None:
         self.user_id = user_id
