@@ -34,9 +34,9 @@ class Project:
         QtCore.QMetaObject.connectSlotsByName(self._proj_win)
 
         _translate = QtCore.QCoreApplication.translate
-        self._proj_win.setWindowTitle(_translate("Form", "Projects"))
-        self.pushButton.setText(_translate("Form", "Leave"))
-        self.pushButton_2.setText(_translate("Form", "Add"))
+        self._proj_win.setWindowTitle(_translate("Form", "Проекты"))
+        self.pushButton.setText(_translate("Form", "Удалить"))
+        self.pushButton_2.setText(_translate("Form", "Добавить"))
 
         self.add_pr = Add_proj()
         self.add_pr.pushButton.clicked.disconnect(self.add_pr.execute)
@@ -48,7 +48,7 @@ class Project:
         query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
             f"{BASE_URL}/project/{self.user_id}").json()
         self.listWidget.clear()
-        self.listWidget.addItem(f"name\t\t\tdescription")
+        self.listWidget.addItem(f"Название\t\t\tОписание")
         for i in query:
             self.listWidget.addItem(f"{i['name']}\t\t\t{i['desc']}")
 
@@ -78,7 +78,7 @@ class Add_proj(Add):
 
         _translate = QtCore.QCoreApplication.translate
 
-        self._winAdd.setWindowTitle(_translate("Form", "Add project"))
+        self._winAdd.setWindowTitle(_translate("Form", "Добавить проект"))
         self.pushButton.clicked.connect(self.add_pr)
 
     def add_pr(self):

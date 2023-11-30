@@ -37,12 +37,12 @@ class Reg(QWidget):
         QtCore.QMetaObject.connectSlotsByName(self)
 
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("Form", "Registration"))
-        self.label.setText(_translate("Form", "Registration"))
-        self.lineEdit_3.setPlaceholderText(_translate("Form", "Name"))
-        self.lineEdit.setPlaceholderText(_translate("Form", "Login"))
-        self.lineEdit_2.setPlaceholderText(_translate("Form", "Password"))
-        self.pushButton.setText(_translate("Form", "Register"))
+        self.setWindowTitle(_translate("Form", "Регистрация"))
+        self.label.setText(_translate("Form", "Регистрация"))
+        self.lineEdit_3.setPlaceholderText(_translate("Form", "ФИО"))
+        self.lineEdit.setPlaceholderText(_translate("Form", "Логин"))
+        self.lineEdit_2.setPlaceholderText(_translate("Form", "Пароль"))
+        self.pushButton.setText(_translate("Form", "Регистрация"))
 
         self.pushButton.clicked.connect(self.register)
 

@@ -40,26 +40,19 @@ class Login(QWidget):
         self.label1.setObjectName("current_date_label")
         self.verticalLayout.addWidget(self.label1, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
 
-
-
         QtCore.QMetaObject.connectSlotsByName(self)
 
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("Form", "Auth"))
-        self.label.setText(_translate("Form", "Authorization"))
+        self.setWindowTitle(_translate("Form", "Войти"))
+        self.label.setText(_translate("Form", "Авторизация"))
         self.label1.setText(_translate("Form", ""))
-        self.loginEdit.setPlaceholderText('Login')
-        self.passEdit.setPlaceholderText('Password')
+        self.loginEdit.setPlaceholderText('Логин')
+        self.passEdit.setPlaceholderText('Пароль')
         self.passEdit.setEchoMode(QLineEdit.EchoMode.Password)
-        self.loginButton.setText(_translate("Form", "Sing in"))
-
+        self.loginButton.setText(_translate("Form", "Войти"))
 
         self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.login)
-
-
-
-
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == QtCore.Qt.Key.Key_Enter or event.key() == QtCore.Qt.Key.Key_Return:
@@ -68,7 +61,7 @@ class Login(QWidget):
             super().keyPressEvent(event)
 
     def login(self):
-        #try:
+        try:
             response = requests.get(
                 f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
             user_id = int(response.json()['id'])
@@ -79,8 +72,7 @@ class Login(QWidget):
             self.mw = MainWindow(user_id, permission)
             self.mw.show()
             self.close()
-        #except:
-        #   self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
-        #   self.label1.setText('Incorrect username or password.')
+        except:
+            self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
+            self.label1.setText('Неправильное имя пользователя или пароль')
 #
-

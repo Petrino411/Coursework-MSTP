@@ -24,10 +24,10 @@ class Edit(Add):
         self.label_5.setObjectName("label_5")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_5)
         _translate = QtCore.QCoreApplication.translate
-        self._winAdd.setWindowTitle(_translate("Form", "Edit"))
-        self.pushButton.setText(_translate("Form", "Edit"))
-        self.checkBox.setText(_translate("Form", "Done"))
-        self.label_5.setText(_translate("Form", "Status"))
+        self._winAdd.setWindowTitle(_translate("Form", "Изменить"))
+        self.pushButton.setText(_translate("Form", "Изменить"))
+        self.checkBox.setText(_translate("Form", "Готово"))
+        self.label_5.setText(_translate("Form", "Статус"))
 
     def execute(self):
         if self.permission == "admin":
@@ -98,6 +98,6 @@ class Edit(Add):
                 if i['id'] != self.user_id:
                     self.combobox.addItem(i['FIO'])
         else:
-            self.combobox.addItem('nothing to show')
+            self.combobox.addItem('Не найдено')
 
         self._winAdd.show()

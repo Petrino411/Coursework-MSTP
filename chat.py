@@ -27,7 +27,6 @@ class Chat:
         self.combo = QtWidgets.QComboBox(parent=self.layoutWidget)
         self.combo.setObjectName("combo")
         self.verticalLayout.addWidget(self.combo)
-        self.combo.addItem('asfdghj')
 
         self.listWidget = QtWidgets.QListWidget(parent=self.layoutWidget)
         self.listWidget.setObjectName("listWidget")
@@ -39,7 +38,7 @@ class Chat:
         QtCore.QMetaObject.connectSlotsByName(self._winAdd)
 
         _translate = QtCore.QCoreApplication.translate
-        self._winAdd.setWindowTitle(_translate("Form", "Chat"))
+        self._winAdd.setWindowTitle(_translate("Form", "Чат"))
 
         self.pushButton.setText('>')
         self.pushButton.clicked.connect(self.send)
@@ -60,7 +59,7 @@ class Chat:
                 if i['id'] != self.user_id:
                     self.combo.addItem(i['FIO'])
         else:
-            self.combo.addItem('nothing to show')
+            self.combo.addItem('Не найдено')
 
         self.render_ch()
         self._winAdd.show()

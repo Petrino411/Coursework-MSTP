@@ -98,14 +98,14 @@ class Add:
 
         _translate = QtCore.QCoreApplication.translate
 
-        self._winAdd.setWindowTitle(_translate("Form", "Add"))
-        self.label.setText(_translate("Form", "Date:"))
-        self.label_2.setText(_translate("Form", "Time"))
-        self.label_4.setText(_translate("Form", "Title"))
-        self.label_3.setText(_translate("Form", "Notes:"))
-        self.label_for.setText(_translate("Form", "For user:"))
+        self._winAdd.setWindowTitle(_translate("Form", "Добавить"))
+        self.label.setText(_translate("Form", "Дата:"))
+        self.label_2.setText(_translate("Form", "Время:"))
+        self.label_4.setText(_translate("Form", "Название:"))
+        self.label_3.setText(_translate("Form", "Описание:"))
+        self.label_for.setText(_translate("Form", "Для работника:"))
 
-        self.pushButton.setText(_translate("Form", "Add"))
+        self.pushButton.setText(_translate("Form", "Добавить"))
         self.pushButton.clicked.connect(self.execute)
 
     def execute(self):
@@ -115,11 +115,11 @@ class Add:
                 if self.combobox.currentText() == i['FIO']:
                     u_id = i['id']
             print(self.combobox.currentText() )
-            if self.combobox.currentText() == 'nothing to show':
+            if self.combobox.currentText() == 'Не найдено':
                 msg = QMessageBox(self._winAdd)
-                msg.setText('You can not add smth for empty employer.\n'
-                            'Check you have employers in selected project')
-                msg.setWindowTitle("Oh shit")
+                msg.setText('Ты не можешь добавить задачу этому пользователю.\n'
+                            'Проверь, есть ли у тебя люди в проекте')
+                msg.setWindowTitle("Ошибка")
                 msg.exec()
             else:
                 data = {
@@ -157,6 +157,6 @@ class Add:
                 if i['id'] != self.user_id:
                     self.combobox.addItem(i['FIO'])
         else:
-            self.combobox.addItem('nothing to show')
+            self.combobox.addItem('Не найдено')
 
         self._winAdd.show()

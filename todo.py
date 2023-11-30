@@ -1,4 +1,5 @@
-from pathlib import Path
+import locale
+locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
 
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import QMainWindow, QMenuBar, QMessageBox, QApplication
@@ -24,18 +25,19 @@ class MainWindow(QMainWindow):
     def __init__(self, user_id, permission):
         super().__init__()
         self.task_user = None
+        self.user_id = user_id
         menubar = QMenuBar()
 
-        self.Me = menubar.addMenu('Me')
+        self.Me = menubar.addMenu(str(requests.get(f"{BASE_URL}/profile/{self.user_id}").json()['FIO']))
 
         self.ch_win = Chat()
 
-        self.profile = QAction('Profile', self)
-        self.notifications_action = QAction('Notifications', self)
-        self.projects_action = QAction('Projects', self)
-        self.chat_action = QAction('Chat', self)
-        self.exit_action = QAction('Exit', self)
-        self.reg_action = QAction('Add user', self)
+        self.profile = QAction('Профиль', self)
+        self.notifications_action = QAction('Уведомления', self)
+        self.projects_action = QAction('Проекты', self)
+        self.chat_action = QAction('Чат', self)
+        self.exit_action = QAction('Выход', self)
+        self.reg_action = QAction('Добавить пользователя', self)
 
         self.exit_action.triggered.connect(self.exit)
         self.chat_action.triggered.connect(self.chat_sh)
@@ -58,7 +60,7 @@ class MainWindow(QMainWindow):
 
         self.setMenuBar(menubar)
 
-        self.user_id = user_id
+
 
         self.permission = permission
 
@@ -87,7 +89,7 @@ class MainWindow(QMainWindow):
         self.calendarWidget.setFont(font)
 
         self.calendarWidget.setLocale(
-            QtCore.QLocale(QtCore.QLocale.Language.English, QtCore.QLocale.Country.UnitedKingdom))
+            QtCore.QLocale(QtCore.QLocale.Language.Russian, QtCore.QLocale.Country.Russia))
         self.calendarWidget.setObjectName("calendarWidget")
         self.verticalLayout.addWidget(self.calendarWidget)
         self.line_2 = QtWidgets.QFrame(parent=self.widget)
@@ -170,15 +172,15 @@ class MainWindow(QMainWindow):
 
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("MainWindow", "ToDoList"))
-        self.current_matter_label.setText(_translate("MainWindow", "Current matter:"))
-        self.label_5.setText(_translate("MainWindow", "Description:"))
-        self.rmButton.setText(_translate("MainWindow", "Remove"))
-        self.editButton.setText(_translate("MainWindow", "Edit"))
-        self.addButton.setText(_translate("MainWindow", "Add"))
-        self.current_date_label.setText(_translate("MainWindow", "Current date:"))
+        self.current_matter_label.setText(_translate("MainWindow", "Текущая задача: "))
+        self.label_5.setText(_translate("MainWindow", "Описание:"))
+        self.rmButton.setText(_translate("MainWindow", "Удалить"))
+        self.editButton.setText(_translate("MainWindow", "Изменить"))
+        self.addButton.setText(_translate("MainWindow", "Добавить"))
+        self.current_date_label.setText(_translate("MainWindow", "Текущая дата: "))
         self.current_date_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.label_6.setText(_translate("MainWindow", "Plans:"))
-        self.current_project_label.setText(_translate("MainWindow", "Project: "))
+        self.label_6.setText(_translate("MainWindow", "Задачи:"))
+        self.current_project_label.setText(_translate("MainWindow", "Проект: "))
 
         self.selected_proj = 0
         self.proj_user()
@@ -226,6 +228,8 @@ class MainWindow(QMainWindow):
 
 
     def dateview(self):
+        self.calendarWidget.setLocale(
+            QtCore.QLocale(QtCore.QLocale.Language.Russian, QtCore.QLocale.Country.Russia))
         """Отображение выбранной даты"""
         day = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime("%A")
         date = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime(
@@ -234,26 +238,26 @@ class MainWindow(QMainWindow):
 
     def renderList(self):
         """Отображение списка дел по дате"""
-        self.current_matter_label.setText('Current matter: ')
+        self.current_matter_label.setText('Текущая задача: ')
         self.textDescription.clear()
         self.listWidget.clear()
         self.lst_do = requests.get(
             f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&proj_id={self.selected_proj}").json()
         if self.permission == 'admin':
-            self.listWidget.addItem(f'№ Time\tTitle\t\tEmployer\t\tStatus\n')
+            self.listWidget.addItem(f'№ Время\tНазвание\t\tРаботник\t\tСтатус\n')
         else:
-            self.listWidget.addItem(f'№ Time\tTitle\t\tStatus\n')
+            self.listWidget.addItem(f'№ Время\tНазвание\t\tСтатус\n')
         for i in range(len(self.lst_do)):
             time = self.lst_do[i]['time'].split(':')
             if self.lst_do[i]["status"] != 2 and self.permission == 'user':
                 self.listWidget.addItem(
-                    f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{"done" if self.lst_do[i]["status"] == True else "not done"}\n')
+                    f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{"Сделано" if self.lst_do[i]["status"] == True else "На выполнении"}\n')
             elif self.permission == 'admin':
                 user = requests.get(f"{BASE_URL}/list_users?user_id={self.lst_do[i]['user_id']}").json()
                 self.listWidget.addItem(
-                    f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{user['FIO']}\t\t{"done" if self.lst_do[i]["status"] == True else "not done"}\n')
+                    f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{user['FIO']}\t\t{"Сделано" if self.lst_do[i]["status"] == True else "На выполнении"}\n')
         self.textDescription.clear()
-        self.current_matter_label.setText('Current matter: ')
+        self.current_matter_label.setText('Текущая задача: ')
 
     def getId(self, title):
         """Получение id по названию"""
@@ -272,12 +276,12 @@ class MainWindow(QMainWindow):
                 if self.lst_do[i]['id'] == self.getId(title):
                     self.textDescription.setText(self.lst_do[i]['description'])
             title = str(self.listWidget.currentItem().text().split("\t")[1])
-            self.current_matter_label.setText(f'Current matter: {title}') if \
+            self.current_matter_label.setText(f'Текущая задача: {title}') if \
                 str(self.listWidget.currentItem().text().split('\t')[
                         1]) != 'Title' else self.current_matter_label.setText(
-                'Current matter: ')
+                'Текущая задача: ')
         except:
-            self.current_matter_label.setText('Current matter: ')
+            self.current_matter_label.setText('Текущая задача: ')
 
     def add(self):
         """Окно добавления"""
@@ -286,7 +290,7 @@ class MainWindow(QMainWindow):
     def edit(self):
         """Окно редактирования """
         try:
-            if self.listWidget.currentItem().text().split('\t')[1] != 'Title':
+            if self.listWidget.currentItem().text().split('\t')[1] != 'Название':
                 task = None
 
                 for i in range(len(self.lst_do)):
@@ -296,8 +300,8 @@ class MainWindow(QMainWindow):
                 self.msg_edit.show(self.user_id, task, self.selected_proj, self.permission)
         except:
             msg = QMessageBox(self)
-            msg.setText('Select smth, idiot')
-            msg.setWindowTitle("Oh shit")
+            msg.setText('Выбери что то')
+            msg.setWindowTitle("Ошибка")
             msg.exec()
 
     def rm_task(self):
@@ -316,7 +320,7 @@ class MainWindow(QMainWindow):
                 self.project_combobox.addItem(i['name'])
             self.selected_proj = query[0]['id']
         else:
-            self.project_combobox.addItem('nothing to show')
+            self.project_combobox.addItem('Нет работников')
 
     def change_project(self):
         query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
@@ -333,7 +337,7 @@ class MainWindow(QMainWindow):
         self.ch_win.show(self.user_id, self.selected_proj)
 
     def prof_sh(self):
-        requests.get(f"{BASE_URL}/profile/{self.user_id}").json()
+
         self.prof.show(self.user_id)
 
 

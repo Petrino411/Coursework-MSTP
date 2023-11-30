@@ -11,8 +11,8 @@ class Note(Project):
         self.query = None
         self.proj_id = None
         _translate = QtCore.QCoreApplication.translate
-        self._proj_win.setWindowTitle(_translate("Form", "Notifications"))
-        self.pushButton.setText(_translate("Form", "Accept"))
+        self._proj_win.setWindowTitle(_translate("Form", "Уведомления"))
+        self.pushButton.setText(_translate("Form", "Принять"))
         self.pushButton_2.close()
 
         self.pushButton.clicked.connect(self.accept)
@@ -20,10 +20,10 @@ class Note(Project):
     def render(self):
         self.notes = requests.get(f"{BASE_URL}/list_notes?u_id={self.user_id}").json()
         self.listWidget.clear()
-        self.listWidget.addItem(f"title\t Deadline\t\t From \t status ")
+        self.listWidget.addItem(f"Название\t Дедлайн\t\t От \t Статус ")
         for i in self.notes:
             self.listWidget.addItem(
-                f"{i['title']}\t {i['date']} {i['time']}\t {requests.get(f"{BASE_URL}/get_name_for_notes?task_id={i['id']}").json()}\t {'not accepted' if i['status'] == 2 else 'accepted'}")
+                f"{i['title']}\t {i['date']} {i['time']}\t {requests.get(f"{BASE_URL}/get_name_for_notes?task_id={i['id']}").json()}\t {'Не принято' if i['status'] == 2 else 'Принятно'}")
 
     def show(self, user_id, proj_id=0):
         self.user_id = user_id

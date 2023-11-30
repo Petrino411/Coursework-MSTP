@@ -57,12 +57,12 @@ class Profile:
         QtCore.QMetaObject.connectSlotsByName(self._prof_win)
 
         _translate = QtCore.QCoreApplication.translate
-        self._prof_win.setWindowTitle(_translate("Form", "Profile"))
-        self.label.setText(_translate("Form", "FIO"))
-        self.label_2.setText(_translate("Form", "Login"))
-        self.label_3.setText(_translate("Form", "Password"))
-        self.pushButton.setText(_translate("Form", "Change"))
-        self.pushButton_2.setText(_translate("Form", "Ok"))
+        self._prof_win.setWindowTitle(_translate("Form", "Профиль"))
+        self.label.setText(_translate("Form", "ФИО"))
+        self.label_2.setText(_translate("Form", "Логин"))
+        self.label_3.setText(_translate("Form", "Пароль"))
+        self.pushButton.setText(_translate("Form", "Изменить"))
+        self.pushButton_2.setText(_translate("Form", "Ок"))
 
         self.lineEdit_3.setDisabled(True)
         self.lineEdit.setDisabled(True)
