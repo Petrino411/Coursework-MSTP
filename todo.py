@@ -33,11 +33,17 @@ class MainWindow(QMainWindow):
         self.ch_win = Chat()
 
         self.profile = QAction('Профиль', self)
+        self.profile.setIcon(QtGui.QIcon('resources/ico/profile.svg'))
         self.notifications_action = QAction('Уведомления', self)
+        self.notifications_action.setIcon(QtGui.QIcon('resources/ico/notes.svg'))
         self.projects_action = QAction('Проекты', self)
+        self.projects_action.setIcon(QtGui.QIcon('resources/ico/proj.svg'))
         self.chat_action = QAction('Чат', self)
+        self.chat_action.setIcon(QtGui.QIcon('resources/ico/chat.svg'))
         self.exit_action = QAction('Выход', self)
+        self.exit_action.setIcon(QtGui.QIcon('resources/ico/exit.svg'))
         self.reg_action = QAction('Добавить пользователя', self)
+        self.reg_action.setIcon(QtGui.QIcon('resources/ico/add.svg'))
 
         self.exit_action.triggered.connect(self.exit)
         self.chat_action.triggered.connect(self.chat_sh)
@@ -217,6 +223,10 @@ class MainWindow(QMainWindow):
 
         self.login = Login()
         self.for_permission()
+
+        self.addButton.setIcon(QtGui.QIcon('resources/ico/add.svg'))
+        self.editButton.setIcon(QtGui.QIcon('resources/ico/edit.svg'))
+        self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete.svg'))
 
 
 
