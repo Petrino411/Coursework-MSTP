@@ -149,7 +149,6 @@ class Add:
         self.proj_id = proj_id
         self.dateEdit.setDate(date.selectedDate())
         self.timeEdit.setTime(self.timeEdit.time().currentTime())
-
         self.query = requests.get(f"{BASE_URL}/list_proj_users/{self.proj_id}").json()
         self.combobox.clear()
         if len(self.query) > 0:

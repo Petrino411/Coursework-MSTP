@@ -168,10 +168,12 @@ class MainWindow(QMainWindow):
         self.label_6.setFont(font)
         self.label_6.setObjectName("label_6")
         self.verticalLayout_2.addWidget(self.label_6)
-        self.listWidget = QtWidgets.QListWidget(parent=self.widget1)
+        self.listWidget = QtWidgets.QTableWidget(parent=self.widget1)
+        self.listWidget.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
 
         self.listWidget.setObjectName("listWidget")
         self.verticalLayout_2.addWidget(self.listWidget)
+        self.listWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.setCentralWidget(self.centralwidget)
 
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -246,15 +248,14 @@ class MainWindow(QMainWindow):
             "%d.%m.%Y")
         self.current_date_label.setText(f"{day} {date}")
 
-    def renderList(self):
-        """Отображение списка дел по дате"""
+    """def renderList(self):
         self.current_matter_label.setText('Текущая задача: ')
         self.textDescription.clear()
         self.listWidget.clear()
         self.lst_do = requests.get(
             f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&proj_id={self.selected_proj}").json()
         if self.permission == 'admin':
-            self.listWidget.addItem(f'№ Время\tНазвание\t\tРаботник\t\tСтатус\n')
+            self.listWidget.addItem(f'№ Время\tНазвание\t\tРаботник\t\tСтатус\n') #шапка
         else:
             self.listWidget.addItem(f'№ Время\tНазвание\t\tСтатус\n')
         for i in range(len(self.lst_do)):
@@ -266,6 +267,49 @@ class MainWindow(QMainWindow):
                 user = requests.get(f"{BASE_URL}/list_users?user_id={self.lst_do[i]['user_id']}").json()
                 self.listWidget.addItem(
                     f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{user['FIO']}\t\t{"Сделано" if self.lst_do[i]["status"] == True else "На выполнении"}\n')
+        self.textDescription.clear()
+        self.current_matter_label.setText('Текущая задача: ')
+        
+"""
+
+    def renderList(self):
+        self.current_matter_label.setText('Текущая задача: ')
+        self.textDescription.clear()
+        self.listWidget.clear()
+        self.lst_do = requests.get(
+            f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&proj_id={self.selected_proj}").json()
+        self.listWidget.setRowCount(len(self.lst_do))
+        if self.permission == 'admin':
+            self.listWidget.setColumnCount(4)
+            self.listWidget.setHorizontalHeaderLabels(['Время', 'Название', 'Работник', 'Статус'])  # шапка
+        else:
+            self.listWidget.setColumnCount(3)
+            self.listWidget.setHorizontalHeaderLabels(['Время', 'Название', 'Статус'])
+        for row in range(len(self.lst_do)):
+            for col in range(self.listWidget.columnCount()):
+                time = self.lst_do[row]['time'].split(':')
+                if self.lst_do[row]["status"] != 2 and self.permission == 'user':
+                    item = None
+                    if col == 0:
+                        item = QtWidgets.QTableWidgetItem(f'{time[0]}:{time[1]}')
+                    elif col == 1:
+                        item = QtWidgets.QTableWidgetItem(f'{self.lst_do[row]["title"]}')
+                    elif col == 2:
+                        item = QtWidgets.QTableWidgetItem(
+                            f'{"Сделано" if self.lst_do[row]["status"] == True else "На выполнении"}')
+                    self.listWidget.setItem(row, col, item)
+                elif self.permission == 'admin':
+                    item = None
+                    user = requests.get(f"{BASE_URL}/list_users?user_id={self.lst_do[row]['user_id']}").json()
+                    if col == 0:
+                        item = QtWidgets.QTableWidgetItem(f'{time[0]}:{time[1]}')
+                    elif col == 1:
+                        item = QtWidgets.QTableWidgetItem(f'{self.lst_do[row]["title"]}')
+                    elif col == 2:
+                        item = QtWidgets.QTableWidgetItem(f'{user['FIO']}')
+                    elif col == 3:
+                        item = QtWidgets.QTableWidgetItem(f'{"Сделано" if self.lst_do[row]["status"] == True else "На выполнении"}')
+                    self.listWidget.setItem(row, col, item)
         self.textDescription.clear()
         self.current_matter_label.setText('Текущая задача: ')
 
@@ -282,14 +326,13 @@ class MainWindow(QMainWindow):
             self.textDescription.setText('')
 
             for i in range(len(self.lst_do)):
-                title = self.listWidget.currentItem().text().split('\t')[1]
+                title = self.listWidget.item(self.listWidget.currentRow(), 1).text()
                 if self.lst_do[i]['id'] == self.getId(title):
                     self.textDescription.setText(self.lst_do[i]['description'])
-            title = str(self.listWidget.currentItem().text().split("\t")[1])
+            title = str(self.listWidget.item(self.listWidget.currentRow(), 1).text())
             self.current_matter_label.setText(f'Текущая задача: {title}') if \
-                str(self.listWidget.currentItem().text().split('\t')[
-                        1]) != 'Title' else self.current_matter_label.setText(
-                'Текущая задача: ')
+                self.listWidget.item(self.listWidget.currentRow(), 1).text() != 'Title'\
+                else self.current_matter_label.setText('Текущая задача: ')
         except:
             self.current_matter_label.setText('Текущая задача: ')
 
@@ -300,11 +343,10 @@ class MainWindow(QMainWindow):
     def edit(self):
         """Окно редактирования """
         try:
-            if self.listWidget.currentItem().text().split('\t')[1] != 'Название':
+            if self.listWidget.item(self.listWidget.currentRow(), 1).text() != 'Название':
                 task = None
-
                 for i in range(len(self.lst_do)):
-                    title = self.listWidget.currentItem().text().split('\t')[1]
+                    title = self.listWidget.item(self.listWidget.currentRow(), 1).text()
                     if self.lst_do[i]['id'] == self.getId(title):
                         task = requests.get(f"{BASE_URL}/list_tasks_by_id/{self.lst_do[i]['id']}").json()
                 self.msg_edit.show(self.user_id, task, self.selected_proj, self.permission)
@@ -317,7 +359,7 @@ class MainWindow(QMainWindow):
     def rm_task(self):
         """ Удаление дела"""
         for i in range(len(self.lst_do)):
-            title = self.listWidget.currentItem().text().split('\t')[1]
+            title = self.listWidget.item(self.listWidget.currentRow(), 1).text()
             if self.lst_do[i]['id'] == self.getId(title):
                 requests.delete(f"{BASE_URL}/tasks/{self.getId(title)}").json()
                 self.renderList()
@@ -341,15 +383,11 @@ class MainWindow(QMainWindow):
                 break
         self.renderList()
 
-
-
     def chat_sh(self):
         self.ch_win.show(self.user_id, self.selected_proj)
 
     def prof_sh(self):
-
         self.prof.show(self.user_id)
-
 
     def proj_sh(self):
         self.proj.show(self.user_id, self.permission)
@@ -367,7 +405,6 @@ class MainWindow(QMainWindow):
                 widget.close()
 
         super().closeEvent(event)
-
 
     def reg(self):
         from reg import Reg

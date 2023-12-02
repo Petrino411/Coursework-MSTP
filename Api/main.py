@@ -246,13 +246,12 @@ async def update_st(data=Body()):
 @app.delete("/tasks/{task_id}")
 async def delete_item(task_id: int):
     item = session.query(Tasks).filter(Tasks.id == task_id).one()
+    req = session.query(Request).filter(Request.task_id == task_id).all()
 
-    if item:
-        session.delete(item)
-        session.commit()
-        return {"message": "Item deleted successfully"}
-    else:
-        raise HTTPException(status_code=404, detail="Item not found")
+    session.delete(item)
+    for i in req:
+        session.delete(i)
+    session.commit()
 
 
 session.close()
