@@ -91,6 +91,8 @@ class Profile:
         self.lineEdit.setDisabled(True)
         self.lineEdit_2.setDisabled(True)
         self._prof_win.close()
+        self.pushButton.show()
+        self.pushButton_2.close()
 
     def render(self):
         self.query = requests.get(f"{BASE_URL}/profile/{self.user_id}").json()

@@ -1,4 +1,5 @@
 import locale
+
 locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
 
 from PyQt6.QtGui import QAction
@@ -24,11 +25,13 @@ BASE_URL = 'http://127.0.0.1:8000'
 class MainWindow(QMainWindow):
     def __init__(self, user_id, permission):
         super().__init__()
+
         self.task_user = None
         self.user_id = user_id
-        menubar = QMenuBar()
+        self.menubar = QMenuBar()
 
-        self.Me = menubar.addMenu(str(requests.get(f"{BASE_URL}/profile/{self.user_id}").json()['FIO']))
+        self.Me = self.menubar.addMenu('')
+        self.set_menu()
 
         self.ch_win = Chat()
 
@@ -52,7 +55,6 @@ class MainWindow(QMainWindow):
         self.notifications_action.triggered.connect(self.notes_sh)
         self.reg_action.triggered.connect(self.reg)
 
-
         self.Me.addAction(self.profile)
         self.Me.addSeparator()
         self.Me.addAction(self.notifications_action)
@@ -63,10 +65,7 @@ class MainWindow(QMainWindow):
         self.Me.addSeparator()
         self.Me.addAction(self.exit_action)
 
-
-        self.setMenuBar(menubar)
-
-
+        self.setMenuBar(self.menubar)
 
         self.permission = permission
 
@@ -153,7 +152,6 @@ class MainWindow(QMainWindow):
         self.current_date_label.setFont(font)
         self.current_date_label.setObjectName("current_project_label")
 
-
         self.verticalLayout_2.addWidget(self.current_project_label)
 
         self.project_combobox = QtWidgets.QComboBox(parent=self.widget1)
@@ -226,18 +224,21 @@ class MainWindow(QMainWindow):
         self.login = Login()
         self.for_permission()
 
+        self.prof.pushButton_2.clicked.connect(self.set_menu)
+
         self.addButton.setIcon(QtGui.QIcon('resources/ico/add.svg'))
         self.editButton.setIcon(QtGui.QIcon('resources/ico/edit.svg'))
         self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete.svg'))
 
+    def set_menu(self):
 
+        self.Me.setTitle(str(requests.get(f"{BASE_URL}/profile/{self.user_id}").json()['FIO']))
 
     def for_permission(self):
         if self.permission == 'user':
             self.Me.removeAction(self.reg_action)
             self.addButton.close()
             self.rmButton.close()
-
 
     def dateview(self):
         self.calendarWidget.setLocale(
@@ -288,7 +289,8 @@ class MainWindow(QMainWindow):
         for row in range(len(self.lst_do)):
             for col in range(self.listWidget.columnCount()):
                 time = self.lst_do[row]['time'].split(':')
-                if self.lst_do[row]["status"] != 2 and self.permission == 'user':
+                if self.lst_do[row]["status"] != 2 and self.permission == 'user' and self.lst_do[row][
+                    "user_id"] == self.user_id:
                     item = None
                     if col == 0:
                         item = QtWidgets.QTableWidgetItem(f'{time[0]}:{time[1]}')
@@ -308,7 +310,8 @@ class MainWindow(QMainWindow):
                     elif col == 2:
                         item = QtWidgets.QTableWidgetItem(f'{user['FIO']}')
                     elif col == 3:
-                        item = QtWidgets.QTableWidgetItem(f'{"Сделано" if self.lst_do[row]["status"] == True else "На выполнении"}')
+                        item = QtWidgets.QTableWidgetItem(
+                            f'{"Сделано" if self.lst_do[row]["status"] == True else "На выполнении"}')
                     self.listWidget.setItem(row, col, item)
         self.textDescription.clear()
         self.current_matter_label.setText('Текущая задача: ')
@@ -331,7 +334,7 @@ class MainWindow(QMainWindow):
                     self.textDescription.setText(self.lst_do[i]['description'])
             title = str(self.listWidget.item(self.listWidget.currentRow(), 1).text())
             self.current_matter_label.setText(f'Текущая задача: {title}') if \
-                self.listWidget.item(self.listWidget.currentRow(), 1).text() != 'Title'\
+                self.listWidget.item(self.listWidget.currentRow(), 1).text() != 'Название' \
                 else self.current_matter_label.setText('Текущая задача: ')
         except:
             self.current_matter_label.setText('Текущая задача: ')
@@ -410,5 +413,3 @@ class MainWindow(QMainWindow):
         from reg import Reg
         self.reg_win = Reg()
         self.reg_win.show()
-
-
