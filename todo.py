@@ -249,29 +249,6 @@ class MainWindow(QMainWindow):
             "%d.%m.%Y")
         self.current_date_label.setText(f"{day} {date}")
 
-    """def renderList(self):
-        self.current_matter_label.setText('Текущая задача: ')
-        self.textDescription.clear()
-        self.listWidget.clear()
-        self.lst_do = requests.get(
-            f"{BASE_URL}/list_tasks_by_date?date={str(self.calendarWidget.selectedDate().toPyDate())}&proj_id={self.selected_proj}").json()
-        if self.permission == 'admin':
-            self.listWidget.addItem(f'№ Время\tНазвание\t\tРаботник\t\tСтатус\n') #шапка
-        else:
-            self.listWidget.addItem(f'№ Время\tНазвание\t\tСтатус\n')
-        for i in range(len(self.lst_do)):
-            time = self.lst_do[i]['time'].split(':')
-            if self.lst_do[i]["status"] != 2 and self.permission == 'user':
-                self.listWidget.addItem(
-                    f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{"Сделано" if self.lst_do[i]["status"] == True else "На выполнении"}\n')
-            elif self.permission == 'admin':
-                user = requests.get(f"{BASE_URL}/list_users?user_id={self.lst_do[i]['user_id']}").json()
-                self.listWidget.addItem(
-                    f'{i + 1}:  {time[0]}:{time[1]}\t{self.lst_do[i]["title"]}\t\t{user['FIO']}\t\t{"Сделано" if self.lst_do[i]["status"] == True else "На выполнении"}\n')
-        self.textDescription.clear()
-        self.current_matter_label.setText('Текущая задача: ')
-        
-"""
 
     def renderList(self):
         self.current_matter_label.setText('Текущая задача: ')
