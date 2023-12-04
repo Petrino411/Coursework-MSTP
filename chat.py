@@ -4,8 +4,7 @@ import requests
 from PyQt6 import QtCore, QtWidgets
 from PyQt6.QtWidgets import QWidget
 
-BASE_URL = 'http://127.0.0.1:8000'
-
+from connection import BASE_URL
 class Chat:
     def __init__(self):
         self.sort_hist = []
@@ -13,27 +12,20 @@ class Chat:
         self.query = []
         self.proj_id = 0
         self._winAdd = QtWidgets.QWidget()
-        self._winAdd.setObjectName("Form")
         self._winAdd.resize(411, 320)
         self.textEdit = QtWidgets.QTextEdit(parent=self._winAdd)
         self.textEdit.setGeometry(QtCore.QRect(10, 270, 331, 41))
-        self.textEdit.setObjectName("textEdit")
         self.layoutWidget = QtWidgets.QWidget(parent=self._winAdd)
         self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 391, 251))
-        self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
         self.combo = QtWidgets.QComboBox(parent=self.layoutWidget)
-        self.combo.setObjectName("combo")
         self.verticalLayout.addWidget(self.combo)
 
         self.listWidget = QtWidgets.QListWidget(parent=self.layoutWidget)
-        self.listWidget.setObjectName("listWidget")
         self.verticalLayout.addWidget(self.listWidget)
         self.pushButton = QtWidgets.QPushButton(parent=self._winAdd)
         self.pushButton.setGeometry(QtCore.QRect(360, 280, 31, 23))
-        self.pushButton.setObjectName("addButton")
 
         QtCore.QMetaObject.connectSlotsByName(self._winAdd)
 

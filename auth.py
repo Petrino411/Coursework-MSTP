@@ -4,7 +4,7 @@ from PyQt6.QtWidgets import QWidget, QLineEdit
 
 import requests
 
-BASE_URL = 'http://127.0.0.1:8000'
+from connection import BASE_URL
 
 
 class Login(QWidget):
@@ -12,7 +12,6 @@ class Login(QWidget):
         super().__init__()
 
         self.mw = None
-        self.setObjectName("Auth")
         self.resize(295, 200)
         font = QtGui.QFont()
         font.setFamily("Calibri")
@@ -20,24 +19,17 @@ class Login(QWidget):
         self.setFont(font)
         self.layoutWidget = QtWidgets.QWidget(parent=self)
         self.layoutWidget.setGeometry(QtCore.QRect(30, 10, 231, 201))
-        self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(parent=self.layoutWidget)
-        self.label.setObjectName("current_date_label")
         self.verticalLayout.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.loginEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
-        self.loginEdit.setObjectName("lineEdit")
         self.verticalLayout.addWidget(self.loginEdit)
         self.passEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
-        self.passEdit.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.passEdit)
         self.loginButton = QtWidgets.QPushButton(parent=self.layoutWidget)
-        self.loginButton.setObjectName("addButton")
         self.verticalLayout.addWidget(self.loginButton)
         self.label1 = QtWidgets.QLabel(parent=self.layoutWidget)
-        self.label1.setObjectName("current_date_label")
         self.verticalLayout.addWidget(self.label1, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
 
         QtCore.QMetaObject.connectSlotsByName(self)

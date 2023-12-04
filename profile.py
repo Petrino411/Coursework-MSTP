@@ -1,6 +1,6 @@
 import requests
 from PyQt6 import QtCore, QtWidgets
-BASE_URL = 'http://127.0.0.1:8000'
+from connection import BASE_URL
 
 class Profile:
     def __init__(self):

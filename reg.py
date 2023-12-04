@@ -2,35 +2,28 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QWidget
 import requests
 
+from connection import BASE_URL
 
 class Reg(QWidget):
     def __init__(self):
         super().__init__()
         self.pr = []
         self.mw = None
-        self.setObjectName("Form")
         self.resize(295, 192)
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(parent=self)
-        self.label.setObjectName("current_date_label")
         self.verticalLayout.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.lineEdit_3 = QtWidgets.QLineEdit(parent=self)
-        self.lineEdit_3.setObjectName("lineEdit_3")
         self.verticalLayout.addWidget(self.lineEdit_3)
         self.lineEdit = QtWidgets.QLineEdit(parent=self)
-        self.lineEdit.setObjectName("lineEdit")
         self.verticalLayout.addWidget(self.lineEdit)
         self.lineEdit_2 = QtWidgets.QLineEdit(parent=self)
-        self.lineEdit_2.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.lineEdit_2)
         self.combo = QtWidgets.QComboBox(parent=self)
-        self.combo.setObjectName("combo")
         self.verticalLayout.addWidget(self.combo)
 
         self.pushButton = QtWidgets.QPushButton(parent=self)
-        self.pushButton.setObjectName("addButton")
         self.verticalLayout.addWidget(self.pushButton)
         self.combo.setFixedHeight(30)
 
@@ -49,7 +42,7 @@ class Reg(QWidget):
         self.render_pr()
 
     def render_pr(self):
-        self.pr = requests.get('http://127.0.0.1:8000/list_projects').json()
+        self.pr = requests.get(f'{BASE_URL}/list_projects').json()
         for i in self.pr:
             self.combo.addItem(str(i['name']))
 
@@ -61,7 +54,7 @@ class Reg(QWidget):
                 'password': self.lineEdit_2.text(),
                 'root': "user",
             }
-            q = requests.post('http://127.0.0.1:8000/add_user', json=data).json()
+            q = requests.post(f'{BASE_URL}/add_user', json=data).json()
 
             pr_id = 0
             for i in self.pr:
@@ -72,7 +65,7 @@ class Reg(QWidget):
                 'user_id': q['id'],
                 'project_id': pr_id
             }
-            requests.post('http://127.0.0.1:8000/user_to_project', json=data2)
+            requests.post(f'{BASE_URL}/user_to_project', json=data2)
 
             self.close()
             return True
