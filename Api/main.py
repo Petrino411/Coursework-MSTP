@@ -1,10 +1,14 @@
-from fastapi import FastAPI, Body, HTTPException
+from fastapi import FastAPI, Body, HTTPException, Depends
+from sqlalchemy.exc import NoResultFound
+
 from back import *
 from sqlalchemy import and_, or_
 from datetime import datetime
 
 
 app = FastAPI()
+
+
 
 
 @app.get('/list_tasks')
@@ -20,8 +24,8 @@ async def list_projects():
 async def auth(login, password):
     try:
         return session.query(User).filter(and_(User.login == str(login), User.password == str(password))).one()
-    except Exception as e:
-        print('Ошибка:', e)
+    except NoResultFound as e:
+        raise HTTPException(status_code=404, detail=str(e))
 
 
 @app.get('/list_tasks_by_date')
@@ -48,7 +52,7 @@ async def list_tasks_by_date(task_id):
     try:
         return session.query(Tasks).where(Tasks.id == task_id).one()
     except Exception as e:
-        print('Ошибка:', e)
+        return e
 
 
 @app.get('/profile/{user_id}')

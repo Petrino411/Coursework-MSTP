@@ -177,7 +177,7 @@ class MainWindow(QMainWindow):
         QtCore.QMetaObject.connectSlotsByName(self)
 
         _translate = QtCore.QCoreApplication.translate
-        self.setWindowTitle(_translate("MainWindow", "ToDoList"))
+        self.setWindowTitle(_translate("MainWindow", "Система управления задачами и проектами"))
         self.current_matter_label.setText(_translate("MainWindow", "Текущая задача: "))
         self.label_5.setText(_translate("MainWindow", "Описание:"))
         self.rmButton.setText(_translate("MainWindow", "Удалить"))

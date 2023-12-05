@@ -13,11 +13,12 @@ class Login(QWidget):
 
         self.mw = None
         self.setObjectName("Auth")
-        self.resize(295, 200)
+        self.resize(295, 210)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
         self.setFont(font)
+
         self.layoutWidget = QtWidgets.QWidget(parent=self)
         self.layoutWidget.setGeometry(QtCore.QRect(30, 10, 231, 201))
         self.layoutWidget.setObjectName("layoutWidget")
@@ -38,6 +39,9 @@ class Login(QWidget):
         self.verticalLayout.addWidget(self.loginButton)
         self.label1 = QtWidgets.QLabel(parent=self.layoutWidget)
         self.label1.setObjectName("current_date_label")
+        font.setPointSize(10)
+        self.label1.setFont(font)
+        self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
         self.verticalLayout.addWidget(self.label1, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
 
         QtCore.QMetaObject.connectSlotsByName(self)
@@ -61,18 +65,26 @@ class Login(QWidget):
             super().keyPressEvent(event)
 
     def login(self):
-        try:
+        if self.loginEdit.text() != '' and self.passEdit.text() != '':
             response = requests.get(
                 f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
-            user_id = int(response.json()['id'])
-            permission = response.json()['root']
+            if response.status_code == 404:
+                self.label1.setText('Неправильное имя пользователя\nили пароль')
+            elif response.status_code == 200:
+                user_id = int(response.json()['id'])
+                permission = response.json()['root']
 
-            from todo import MainWindow
+                from todo import MainWindow
 
-            self.mw = MainWindow(user_id, permission)
-            self.mw.show()
-            self.close()
-        except:
-            self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
-            self.label1.setText('Неправильное имя пользователя или пароль')
+                self.mw = MainWindow(user_id, permission)
+                self.mw.show()
+                self.close()
+            else:
+                self.label1.setText('Что то пошло не так')
+        else:
+            self.label1.setText('Поля не могут быть пустыми')
+
+
+
+
 #
