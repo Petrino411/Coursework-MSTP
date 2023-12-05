@@ -1,6 +1,7 @@
 import requests
 from PyQt6 import QtCore, QtWidgets
-from project import Project, BASE_URL
+from project import Project
+from connection import BASE_URL
 
 
 class Note(Project):
@@ -37,7 +38,7 @@ class Note(Project):
         self._proj_win.show()
 
     def accept(self):
-        if self.listWidget.currentItem() != None:
+        if self.listWidget.currentItem() is not None:
             for i in self.notes:
                 if self.listWidget.currentItem().text().split('\t')[0] == i['title']:
                     requests.put(f"{BASE_URL}/update_st/?task_id={i['id']}&st={0}").json()

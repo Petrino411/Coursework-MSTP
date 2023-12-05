@@ -1,8 +1,7 @@
 from pathlib import Path
 
-from add import *
 from auth import Login
-
+from PyQt6 import QtWidgets
 import qdarktheme
 
 
@@ -10,7 +9,8 @@ if __name__ == "__main__":
 
     import sys
 
-    app = QtWidgets.QApplication(sys.argv)
+    from app import app
+
 
     #dark_palette = qdarktheme.load_palette()
     #link_color = dark_palette.link().color()

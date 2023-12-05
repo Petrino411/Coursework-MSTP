@@ -3,7 +3,7 @@ from PyQt6 import QtCore, QtGui, QtWidgets
 import requests
 from PyQt6.QtWidgets import QMessageBox
 
-BASE_URL = 'http://127.0.0.1:8000'
+from connection import BASE_URL
 
 
 class Add:
@@ -12,7 +12,6 @@ class Add:
         self.proj_id = 0
         self.user_id = 0
         self._winAdd = QtWidgets.QWidget()
-        self._winAdd.setObjectName("Form")
         self._winAdd.resize(328, 365)
 
         self._winAdd.setFixedSize(328, 365)
@@ -24,60 +23,51 @@ class Add:
 
         self.layoutWidget = QtWidgets.QWidget(parent=self._winAdd)
         self.layoutWidget.setGeometry(QtCore.QRect(10, 10, 308, 341))
-        self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
         self.formLayout = QtWidgets.QFormLayout()
-        self.formLayout.setObjectName("formLayout")
         self.label = QtWidgets.QLabel(parent=self.layoutWidget)
 
         self.label.setFont(font)
 
-        self.label.setObjectName("current_date_label")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label)
         self.dateEdit = QtWidgets.QDateEdit(parent=self.layoutWidget)
 
         self.dateEdit.setFont(font)
 
-        self.dateEdit.setObjectName("dateEdit")
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.FieldRole, self.dateEdit)
         self.label_2 = QtWidgets.QLabel(parent=self.layoutWidget)
 
         self.label_2.setFont(font)
 
-        self.label_2.setObjectName("current_matter_label")
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_2)
         self.timeEdit = QtWidgets.QTimeEdit(parent=self.layoutWidget)
 
         self.timeEdit.setFont(font)
 
-        self.timeEdit.setObjectName("timeEdit")
+
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.FieldRole, self.timeEdit)
         self.label_4 = QtWidgets.QLabel(parent=self.layoutWidget)
 
         self.label_4.setFont(font)
 
-        self.label_4.setObjectName("label_4")
+
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_4)
         self.titleLineEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
 
         self.titleLineEdit.setFont(font)
 
-        self.titleLineEdit.setObjectName("lineEdit_2")
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.FieldRole, self.titleLineEdit)
         self.label_3 = QtWidgets.QLabel(parent=self.layoutWidget)
 
         self.label_3.setFont(font)
 
-        self.label_3.setObjectName("label_3")
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_3)
 
         self.descEdit = QtWidgets.QTextEdit(parent=self.layoutWidget)
 
         self.descEdit.setFont(font)
 
-        self.descEdit.setObjectName("textEdit")
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.ItemRole.FieldRole, self.descEdit)
         self.verticalLayout.addLayout(self.formLayout)
 
@@ -91,7 +81,6 @@ class Add:
 
         self.pushButton.setFont(font)
 
-        self.pushButton.setObjectName("addButton")
         self.verticalLayout.addWidget(self.pushButton)
 
         QtCore.QMetaObject.connectSlotsByName(self._winAdd)
