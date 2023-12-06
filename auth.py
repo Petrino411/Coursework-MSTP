@@ -1,5 +1,4 @@
 from PyQt6 import QtGui, QtWidgets, QtCore
-from PyQt6.QtGui import QPalette
 from PyQt6.QtWidgets import QWidget, QLineEdit
 
 import requests
@@ -55,7 +54,6 @@ class Login(QWidget):
         self.passEdit.setEchoMode(QLineEdit.EchoMode.Password)
         self.loginButton.setText(_translate("Form", "Войти"))
 
-        self.loginButton.setDefault(True)
         self.loginButton.clicked.connect(self.login)
 
     def keyPressEvent(self, event: QtGui.QKeyEvent):
@@ -87,4 +85,4 @@ class Login(QWidget):
 
 
 
-#
+

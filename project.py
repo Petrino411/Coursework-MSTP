@@ -1,6 +1,5 @@
 import requests
 from PyQt6 import QtCore, QtWidgets
-
 from connection import BASE_URL
 
 
@@ -11,8 +10,6 @@ class Project:
         self._proj_win = QtWidgets.QWidget()
         self._proj_win.resize(400, 243)
 
-        # self.widget = QtWidgets.QWidget(parent=self._proj_win)
-        # self.widget.setGeometry(QtCore.QRect(10, 10, 381, 225))
         self.verticalLayout = QtWidgets.QVBoxLayout(self._proj_win)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.listWidget = QtWidgets.QListWidget(parent=self._proj_win)
@@ -56,7 +53,6 @@ class Project:
 
 
 from add import Add
-
 
 class Add_proj(Add):
     def __init__(self):

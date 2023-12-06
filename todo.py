@@ -1,11 +1,7 @@
 import locale
-from pathlib import Path
-
 locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
-
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import QMainWindow, QMenuBar, QMessageBox, QApplication
-
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
 from edit import Edit
@@ -14,7 +10,6 @@ from chat import Chat
 from profile import Profile
 from project import Project
 from notifications import Note
-
 from auth import Login
 import requests
 
@@ -152,8 +147,6 @@ class MainWindow(QMainWindow):
         self.verticalLayout_2.addWidget(self.label_6)
         self.listWidget = QtWidgets.QTableWidget(parent=self.widget1)
         self.listWidget.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
-
-
         self.verticalLayout_2.addWidget(self.listWidget)
         self.listWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.setCentralWidget(self.centralwidget)
@@ -203,7 +196,6 @@ class MainWindow(QMainWindow):
         self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete.svg'))
 
     def set_menu(self):
-
         self.Me.setTitle(str(requests.get(f"{BASE_URL}/profile/{self.user_id}").json()['FIO']))
 
     def for_permission(self):

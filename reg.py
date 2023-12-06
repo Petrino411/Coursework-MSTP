@@ -4,6 +4,7 @@ import requests
 
 from connection import BASE_URL
 
+
 class Reg(QWidget):
     def __init__(self):
         super().__init__()
