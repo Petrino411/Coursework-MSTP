@@ -26,43 +26,41 @@ class Add:
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.formLayout = QtWidgets.QFormLayout()
-        self.label = QtWidgets.QLabel(parent=self.layoutWidget)
+        self.date_label = QtWidgets.QLabel(parent=self.layoutWidget)
 
-        self.label.setFont(font)
+        self.date_label.setFont(font)
 
-        self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label)
+        self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.LabelRole, self.date_label)
         self.dateEdit = QtWidgets.QDateEdit(parent=self.layoutWidget)
 
         self.dateEdit.setFont(font)
 
         self.formLayout.setWidget(0, QtWidgets.QFormLayout.ItemRole.FieldRole, self.dateEdit)
-        self.label_2 = QtWidgets.QLabel(parent=self.layoutWidget)
+        self.time_label = QtWidgets.QLabel(parent=self.layoutWidget)
 
-        self.label_2.setFont(font)
+        self.time_label.setFont(font)
 
-        self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_2)
+        self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.LabelRole, self.time_label)
         self.timeEdit = QtWidgets.QTimeEdit(parent=self.layoutWidget)
 
         self.timeEdit.setFont(font)
 
-
         self.formLayout.setWidget(1, QtWidgets.QFormLayout.ItemRole.FieldRole, self.timeEdit)
-        self.label_4 = QtWidgets.QLabel(parent=self.layoutWidget)
+        self.title_label = QtWidgets.QLabel(parent=self.layoutWidget)
 
-        self.label_4.setFont(font)
+        self.title_label.setFont(font)
 
-
-        self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_4)
+        self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.LabelRole, self.title_label)
         self.titleLineEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
 
         self.titleLineEdit.setFont(font)
 
         self.formLayout.setWidget(2, QtWidgets.QFormLayout.ItemRole.FieldRole, self.titleLineEdit)
-        self.label_3 = QtWidgets.QLabel(parent=self.layoutWidget)
+        self.desc_label = QtWidgets.QLabel(parent=self.layoutWidget)
 
-        self.label_3.setFont(font)
+        self.desc_label.setFont(font)
 
-        self.formLayout.setWidget(4, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_3)
+        self.formLayout.setWidget(4, QtWidgets.QFormLayout.ItemRole.LabelRole, self.desc_label)
 
         self.descEdit = QtWidgets.QTextEdit(parent=self.layoutWidget)
 
@@ -71,8 +69,8 @@ class Add:
         self.formLayout.setWidget(4, QtWidgets.QFormLayout.ItemRole.FieldRole, self.descEdit)
         self.verticalLayout.addLayout(self.formLayout)
 
-        self.label_for = QtWidgets.QLabel(parent=self.layoutWidget)
-        self.verticalLayout.addWidget(self.label_for)
+        self.for_label = QtWidgets.QLabel(parent=self.layoutWidget)
+        self.verticalLayout.addWidget(self.for_label)
 
         self.combobox = QtWidgets.QComboBox(parent=self.layoutWidget)
         self.verticalLayout.addWidget(self.combobox)
@@ -83,16 +81,14 @@ class Add:
 
         self.verticalLayout.addWidget(self.pushButton)
 
-        QtCore.QMetaObject.connectSlotsByName(self._winAdd)
-
         _translate = QtCore.QCoreApplication.translate
 
         self._winAdd.setWindowTitle(_translate("Form", "Добавить"))
-        self.label.setText(_translate("Form", "Дата:"))
-        self.label_2.setText(_translate("Form", "Время:"))
-        self.label_4.setText(_translate("Form", "Название:"))
-        self.label_3.setText(_translate("Form", "Описание:"))
-        self.label_for.setText(_translate("Form", "Для работника:"))
+        self.date_label.setText(_translate("Form", "Дата:"))
+        self.time_label.setText(_translate("Form", "Время:"))
+        self.title_label.setText(_translate("Form", "Название:"))
+        self.desc_label.setText(_translate("Form", "Описание:"))
+        self.for_label.setText(_translate("Form", "Для работника:"))
 
         self.pushButton.setText(_translate("Form", "Добавить"))
         self.pushButton.clicked.connect(self.execute)

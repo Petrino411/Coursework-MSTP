@@ -13,32 +13,31 @@ class Reg(QWidget):
         self.resize(295, 192)
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.label = QtWidgets.QLabel(parent=self)
-        self.verticalLayout.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
-        self.lineEdit_3 = QtWidgets.QLineEdit(parent=self)
-        self.verticalLayout.addWidget(self.lineEdit_3)
-        self.lineEdit = QtWidgets.QLineEdit(parent=self)
-        self.verticalLayout.addWidget(self.lineEdit)
-        self.lineEdit_2 = QtWidgets.QLineEdit(parent=self)
-        self.verticalLayout.addWidget(self.lineEdit_2)
+        self.reg_label = QtWidgets.QLabel(parent=self)
+        self.verticalLayout.addWidget(self.reg_label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
+        self.fio_label = QtWidgets.QLineEdit(parent=self)
+        self.verticalLayout.addWidget(self.fio_label)
+        self.login_edit = QtWidgets.QLineEdit(parent=self)
+        self.verticalLayout.addWidget(self.login_edit)
+        self.password_edit = QtWidgets.QLineEdit(parent=self)
+        self.verticalLayout.addWidget(self.password_edit)
         self.combo = QtWidgets.QComboBox(parent=self)
         self.verticalLayout.addWidget(self.combo)
 
-        self.pushButton = QtWidgets.QPushButton(parent=self)
-        self.verticalLayout.addWidget(self.pushButton)
+        self.reg_button = QtWidgets.QPushButton(parent=self)
+        self.verticalLayout.addWidget(self.reg_button)
         self.combo.setFixedHeight(30)
 
-        QtCore.QMetaObject.connectSlotsByName(self)
 
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Form", "Регистрация"))
-        self.label.setText(_translate("Form", "Регистрация"))
-        self.lineEdit_3.setPlaceholderText(_translate("Form", "ФИО"))
-        self.lineEdit.setPlaceholderText(_translate("Form", "Логин"))
-        self.lineEdit_2.setPlaceholderText(_translate("Form", "Пароль"))
-        self.pushButton.setText(_translate("Form", "Регистрация"))
+        self.reg_label.setText(_translate("Form", "Регистрация"))
+        self.fio_label.setPlaceholderText(_translate("Form", "ФИО"))
+        self.login_edit.setPlaceholderText(_translate("Form", "Логин"))
+        self.password_edit.setPlaceholderText(_translate("Form", "Пароль"))
+        self.reg_button.setText(_translate("Form", "Регистрация"))
 
-        self.pushButton.clicked.connect(self.register)
+        self.reg_button.clicked.connect(self.register)
 
         self.render_pr()
 
@@ -50,9 +49,9 @@ class Reg(QWidget):
     def register(self) -> bool:
         try:
             data = {
-                'FIO': self.lineEdit_3.text(),
-                'login': str(self.lineEdit.text()),
-                'password': self.lineEdit_2.text(),
+                'FIO': self.fio_label.text(),
+                'login': str(self.login_edit.text()),
+                'password': self.password_edit.text(),
                 'root': "user",
             }
             q = requests.post(f'{BASE_URL}/add_user', json=data).json()

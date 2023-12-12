@@ -21,8 +21,6 @@ class Project:
         self.horizontalLayout.addWidget(self.pushButton_2)
         self.verticalLayout.addLayout(self.horizontalLayout)
 
-        QtCore.QMetaObject.connectSlotsByName(self._proj_win)
-
         _translate = QtCore.QCoreApplication.translate
         self._proj_win.setWindowTitle(_translate("Form", "Проекты"))
         self.pushButton.setText(_translate("Form", "Удалить"))
@@ -54,15 +52,16 @@ class Project:
 
 from add import Add
 
+
 class Add_proj(Add):
     def __init__(self):
         Add.__init__(self)
 
         self.dateEdit.close()
         self.timeEdit.close()
-        self.label.close()
-        self.label_2.close()
-        self.label_for.close()
+        self.date_label.close()
+        self.time_label.close()
+        self.for_label.close()
         self.combobox.close()
 
         _translate = QtCore.QCoreApplication.translate
@@ -71,6 +70,7 @@ class Add_proj(Add):
         self.pushButton.clicked.connect(self.add_pr)
 
     def add_pr(self):
+        """ Удаление дела"""
         data = {
             'name': self.titleLineEdit.text(),
             'desc': self.descEdit.toPlainText(),

@@ -1,4 +1,5 @@
 import locale
+
 locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
 from PyQt6.QtGui import QAction
 from PyQt6.QtWidgets import QMainWindow, QMenuBar, QMessageBox, QApplication
@@ -64,7 +65,6 @@ class MainWindow(QMainWindow):
 
         self.setMenuBar(self.menubar)
 
-
         self.setObjectName("MainWindow")
         self.resize(1040, 576)
         self.setFixedSize(self.size())
@@ -96,10 +96,10 @@ class MainWindow(QMainWindow):
 
         self.current_matter_label.setFont(font)
         self.verticalLayout.addWidget(self.current_matter_label)
-        self.label_5 = QtWidgets.QLabel(parent=self.widget)
+        self.desc_label = QtWidgets.QLabel(parent=self.widget)
 
-        self.label_5.setFont(font)
-        self.verticalLayout.addWidget(self.label_5)
+        self.desc_label.setFont(font)
+        self.verticalLayout.addWidget(self.desc_label)
         self.textDescription = QtWidgets.QTextBrowser(parent=self.widget)
 
         self.verticalLayout.addWidget(self.textDescription)
@@ -131,7 +131,6 @@ class MainWindow(QMainWindow):
         self.current_project_label = QtWidgets.QLabel(parent=self.widget1)
         self.current_date_label.setFont(font)
 
-
         self.verticalLayout_2.addWidget(self.current_project_label)
 
         self.project_combobox = QtWidgets.QComboBox(parent=self.widget1)
@@ -141,28 +140,26 @@ class MainWindow(QMainWindow):
         self.project_combobox.setFixedHeight(30)
 
         self.verticalLayout_2.addWidget(self.current_date_label)
-        self.label_6 = QtWidgets.QLabel(parent=self.widget1)
+        self.tasks_label = QtWidgets.QLabel(parent=self.widget1)
 
-        self.label_6.setFont(font)
-        self.verticalLayout_2.addWidget(self.label_6)
+        self.tasks_label.setFont(font)
+        self.verticalLayout_2.addWidget(self.tasks_label)
         self.listWidget = QtWidgets.QTableWidget(parent=self.widget1)
         self.listWidget.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
         self.verticalLayout_2.addWidget(self.listWidget)
         self.listWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.setCentralWidget(self.centralwidget)
 
-        QtCore.QMetaObject.connectSlotsByName(self)
-
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("MainWindow", "Система управления задачами и проектами"))
         self.current_matter_label.setText(_translate("MainWindow", "Текущая задача: "))
-        self.label_5.setText(_translate("MainWindow", "Описание:"))
+        self.desc_label.setText(_translate("MainWindow", "Описание:"))
         self.rmButton.setText(_translate("MainWindow", "Удалить"))
         self.editButton.setText(_translate("MainWindow", "Изменить"))
         self.addButton.setText(_translate("MainWindow", "Добавить"))
         self.current_date_label.setText(_translate("MainWindow", "Текущая дата: "))
         self.current_date_label.setAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-        self.label_6.setText(_translate("MainWindow", "Задачи:"))
+        self.tasks_label.setText(_translate("MainWindow", "Задачи:"))
         self.current_project_label.setText(_translate("MainWindow", "Проект: "))
 
         self.proj_user()
@@ -189,31 +186,34 @@ class MainWindow(QMainWindow):
         self.msg_edit.pushButton.clicked.connect(self.renderList)
         self.notes.pushButton.clicked.connect(self.renderList)
         self.project_combobox.currentTextChanged.connect(self.change_project)
-        self.prof.pushButton_2.clicked.connect(self.set_menu)
+        self.prof.ok_button.clicked.connect(self.set_menu)
 
         self.addButton.setIcon(QtGui.QIcon('resources/ico/add.png'))
         self.editButton.setIcon(QtGui.QIcon('resources/ico/edit.svg'))
         self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete.svg'))
 
     def set_menu(self):
+        """Меню пользователя"""
         self.Me.setTitle(str(requests.get(f"{BASE_URL}/profile/{self.user_id}").json()['FIO']))
 
     def for_permission(self):
+        """Проверка разрешений пользователя"""
         if self.permission == 'user':
             self.Me.removeAction(self.reg_action)
             self.addButton.close()
             self.rmButton.close()
 
     def dateview(self):
+        """Отображение выбранной даты"""
         self.calendarWidget.setLocale(
             QtCore.QLocale(QtCore.QLocale.Language.Russian, QtCore.QLocale.Country.Russia))
-        """Отображение выбранной даты"""
         day = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime("%A")
         date = datetime.strptime(str(self.calendarWidget.selectedDate().toPyDate()), '%Y-%m-%d').date().strftime(
             "%d.%m.%Y")
         self.current_date_label.setText(f"{day} {date}")
 
     def renderList(self):
+        """Запрос и парсинг списка дел по дате из БД"""
         self.current_matter_label.setText('Текущая задача: ')
         self.textDescription.clear()
         self.listWidget.clear()
@@ -263,8 +263,8 @@ class MainWindow(QMainWindow):
                 return self.lst_do[i]['id']
 
     def getDescription(self):
+        """Отображение описание выбранного дела"""
         try:
-            """Отображение описание выбранного дела"""
             self.current_matter_label.setText('')
             self.textDescription.setText('')
 
@@ -308,6 +308,7 @@ class MainWindow(QMainWindow):
                 self.renderList()
 
     def proj_user(self):
+        """Проекты пользователя"""
         query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
             f"{BASE_URL}/project/{self.user_id}").json()
         if len(query) > 0:
@@ -318,6 +319,7 @@ class MainWindow(QMainWindow):
             self.project_combobox.addItem('Нет работников')
 
     def change_project(self):
+        """Смена проекта"""
         query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
             f"{BASE_URL}/project/{self.user_id}").json()
         for i in query:
@@ -327,18 +329,23 @@ class MainWindow(QMainWindow):
         self.renderList()
 
     def chat_sh(self):
+        """Показ чата"""
         self.ch_win.show(self.user_id, self.selected_proj)
 
     def prof_sh(self):
+        """Показ профиля"""
         self.prof.show(self.user_id)
 
     def proj_sh(self):
+        """Показ проектов"""
         self.proj.show(self.user_id, self.permission)
 
     def notes_sh(self):
+        """Показ уцвведомлений"""
         self.notes.show(self.user_id, self.selected_proj)
 
     def exit(self):
+        """Выход ползователя"""
         self.close()
         self.login.show()
 
@@ -350,6 +357,7 @@ class MainWindow(QMainWindow):
         super().closeEvent(event)
 
     def reg(self):
+        """Показ регистрации"""
         from reg import Reg
         self.reg_win = Reg()
         self.reg_win.show()

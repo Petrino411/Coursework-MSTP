@@ -20,35 +20,26 @@ class Login(QWidget):
 
         self.layoutWidget = QtWidgets.QWidget(parent=self)
         self.layoutWidget.setGeometry(QtCore.QRect(30, 10, 231, 201))
-        self.layoutWidget.setObjectName("layoutWidget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.verticalLayout.setObjectName("verticalLayout")
         self.label = QtWidgets.QLabel(parent=self.layoutWidget)
-        self.label.setObjectName("current_date_label")
         self.verticalLayout.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.loginEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
-        self.loginEdit.setObjectName("lineEdit")
         self.verticalLayout.addWidget(self.loginEdit)
         self.passEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
-        self.passEdit.setObjectName("lineEdit_2")
         self.verticalLayout.addWidget(self.passEdit)
         self.loginButton = QtWidgets.QPushButton(parent=self.layoutWidget)
-        self.loginButton.setObjectName("addButton")
         self.verticalLayout.addWidget(self.loginButton)
-        self.label1 = QtWidgets.QLabel(parent=self.layoutWidget)
-        self.label1.setObjectName("current_date_label")
+        self.error_label = QtWidgets.QLabel(parent=self.layoutWidget)
         font.setPointSize(10)
-        self.label1.setFont(font)
-        self.label1.setStyleSheet("QLabel{color: rgb(253,44,2);}")
-        self.verticalLayout.addWidget(self.label1, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
-
-        QtCore.QMetaObject.connectSlotsByName(self)
+        self.error_label.setFont(font)
+        self.error_label.setStyleSheet("QLabel{color: rgb(253,44,2);}")
+        self.verticalLayout.addWidget(self.error_label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
 
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Form", "Войти"))
         self.label.setText(_translate("Form", "Авторизация"))
-        self.label1.setText(_translate("Form", ""))
+        self.error_label.setText(_translate("Form", ""))
         self.loginEdit.setPlaceholderText('Логин')
         self.passEdit.setPlaceholderText('Пароль')
         self.passEdit.setEchoMode(QLineEdit.EchoMode.Password)
@@ -63,24 +54,25 @@ class Login(QWidget):
             super().keyPressEvent(event)
 
     def login(self):
+        """Авторизация пользователя"""
         if self.loginEdit.text() != '' and self.passEdit.text() != '':
             response = requests.get(
                 f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
-            if response.status_code == 404:
-                self.label1.setText('Неправильное имя пользователя\nили пароль')
-            elif response.status_code == 200:
-                user_id = int(response.json()['id'])
-                permission = response.json()['root']
+            #if response.status_code == 404:
+            self.error_label.setText('Неправильное имя пользователя\nили пароль')
+    #elif response.status_code == 200:
+            user_id = int(response.json()['id'])
+            permission = response.json()['root']
 
-                from todo import MainWindow
+            from todo import MainWindow
 
-                self.mw = MainWindow(user_id, permission)
-                self.mw.show()
-                self.close()
-            else:
-                self.label1.setText('Что то пошло не так')
-        else:
-            self.label1.setText('Поля не могут быть пустыми')
+            self.mw = MainWindow(user_id, permission)
+            self.mw.show()
+            self.close()
+            #else:
+        #        self.error_label.setText('Что то пошло не так')
+        #else:
+        #    self.error_label.setText('Поля не могут быть пустыми')
 
 
 

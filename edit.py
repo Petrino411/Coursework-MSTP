@@ -21,7 +21,7 @@ class Edit(Add):
         font.setFamily("Calibri")
         font.setPointSize(12)
         self.label_5.setFont(font)
-        self.label_5.setObjectName("label_5")
+        self.label_5.setObjectName("desc_label")
         self.formLayout.setWidget(3, QtWidgets.QFormLayout.ItemRole.LabelRole, self.label_5)
         _translate = QtCore.QCoreApplication.translate
         self._winAdd.setWindowTitle(_translate("Form", "Изменить"))

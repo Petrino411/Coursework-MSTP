@@ -1,5 +1,4 @@
 from pathlib import Path
-
 from auth import Login
 from PyQt6 import QtWidgets
 import qdarktheme
@@ -24,8 +23,6 @@ if __name__ == "__main__":
     def close_all_windows():
         for widget in app.topLevelWidgets():
             widget.close()
-
-
     app.aboutToQuit.connect(close_all_windows)
 
     sys.exit(app.exec())

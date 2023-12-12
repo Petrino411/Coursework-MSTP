@@ -9,8 +9,6 @@ from datetime import datetime
 app = FastAPI()
 
 
-
-
 @app.get('/list_tasks')
 async def list_tasks():
     return session.query(Tasks).all()
