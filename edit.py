@@ -66,6 +66,7 @@ class Edit(Add):
                 'user_id': self.user_id
             }
             requests.put(f'{BASE_URL}/edit/{self.task["id"]}', json=data)
+        self._winAdd.close()
 
     def show(self, user_id, task, proj_id, permission) -> None:
         self.task = task
@@ -85,19 +86,7 @@ class Edit(Add):
 
         self.timeEdit.setTime(QtCore.QTime.fromString(task['time']))
         self.titleLineEdit.setText(task['title'])
-#
         self.titleFIRST = task['date']
         self.descEdit.setText(task['description'])
-        #self.combobox.close()
-        #self.label_for.close()
-
-        self.query = requests.get(f"{BASE_URL}/list_proj_users/{self.proj_id}").json()
-        self.combobox.clear()
-        if len(self.query) > 0:
-            for i in self.query:
-                if i['id'] != self.user_id:
-                    self.combobox.addItem(i['FIO'])
-        else:
-            self.combobox.addItem('Не найдено')
-
+        self.render_users()
         self._winAdd.show()

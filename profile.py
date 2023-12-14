@@ -11,6 +11,7 @@ class Profile:
 
         self._prof_win.setObjectName("Form")
         self._prof_win.resize(291, 131)
+        self._prof_win.setFixedSize(291, 131)
         self.widget = QtWidgets.QWidget(parent=self._prof_win)
         self.widget.setGeometry(QtCore.QRect(50, 10, 193, 109))
         self.verticalLayout_3 = QtWidgets.QVBoxLayout(self.widget)

@@ -7,9 +7,11 @@ if __name__ == "__main__":
     auth_window = Login()
     auth_window.show()
 
+
     def close_all_windows():
         for widget in app.topLevelWidgets():
             widget.close()
+
 
     app.aboutToQuit.connect(close_all_windows)
 

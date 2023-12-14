@@ -16,10 +16,10 @@ import requests
 
 from connection import BASE_URL
 
-"""Главное окно"""
-
 
 class MainWindow(QMainWindow):
+    """Главное окно"""
+
     def __init__(self, user_id, permission):
         super().__init__()
 
@@ -101,6 +101,7 @@ class MainWindow(QMainWindow):
         self.desc_label.setFont(font)
         self.verticalLayout.addWidget(self.desc_label)
         self.textDescription = QtWidgets.QTextBrowser(parent=self.widget)
+        self.textDescription.setFont(font)
 
         self.verticalLayout.addWidget(self.textDescription)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
@@ -184,11 +185,13 @@ class MainWindow(QMainWindow):
         self.listWidget.itemSelectionChanged.connect(self.getDescription)
         self.msg_add.pushButton.clicked.connect(self.renderList)
         self.msg_edit.pushButton.clicked.connect(self.renderList)
+        self.proj.pushButton.clicked.connect(self.proj_user)
+        self.proj.add_pr.pushButton.clicked.connect(self.proj_user)
         self.notes.pushButton.clicked.connect(self.renderList)
         self.project_combobox.currentTextChanged.connect(self.change_project)
         self.prof.ok_button.clicked.connect(self.set_menu)
 
-        self.addButton.setIcon(QtGui.QIcon('resources/ico/add.png'))
+        self.addButton.setIcon(QtGui.QIcon('resources/ico/add.svg'))
         self.editButton.setIcon(QtGui.QIcon('resources/ico/edit.svg'))
         self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete.svg'))
 
@@ -202,6 +205,8 @@ class MainWindow(QMainWindow):
             self.Me.removeAction(self.reg_action)
             self.addButton.close()
             self.rmButton.close()
+        else:
+            self.Me.removeAction(self.notifications_action)
 
     def dateview(self):
         """Отображение выбранной даты"""
@@ -309,6 +314,7 @@ class MainWindow(QMainWindow):
 
     def proj_user(self):
         """Проекты пользователя"""
+        self.project_combobox.clear()
         query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
             f"{BASE_URL}/project/{self.user_id}").json()
         if len(query) > 0:
@@ -316,7 +322,7 @@ class MainWindow(QMainWindow):
                 self.project_combobox.addItem(i['name'])
             self.selected_proj = query[0]['id']
         else:
-            self.project_combobox.addItem('Нет работников')
+            self.project_combobox.addItem('Нет проектов')
 
     def change_project(self):
         """Смена проекта"""

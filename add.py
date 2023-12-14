@@ -99,7 +99,6 @@ class Add:
             for i in self.query:
                 if self.combobox.currentText() == i['FIO']:
                     u_id = i['id']
-            print(self.combobox.currentText() )
             if self.combobox.currentText() == 'Не найдено':
                 msg = QMessageBox(self._winAdd)
                 msg.setText('Ты не можешь добавить задачу этому пользователю.\n'
@@ -129,11 +128,7 @@ class Add:
                 self.descEdit.clear()
                 self._winAdd.close()
 
-    def show(self, date: QtWidgets.QCalendarWidget, user_id, proj_id, permission) -> None:
-        self.user_id = user_id
-        self.proj_id = proj_id
-        self.dateEdit.setDate(date.selectedDate())
-        self.timeEdit.setTime(self.timeEdit.time().currentTime())
+    def render_users(self):
         self.query = requests.get(f"{BASE_URL}/list_proj_users/{self.proj_id}").json()
         self.combobox.clear()
         if len(self.query) > 0:
@@ -143,4 +138,10 @@ class Add:
         else:
             self.combobox.addItem('Не найдено')
 
+    def show(self, date: QtWidgets.QCalendarWidget, user_id, proj_id, permission) -> None:
+        self.user_id = user_id
+        self.proj_id = proj_id
+        self.dateEdit.setDate(date.selectedDate())
+        self.timeEdit.setTime(self.timeEdit.time().currentTime())
+        self.render_users()
         self._winAdd.show()

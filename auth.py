@@ -1,9 +1,37 @@
 from PyQt6 import QtGui, QtWidgets, QtCore
 from PyQt6.QtWidgets import QWidget, QLineEdit
-
+import httpx
+import asyncio
 import requests
 
-BASE_URL = 'http://127.0.0.1:8000'
+from connection import BASE_URL
+
+
+async def ping_serv(url):
+    try:
+        async with httpx.AsyncClient() as client:
+            response = await client.get(url, timeout=10)
+            if response.status_code == 200:
+                return 'Сервер в сети'
+            else:
+                return f"Код ответа:{response.status_code}"
+    except httpx.TimeoutException:
+        return "Превышено время ожидания"
+    except httpx.ConnectError:
+        return f"Сервер не в сети"
+
+
+class Worker(QtCore.QObject):
+    finished = QtCore.pyqtSignal(str)
+
+    def run(self):
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+
+        while True:
+            result = loop.run_until_complete(ping_serv(f"{BASE_URL}/connection"))
+            self.finished.emit(result)
+            loop.run_until_complete(asyncio.sleep(2))
 
 
 class Login(QWidget):
@@ -12,7 +40,7 @@ class Login(QWidget):
 
         self.mw = None
         self.setObjectName("Auth")
-        self.resize(295, 210)
+        self.resize(295, 230)
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)
@@ -22,6 +50,9 @@ class Login(QWidget):
         self.layoutWidget.setGeometry(QtCore.QRect(30, 10, 231, 201))
         self.verticalLayout = QtWidgets.QVBoxLayout(self.layoutWidget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
+
+        self.st_label = QtWidgets.QLabel(parent=self.layoutWidget)
+        self.verticalLayout.addWidget(self.st_label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.label = QtWidgets.QLabel(parent=self.layoutWidget)
         self.verticalLayout.addWidget(self.label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
         self.loginEdit = QtWidgets.QLineEdit(parent=self.layoutWidget)
@@ -33,6 +64,7 @@ class Login(QWidget):
         self.error_label = QtWidgets.QLabel(parent=self.layoutWidget)
         font.setPointSize(10)
         self.error_label.setFont(font)
+        self.st_label.setFont(font)
         self.error_label.setStyleSheet("QLabel{color: rgb(253,44,2);}")
         self.verticalLayout.addWidget(self.error_label, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
 
@@ -47,6 +79,19 @@ class Login(QWidget):
 
         self.loginButton.clicked.connect(self.login)
 
+        self.worker = Worker()
+        self.thread = QtCore.QThread(self)
+        self.worker.moveToThread(self.thread)
+        self.thread.started.connect(self.worker.run)
+        self.worker.finished.connect(self.update_st_label)
+        self.thread.start()
+
+    def update_st_label(self, result):
+        self.st_label.setText(result)
+        self.st_label.setStyleSheet(
+            "QLabel{color: rgb(0, 207, 0);}") if result == 'Сервер в сети' else self.st_label.setStyleSheet(
+            "QLabel{color: rgb(253,44,2);}")
+
     def keyPressEvent(self, event: QtGui.QKeyEvent):
         if event.key() == QtCore.Qt.Key.Key_Enter or event.key() == QtCore.Qt.Key.Key_Return:
             self.loginButton.click()
@@ -55,6 +100,8 @@ class Login(QWidget):
 
     def login(self):
         """Авторизация пользователя"""
+        if self.st_label.text() != "Сервер в сети":
+            return
         if self.loginEdit.text() != '' and self.passEdit.text() != '':
             response = requests.get(
                 f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
@@ -70,11 +117,6 @@ class Login(QWidget):
                 self.mw.show()
                 self.close()
             else:
-                self.error_label.setText('Что то пошло не так')
+                self.error_label.setText('Что-то пошло не так')
         else:
             self.error_label.setText('Поля не могут быть пустыми')
-
-
-
-
-

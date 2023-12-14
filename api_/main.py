@@ -9,6 +9,11 @@ app = FastAPI()
 
 class DataRequests:
     @staticmethod
+    @app.get('/connection')
+    async def connection():
+        return True
+
+    @staticmethod
     @app.get('/list_projects')
     async def list_projects():
         return session.query(Project).all()
@@ -34,7 +39,7 @@ class DataRequests:
     @app.get('/get_name_for_notes')
     async def get_name_for_notes(task_id):
         try:
-            q = session.query(Request).filter(Request.task_id == task_id).one()
+            q = session.query(Request).filter(Request.task_id == task_id).first()
             u = session.query(User).filter(User.id == q.sender_id).one()
             return u.FIO
         except Exception as e:
@@ -252,9 +257,21 @@ class DataRequests:
         for i in req:
             session.delete(i)
         session.commit()
+    @staticmethod
+    @app.delete("/project/{name}")
+    async def delete_project_id(name: str):
+        item = session.query(Project).filter(Project.name == str(name)).one()
+        u_p = session.query(User_project).filter(User_project.project_id == item.id).all()
+        t_p = session.query(Tasks).filter(Tasks.project_id == item.id).all()
+        session.delete(item)
+        for i in t_p:
+            session.delete(i)
+        for i in u_p:
+            u = session.query(User).filter(User.id == i.user_id).one()
+            session.delete(u)
+            session.delete(i)
+        session.commit()
 
-    def __del__(self):
-        session.close()
 
 
 

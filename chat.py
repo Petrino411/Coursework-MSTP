@@ -2,9 +2,11 @@ from datetime import datetime
 
 import requests
 from PyQt6 import QtCore, QtWidgets
-from PyQt6.QtWidgets import QWidget
+
 
 from connection import BASE_URL
+
+
 class Chat:
     def __init__(self):
         self.sort_hist = []
@@ -13,6 +15,7 @@ class Chat:
         self.proj_id = 0
         self._winAdd = QtWidgets.QWidget()
         self._winAdd.resize(411, 320)
+        self._winAdd.setFixedSize(411, 320)
         self.textEdit = QtWidgets.QTextEdit(parent=self._winAdd)
         self.textEdit.setGeometry(QtCore.QRect(10, 270, 331, 41))
         self.layoutWidget = QtWidgets.QWidget(parent=self._winAdd)
@@ -39,8 +42,6 @@ class Chat:
 
         self.combo.setFixedHeight(25)
 
-
-
     def show(self, u_id, p_id):
         self.user_id = u_id
         self.proj_id = p_id
@@ -55,8 +56,6 @@ class Chat:
 
         self.render_ch()
         self._winAdd.show()
-
-
 
     def send(self):
         r_id = 0
@@ -74,7 +73,6 @@ class Chat:
         query = requests.post(f'{BASE_URL}/chat', json=data)
         self.textEdit.clear()
         self.render_ch()
-
 
     def get_sender(self, id):
         for i in self.query:
@@ -95,7 +93,3 @@ class Chat:
             time = i['time'].split(':')
             date = datetime.strptime(i['date'], '%Y-%m-%d').date().strftime("%d.%m.%Y")
             self.listWidget.addItem(f'{date} {time[0]}:{time[1]}   {self.get_sender(i['sender_id'])}\n {i['message']}')
-
-
-
-

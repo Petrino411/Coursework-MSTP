@@ -9,10 +9,13 @@ class Project:
         self.user_id = 0
         self._proj_win = QtWidgets.QWidget()
         self._proj_win.resize(400, 243)
+        self._proj_win.setFixedSize(400, 243)
 
         self.verticalLayout = QtWidgets.QVBoxLayout(self._proj_win)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
-        self.listWidget = QtWidgets.QListWidget(parent=self._proj_win)
+        self.listWidget = QtWidgets.QTableWidget(parent=self._proj_win)
+        self.listWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.listWidget.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
         self.verticalLayout.addWidget(self.listWidget)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.pushButton = QtWidgets.QPushButton(parent=self._proj_win)
@@ -31,14 +34,23 @@ class Project:
         self.add_pr.pushButton.clicked.connect(self.render)
 
         self.pushButton_2.clicked.connect(self.add)
+        self.pushButton.clicked.connect(self.remove_pr)
 
     def render(self):
         query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
             f"{BASE_URL}/project/{self.user_id}").json()
         self.listWidget.clear()
-        self.listWidget.addItem(f"Название\t\t\tОписание")
-        for i in query:
-            self.listWidget.addItem(f"{i['name']}\t\t\t{i['desc']}")
+        self.listWidget.setColumnCount(2)
+        self.listWidget.setHorizontalHeaderLabels(['Название', 'Описание'])
+        self.listWidget.setRowCount(len(query))
+        for row in range(len(query)):
+            for col in range(self.listWidget.columnCount()):
+                item = None
+                if col == 0:
+                    item = QtWidgets.QTableWidgetItem(f'{query[row]['name']}')
+                elif col == 1:
+                    item = QtWidgets.QTableWidgetItem(f'{query[row]['desc']}')
+                self.listWidget.setItem(row, col, item)
 
     def show(self, user_id, permission):
         self.permission = permission
@@ -48,6 +60,12 @@ class Project:
 
     def add(self):
         self.add_pr.show_()
+
+    def remove_pr(self):
+        title = self.listWidget.item(self.listWidget.currentRow(), 0).text()
+        requests.delete(f"{BASE_URL}/project/{title}").json()
+        self.render()
+
 
 
 from add import Add

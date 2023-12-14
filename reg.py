@@ -11,6 +11,7 @@ class Reg(QWidget):
         self.pr = []
         self.mw = None
         self.resize(295, 192)
+        self.setFixedSize(295, 192)
         self.verticalLayout = QtWidgets.QVBoxLayout(self)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
         self.reg_label = QtWidgets.QLabel(parent=self)
