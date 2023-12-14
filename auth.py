@@ -58,21 +58,21 @@ class Login(QWidget):
         if self.loginEdit.text() != '' and self.passEdit.text() != '':
             response = requests.get(
                 f"{BASE_URL}/auth?login={str(self.loginEdit.text())}&password={str(self.passEdit.text())}")
-            #if response.status_code == 404:
-            self.error_label.setText('Неправильное имя пользователя\nили пароль')
-    #elif response.status_code == 200:
-            user_id = int(response.json()['id'])
-            permission = response.json()['root']
+            if response.status_code == 404:
+                self.error_label.setText('Неправильное имя пользователя\nили пароль')
+            elif response.status_code == 200:
+                user_id = int(response.json()['id'])
+                permission = response.json()['root']
 
-            from todo import MainWindow
+                from todo import MainWindow
 
-            self.mw = MainWindow(user_id, permission)
-            self.mw.show()
-            self.close()
-            #else:
-        #        self.error_label.setText('Что то пошло не так')
-        #else:
-        #    self.error_label.setText('Поля не могут быть пустыми')
+                self.mw = MainWindow(user_id, permission)
+                self.mw.show()
+                self.close()
+            else:
+                self.error_label.setText('Что то пошло не так')
+        else:
+            self.error_label.setText('Поля не могут быть пустыми')
 
 
 

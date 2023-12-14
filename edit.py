@@ -78,7 +78,7 @@ class Edit(Add):
             self.titleLineEdit.setDisabled(True)
             self.descEdit.setDisabled(True)
             self.combobox.close()
-            self.label_for.close()
+            self.for_label.close()
 
         date = task['date'].split('-')
         self.dateEdit.setDate(QtCore.QDate(int(date[0]),int(date[1]),int(date[2])))

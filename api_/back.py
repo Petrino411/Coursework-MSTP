@@ -2,9 +2,7 @@ from sqlalchemy import *
 from sqlalchemy.orm import sessionmaker, declarative_base
 
 __all__ = ['Tasks', 'User', 'session', 'Chat', 'Project', 'Request', 'User_project']
-
 engine = create_engine('sqlite:///db.db')
-
 Base = declarative_base()
 
 
@@ -21,7 +19,6 @@ class Tasks(Base):
     project_id = Column(Integer, ForeignKey('project.id'))
 
 
-
 class User(Base):
     __tablename__ = 'user'
 
@@ -30,8 +27,6 @@ class User(Base):
     login = Column(String(20), nullable=False)
     password = Column(String(16), nullable=False)
     root = Column(Text, nullable=False, default='user')
-
-
 
 
 class Chat(Base):
@@ -44,12 +39,14 @@ class Chat(Base):
     date = Column(Date, nullable=False)
     time = Column(Time, nullable=False)
 
+
 class Project(Base):
     __tablename__ = 'project'
 
     id = Column(Integer, primary_key=True)
     name = Column(String(100), nullable=False)
     desc = Column(String, nullable=False)
+
 
 class Request(Base):
     __tablename__ = 'request'
@@ -67,6 +64,5 @@ class User_project(Base):
 
 
 Base.metadata.create_all(engine)
-
 Sessionlocal = sessionmaker(bind=engine)
 session = Sessionlocal()

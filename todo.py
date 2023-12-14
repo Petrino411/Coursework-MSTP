@@ -222,7 +222,7 @@ class MainWindow(QMainWindow):
         self.listWidget.setRowCount(len(self.lst_do))
         if self.permission == 'admin':
             self.listWidget.setColumnCount(4)
-            self.listWidget.setHorizontalHeaderLabels(['Время', 'Название', 'Работник', 'Статус'])  # шапка
+            self.listWidget.setHorizontalHeaderLabels(['Время', 'Название', 'Работник', 'Статус'])
         else:
             self.listWidget.setColumnCount(3)
             self.listWidget.setHorizontalHeaderLabels(['Время', 'Название', 'Статус'])
@@ -345,7 +345,7 @@ class MainWindow(QMainWindow):
         self.notes.show(self.user_id, self.selected_proj)
 
     def exit(self):
-        """Выход ползователя"""
+        """Выход пользователя"""
         self.close()
         self.login.show()
 

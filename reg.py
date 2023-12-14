@@ -28,7 +28,6 @@ class Reg(QWidget):
         self.verticalLayout.addWidget(self.reg_button)
         self.combo.setFixedHeight(30)
 
-
         _translate = QtCore.QCoreApplication.translate
         self.setWindowTitle(_translate("Form", "Регистрация"))
         self.reg_label.setText(_translate("Form", "Регистрация"))
