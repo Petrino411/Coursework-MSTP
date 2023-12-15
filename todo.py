@@ -149,6 +149,7 @@ class MainWindow(QMainWindow):
         self.listWidget.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
         self.verticalLayout_2.addWidget(self.listWidget)
         self.listWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
+        self.listWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
         self.setCentralWidget(self.centralwidget)
 
         _translate = QtCore.QCoreApplication.translate

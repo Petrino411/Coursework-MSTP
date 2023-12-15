@@ -16,6 +16,7 @@ class Project:
         self.listWidget = QtWidgets.QTableWidget(parent=self._proj_win)
         self.listWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.listWidget.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
+        self.listWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
         self.verticalLayout.addWidget(self.listWidget)
         self.horizontalLayout = QtWidgets.QHBoxLayout()
         self.pushButton = QtWidgets.QPushButton(parent=self._proj_win)
@@ -35,6 +36,12 @@ class Project:
 
         self.pushButton_2.clicked.connect(self.add)
         self.pushButton.clicked.connect(self.remove_pr)
+        self.for_permission()
+
+    def for_permission(self):
+        if self.permission != 'admin':
+            self.pushButton.close()
+            self.pushButton_2.close()
 
     def render(self):
         query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
