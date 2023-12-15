@@ -24,14 +24,19 @@ async def ping_serv(url):
 class Worker(QtCore.QObject):
     finished = QtCore.pyqtSignal(str)
 
-    def run(self):
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
+    def __init__(self):
+        super().__init__()
+        self.loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(self.loop)
 
+    async def run_async(self):
         while True:
-            result = loop.run_until_complete(ping_serv(f"{BASE_URL}/connection"))
+            result = await ping_serv(f"{BASE_URL}/connection")
             self.finished.emit(result)
-            loop.run_until_complete(asyncio.sleep(2))
+            await asyncio.sleep(2)
+
+    def run(self):
+        self.loop.run_until_complete(self.run_async())
 
 
 class Login(QWidget):
@@ -115,6 +120,7 @@ class Login(QWidget):
 
                 self.mw = MainWindow(user_id, permission)
                 self.mw.show()
+
                 self.close()
             else:
                 self.error_label.setText('Что-то пошло не так')

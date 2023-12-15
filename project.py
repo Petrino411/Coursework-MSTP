@@ -39,7 +39,7 @@ class Project:
         self.for_permission()
 
     def for_permission(self):
-        if self.permission != 'admin':
+        if self.permission == 'user':
             self.pushButton.close()
             self.pushButton_2.close()
 

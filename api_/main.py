@@ -224,6 +224,7 @@ class DataRequests:
         session.commit()
         session.refresh(task)
 
+
         return task
 
     @staticmethod
@@ -267,7 +268,7 @@ class DataRequests:
         for i in t_p:
             session.delete(i)
         for i in u_p:
-            u = session.query(User).filter(User.id == i.user_id).one()
+            u = session.query(User).filter(User.id == i.user_id and User.root != 'admin').one()
             session.delete(u)
             session.delete(i)
         session.commit()
