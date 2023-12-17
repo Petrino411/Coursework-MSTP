@@ -8,6 +8,7 @@ from connection import BASE_URL
 class Reg(QWidget):
     def __init__(self):
         super().__init__()
+        self.setWindowIcon(QtGui.QIcon('resources/ico/cat.ico'))
         self.pr = []
         self.mw = None
         self.resize(295, 192)

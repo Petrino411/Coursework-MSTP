@@ -82,7 +82,7 @@ class Edit(Add):
             self.for_label.close()
 
         date = task['date'].split('-')
-        self.dateEdit.setDate(QtCore.QDate(int(date[0]),int(date[1]),int(date[2])))
+        self.dateEdit.setDate(QtCore.QDate(int(date[0]), int(date[1]), int(date[2])))
 
         self.timeEdit.setTime(QtCore.QTime.fromString(task['time']))
         self.titleLineEdit.setText(task['title'])

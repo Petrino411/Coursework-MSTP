@@ -1,5 +1,5 @@
 import requests
-from PyQt6 import QtCore, QtWidgets
+from PyQt6 import QtCore, QtWidgets, QtGui
 from connection import BASE_URL
 
 
@@ -10,6 +10,7 @@ class Project:
         self._proj_win = QtWidgets.QWidget()
         self._proj_win.resize(400, 243)
         self._proj_win.setFixedSize(400, 243)
+        self._proj_win.setWindowIcon(QtGui.QIcon('resources/ico/cat.ico'))
 
         self.verticalLayout = QtWidgets.QVBoxLayout(self._proj_win)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -72,7 +73,6 @@ class Project:
         title = self.listWidget.item(self.listWidget.currentRow(), 0).text()
         requests.delete(f"{BASE_URL}/project/{title}").json()
         self.render()
-
 
 
 from add import Add

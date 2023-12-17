@@ -32,9 +32,11 @@ class Note(Project):
                 elif col == 1:
                     item = QtWidgets.QTableWidgetItem(f'{self.notes[row]['date']}')
                 elif col == 2:
-                    item = QtWidgets.QTableWidgetItem(f'{requests.get(f"{BASE_URL}/get_name_for_notes?task_id={self.notes[row]['id']}").json()}')
+                    item = QtWidgets.QTableWidgetItem(
+                        f'{requests.get(f"{BASE_URL}/get_name_for_notes?task_id={self.notes[row]['id']}").json()}')
                 elif col == 3:
-                    item = QtWidgets.QTableWidgetItem(f'{'Не принято' if self.notes[row]['status'] == 2 else 'Принятно'}')
+                    item = QtWidgets.QTableWidgetItem(
+                        f'{'Не принято' if self.notes[row]['status'] == 2 else 'Принятно'}')
                 self.listWidget.setItem(row, col, item)
 
     def show(self, user_id, proj_id=0):

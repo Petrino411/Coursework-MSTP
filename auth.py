@@ -46,6 +46,8 @@ class Login(QWidget):
         self.mw = None
         self.setObjectName("Auth")
         self.resize(295, 230)
+        self.setFixedSize(self.size())
+        self.setWindowIcon(QtGui.QIcon('resources/ico/cat.ico'))
         font = QtGui.QFont()
         font.setFamily("Calibri")
         font.setPointSize(12)

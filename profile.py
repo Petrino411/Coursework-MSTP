@@ -1,6 +1,7 @@
 import requests
-from PyQt6 import QtCore, QtWidgets
+from PyQt6 import QtCore, QtWidgets, QtGui
 from connection import BASE_URL
+
 
 class Profile:
     def __init__(self):
@@ -8,6 +9,7 @@ class Profile:
         self.user_id = None
         self.query = None
         self._prof_win = QtWidgets.QWidget()
+        self._prof_win.setWindowIcon(QtGui.QIcon('resources/ico/cat.ico'))
 
         self._prof_win.setObjectName("Form")
         self._prof_win.resize(291, 131)

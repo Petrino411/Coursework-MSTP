@@ -22,6 +22,7 @@ class MainWindow(QMainWindow):
 
     def __init__(self, user_id, permission):
         super().__init__()
+        self.setWindowIcon(QtGui.QIcon('resources/ico/cat.ico'))
 
         self.user_id = user_id
         self.permission = permission
@@ -192,7 +193,7 @@ class MainWindow(QMainWindow):
         self.project_combobox.currentTextChanged.connect(self.change_project)
         self.prof.ok_button.clicked.connect(self.set_menu)
 
-        self.addButton.setIcon(QtGui.QIcon('resources/ico/add.svg'))
+        self.addButton.setIcon(QtGui.QIcon('resources/ico/add-white.svg'))
         self.editButton.setIcon(QtGui.QIcon('resources/ico/edit.svg'))
         self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete.svg'))
 

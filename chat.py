@@ -1,8 +1,7 @@
 from datetime import datetime
 
 import requests
-from PyQt6 import QtCore, QtWidgets
-
+from PyQt6 import QtCore, QtWidgets, QtGui
 
 from connection import BASE_URL
 
@@ -16,6 +15,7 @@ class Chat:
         self._winAdd = QtWidgets.QWidget()
         self._winAdd.resize(411, 320)
         self._winAdd.setFixedSize(411, 320)
+        self._winAdd.setWindowIcon(QtGui.QIcon('resources/ico/cat.ico'))
         self.textEdit = QtWidgets.QTextEdit(parent=self._winAdd)
         self.textEdit.setGeometry(QtCore.QRect(10, 270, 331, 41))
         self.layoutWidget = QtWidgets.QWidget(parent=self._winAdd)

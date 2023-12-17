@@ -1,2 +1,10 @@
-BASE_URL = 'http://127.0.0.1:8000'
+import configparser
+
+config = configparser.ConfigParser()
+config.read("connect.ini")
+
+BASE_URL = f"{str(config["Connection"]["BASE_URL"]).strip('"')}"
+
+
+
 

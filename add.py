@@ -9,9 +9,11 @@ from connection import BASE_URL
 class Add:
     def __init__(self):
         self.query = None
+
         self.proj_id = 0
         self.user_id = 0
         self._winAdd = QtWidgets.QWidget()
+        self._winAdd.setWindowIcon(QtGui.QIcon('resources/ico/cat.ico'))
         self._winAdd.resize(328, 365)
 
         self._winAdd.setFixedSize(328, 365)
