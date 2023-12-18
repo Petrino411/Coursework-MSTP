@@ -11,9 +11,9 @@ def main():
     auth_window = Login()
     auth_window.show()
 
-    dark_palette = qdarktheme.load_palette()
-    app.setPalette(dark_palette)
-    app.setStyleSheet(Path('style.сss').read_text())
+    #dark_palette = qdarktheme.load_palette()
+    #app.setPalette(dark_palette)
+    #app.setStyleSheet(Path('style.сss').read_text())
 
     def close_all_windows():
         for widget in app.topLevelWidgets():

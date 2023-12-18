@@ -197,6 +197,10 @@ class MainWindow(QMainWindow):
         self.editButton.setIcon(QtGui.QIcon('resources/ico/edit.svg'))
         self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete.svg'))
 
+
+    def set_theme(self):
+        pass
+
     def set_menu(self):
         """Меню пользователя"""
         self.Me.setTitle(str(requests.get(f"{BASE_URL}/profile/{self.user_id}").json()['FIO']))
