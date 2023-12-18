@@ -1,7 +1,7 @@
 import locale
 
 locale.setlocale(locale.LC_ALL, 'ru_RU.utf8')
-from PyQt6.QtGui import QAction
+from PyQt6.QtGui import QAction, QPalette
 from PyQt6.QtWidgets import QMainWindow, QMenuBar, QMessageBox, QApplication
 from PyQt6 import QtCore, QtGui, QtWidgets
 from add import Add
@@ -39,7 +39,7 @@ class MainWindow(QMainWindow):
         self.notifications_action = QAction('Уведомления', self)
         self.notifications_action.setIcon(QtGui.QIcon('resources/ico/notes.svg'))
         self.projects_action = QAction('Проекты', self)
-        self.projects_action.setIcon(QtGui.QIcon('resources/ico/proj.svg'))
+        self.projects_action.setIcon(QtGui.QIcon('resources/ico/notes.svg'))
         self.chat_action = QAction('Чат', self)
         self.chat_action.setIcon(QtGui.QIcon('resources/ico/chat.svg'))
         self.exit_action = QAction('Выход', self)
@@ -63,6 +63,8 @@ class MainWindow(QMainWindow):
         self.Me.addAction(self.reg_action)
         self.Me.addSeparator()
         self.Me.addAction(self.exit_action)
+
+
 
         self.setMenuBar(self.menubar)
 
@@ -131,7 +133,10 @@ class MainWindow(QMainWindow):
         self.current_date_label.setFont(font)
 
         self.current_project_label = QtWidgets.QLabel(parent=self.widget1)
-        self.current_date_label.setFont(font)
+
+        self.button_style = QtWidgets.QPushButton(parent=self)
+        self.button_style.setFixedSize(40, 40)
+        self.button_style.setGeometry(980, 10, 100, 30)
 
         self.verticalLayout_2.addWidget(self.current_project_label)
 
@@ -148,6 +153,7 @@ class MainWindow(QMainWindow):
         self.verticalLayout_2.addWidget(self.tasks_label)
         self.listWidget = QtWidgets.QTableWidget(parent=self.widget1)
         self.listWidget.setSelectionBehavior(QtWidgets.QTableWidget.SelectionBehavior.SelectRows)
+        self.listWidget.verticalHeader().hide()
         self.verticalLayout_2.addWidget(self.listWidget)
         self.listWidget.horizontalHeader().setSectionResizeMode(QtWidgets.QHeaderView.ResizeMode.Stretch)
         self.listWidget.setEditTriggers(QtWidgets.QAbstractItemView.EditTrigger.NoEditTriggers)
@@ -192,14 +198,51 @@ class MainWindow(QMainWindow):
         self.notes.pushButton.clicked.connect(self.renderList)
         self.project_combobox.currentTextChanged.connect(self.change_project)
         self.prof.ok_button.clicked.connect(self.set_menu)
+        self.button_style.clicked.connect(self.set_theme)
 
-        self.addButton.setIcon(QtGui.QIcon('resources/ico/add-white.svg'))
+        self.addButton.setIcon(QtGui.QIcon('resources/ico/add.svg'))
         self.editButton.setIcon(QtGui.QIcon('resources/ico/edit.svg'))
         self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete.svg'))
+        self.button_style.setIcon(QtGui.QIcon('resources/ico/theme.svg'))
 
 
     def set_theme(self):
-        pass
+        from app import app
+        if app.styleSheet() == "":
+            from pathlib import Path
+            import qdarktheme
+            dark_palette = qdarktheme.load_palette()
+            app.setPalette(dark_palette)
+            app.setStyleSheet(Path('style.сss').read_text())
+            self.addButton.setIcon(QtGui.QIcon('resources/ico/add_white.svg'))
+            self.editButton.setIcon(QtGui.QIcon('resources/ico/edit_white.svg'))
+            self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete_white.svg'))
+            self.button_style.setIcon(QtGui.QIcon('resources/ico/theme_white.svg'))
+
+            self.profile.setIcon(QtGui.QIcon('resources/ico/profile_white.svg'))
+            self.notifications_action.setIcon(QtGui.QIcon('resources/ico/notes_white.svg'))
+            self.projects_action.setIcon(QtGui.QIcon('resources/ico/notes_white.svg'))
+            self.chat_action.setIcon(QtGui.QIcon('resources/ico/chat_white.svg'))
+            self.exit_action.setIcon(QtGui.QIcon('resources/ico/exit_white.svg'))
+            self.reg_action.setIcon(QtGui.QIcon('resources/ico/add_white.svg'))
+            self.menubar.setStyleSheet("color: rgb(255, 255, 255);")
+        else:
+            app.setStyleSheet("")
+            empty_palette = QPalette()
+            app.setPalette(empty_palette)
+            self.addButton.setIcon(QtGui.QIcon('resources/ico/add.svg'))
+            self.editButton.setIcon(QtGui.QIcon('resources/ico/edit.svg'))
+            self.rmButton.setIcon(QtGui.QIcon('resources/ico/delete.svg'))
+            self.button_style.setIcon(QtGui.QIcon('resources/ico/theme.svg'))
+
+            self.profile.setIcon(QtGui.QIcon('resources/ico/profile.svg'))
+            self.notifications_action.setIcon(QtGui.QIcon('resources/ico/notes.svg'))
+            self.projects_action.setIcon(QtGui.QIcon('resources/ico/notes.svg'))
+            self.chat_action.setIcon(QtGui.QIcon('resources/ico/chat.svg'))
+            self.exit_action.setIcon(QtGui.QIcon('resources/ico/exit.svg'))
+            self.reg_action.setIcon(QtGui.QIcon('resources/ico/add.svg'))
+            self.menubar.setStyleSheet("color: rgb(0,0,0);")
+
 
     def set_menu(self):
         """Меню пользователя"""

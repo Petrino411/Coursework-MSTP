@@ -6,7 +6,7 @@ from connection import BASE_URL
 class Project:
     def __init__(self):
         self.permission = None
-        self.user_id = 0
+        self.user_id = None
         self._proj_win = QtWidgets.QWidget()
         self._proj_win.resize(400, 243)
         self._proj_win.setFixedSize(400, 243)
@@ -67,7 +67,7 @@ class Project:
         self._proj_win.show()
 
     def add(self):
-        self.add_pr.show_()
+        self.add_pr.show_(self.user_id)
 
     def remove_pr(self):
         title = self.listWidget.item(self.listWidget.currentRow(), 0).text()
@@ -81,6 +81,7 @@ from add import Add
 class Add_proj(Add):
     def __init__(self):
         Add.__init__(self)
+        self.user_id = None
 
         self.dateEdit.close()
         self.timeEdit.close()
@@ -100,8 +101,11 @@ class Add_proj(Add):
             'name': self.titleLineEdit.text(),
             'desc': self.descEdit.toPlainText(),
         }
-        requests.post(f'{BASE_URL}/add_project', json=data)
+        requests.post(f'{BASE_URL}/add_project/{self.user_id}', json=data).json()
+        self.titleLineEdit.clear()
+        self.descEdit.clear()
         self._winAdd.close()
 
-    def show_(self):
+    def show_(self, user_id):
+        self.user_id = user_id
         self._winAdd.show()

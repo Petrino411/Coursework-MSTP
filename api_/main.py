@@ -7,6 +7,7 @@ from datetime import datetime
 
 app = FastAPI()
 
+
 class DataRequests:
     @staticmethod
     @app.get('/connection')
@@ -118,15 +119,21 @@ class DataRequests:
             print('Ошибка:', e)
 
     @staticmethod
-    @app.post('/add_project')
-    async def add_project(data=Body()):
+    @app.post('/add_project/{user_ud}')
+    async def add_project(user_ud, data=Body()):
         try:
             pr = Project(
                 name=data["name"], desc=data["desc"])
             session.add(pr)
             session.commit()
             session.refresh(pr)
+
+            pr_user = User_project(user_id = user_ud, project_id = pr.id)
+            session.add(pr_user)
+            session.commit()
+            session.refresh(pr_user)
             return pr
+
         except Exception as e:
             print('Ошибка:', e)
 
@@ -224,7 +231,6 @@ class DataRequests:
         session.commit()
         session.refresh(task)
 
-
         return task
 
     @staticmethod
@@ -258,6 +264,7 @@ class DataRequests:
         for i in req:
             session.delete(i)
         session.commit()
+
     @staticmethod
     @app.delete("/project/{name}")
     async def delete_project_id(name: str):
@@ -268,11 +275,13 @@ class DataRequests:
         for i in t_p:
             session.delete(i)
         for i in u_p:
-            u = session.query(User).filter(User.id == i.user_id and User.root != 'admin').one()
-            session.delete(u)
+            u = session.query(User).filter(User.id == i.user_id).one()
+            ch = session.query(Chat).where(or_(Chat.reciever_id == u.id, Chat.reciever_id == u.id)).all()
+            for i in ch:
+                session.delete(i)
             session.delete(i)
+            if u.root != 'admin':
+                session.delete(u)
+
+
         session.commit()
-
-
-
-

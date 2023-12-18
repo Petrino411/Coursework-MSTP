@@ -69,8 +69,7 @@ QMenuBar
 {
     color: rgb(255, 255, 255);
 	background-color: rgb(23, 33, 43);
-	width: 50;
-	
+
 }
 QMenuBar::item
 {
@@ -78,7 +77,8 @@ QMenuBar::item
 	background-color: rgb(23, 33, 43);
 	border: 1px solid rgb(35, 46, 60);
     border-radius:5px;
-	width: 100;
+	margin:5px;
+
 }
 QMenuBar::item::selected
 {
@@ -90,6 +90,7 @@ QMenu
 	background-color: rgb(23, 33, 43);
 	border: 1px solid rgb(35, 46, 60);
     border-radius:5px;
+	margin:3px;
 
 }
 QMenu::item::selected

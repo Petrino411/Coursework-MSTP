@@ -96,7 +96,7 @@ class Add:
         self.pushButton.clicked.connect(self.execute)
 
     def execute(self):
-        if self.titleLineEdit.text() != '':
+        if self.titleLineEdit.text() != '' and self.descEdit.toPlainText() != '':
             u_id = 0
             for i in self.query:
                 if self.combobox.currentText() == i['FIO']:
@@ -129,6 +129,11 @@ class Add:
                 self.titleLineEdit.clear()
                 self.descEdit.clear()
                 self._winAdd.close()
+        else:
+            msg = QMessageBox(self._winAdd)
+            msg.setText('Поля не могут быть пустыми')
+            msg.setWindowTitle("Ошибка")
+            msg.exec()
 
     def render_users(self):
         self.query = requests.get(f"{BASE_URL}/list_proj_users/{self.proj_id}").json()

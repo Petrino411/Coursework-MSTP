@@ -70,8 +70,6 @@ class Reg(QWidget):
 
             self.close()
             return True
-
-
         except:
             print('error')
             return False
