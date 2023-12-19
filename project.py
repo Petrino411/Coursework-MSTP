@@ -1,5 +1,8 @@
 import requests
 from PyQt6 import QtCore, QtWidgets, QtGui
+from PyQt6.QtCore import Qt
+from PyQt6.QtWidgets import QToolTip
+
 from connection import BASE_URL
 
 
@@ -38,11 +41,20 @@ class Project:
         self.pushButton_2.clicked.connect(self.add)
         self.pushButton.clicked.connect(self.remove_pr)
         self.for_permission()
+        self.listWidget.setMouseTracking(True)
+        self.listWidget.cellEntered.connect(self.show_tooltip)
+
+    def mouseMoveEvent(self, event):
+        item = self.itemAt(event.pos())
+        if item:
+            tooltip_text = item.text()
+            QToolTip.showText(event.globalPos(), tooltip_text)
 
     def for_permission(self):
         if self.permission == 'user':
             self.pushButton.close()
             self.pushButton_2.close()
+
 
     def render(self):
         query = requests.get(f"{BASE_URL}/project_for_admin").json() if self.permission == 'admin' else requests.get(
@@ -58,7 +70,16 @@ class Project:
                     item = QtWidgets.QTableWidgetItem(f'{query[row]['name']}')
                 elif col == 1:
                     item = QtWidgets.QTableWidgetItem(f'{query[row]['desc']}')
+                item.setData(Qt.ItemDataRole.DisplayRole, item.text())
+
                 self.listWidget.setItem(row, col, item)
+
+    def show_tooltip(self, row, col):
+        item = self.listWidget.item(row, col)
+        if item:
+            tooltip_text = item.text()
+            tooltip_html = f"<html><body>{tooltip_text.replace('\n', '<br>')}</body></html>"
+            self.listWidget.setToolTip(tooltip_html)
 
     def show(self, user_id, permission):
         self.permission = permission

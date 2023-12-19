@@ -387,6 +387,7 @@ class MainWindow(QMainWindow):
         """Показ чата"""
         self.ch_win.show(self.user_id, self.selected_proj)
 
+
     def prof_sh(self):
         """Показ профиля"""
         self.prof.show(self.user_id)

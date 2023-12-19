@@ -1,0 +1,138 @@
+QMainWindow {
+  background-color: rgb(23, 33, 43);
+  color: rgb(226, 226, 226);
+
+  
+}
+QWidget{
+	color: rgb(255, 255, 255);
+	background-color: rgb(23, 33, 43);
+	alternate-background-color: rgb(35, 46, 60);
+
+}
+QLabel{
+	color: rgb(255, 255, 255);
+}
+QDateEdit{
+	color: rgb(255, 255, 255);
+    border: 1px solid rgb(35, 46, 60);
+    border-radius:7px;
+}
+QTimeEdit{
+	color: rgb(255, 255, 255);
+    border: 1px solid rgb(35, 46, 60);
+    border-radius:7px;
+}
+QCalendarWidget {
+	color: rgb(255, 255, 255);
+  background-color: rgb(23, 33, 43);
+  alternate-background-color: rgb(35, 46, 60);
+}
+QTextEdit{
+	color: rgb(255, 255, 255);
+  border: 1px solid rgb(35, 46, 60);
+  border-radius:7px;
+}
+QLineEdit{
+	color: rgb(255, 255, 255);
+    border: 1px solid rgb(35, 46, 60);
+    border-radius:7px;
+	height: 30;
+}
+QListWidget {
+	color: rgb(255, 255, 255);
+    border: 1px solid rgb(35, 46, 60);
+    border-radius:7px;
+}
+
+QTextBrowser {
+	color: rgb(255, 255, 255);
+  border: 1px solid rgb(35, 46, 60);
+  border-radius:7px;
+}
+QPushButton{
+	color: rgb(255, 255, 255);
+    background-color:rgb(24, 37, 51);
+    border: 1px solid rgb(35, 46, 60);
+    border-radius:7px;
+	width: 130;
+	height: 30;
+}
+QPushButton:hover{
+	background-color:rgb(35, 46, 60);
+}
+QPushButton:pressed{
+	background-color:rgb(35, 46, 60);
+}
+
+QMenuBar
+{
+    color: rgb(255, 255, 255);
+	background-color: rgb(23, 33, 43);
+
+}
+QMenuBar::item
+{
+    color: rgb(255, 255, 255);
+	background-color: rgb(23, 33, 43);
+	border: 1px solid rgb(35, 46, 60);
+    border-radius:5px;
+	margin:5px;
+
+}
+QMenuBar::item::selected
+{
+    background-color:rgb(35, 46, 60);
+}
+QMenu
+{
+    color: rgb(255, 255, 255);
+	background-color: rgb(23, 33, 43);
+	border: 1px solid rgb(35, 46, 60);
+    border-radius:5px;
+	margin:3px;
+
+}
+QMenu::item::selected
+{
+    background-color:rgb(35, 46, 60);
+}
+QComboBox::item::selected
+{
+    background-color:rgb(35, 46, 60);
+}
+QComboBox
+{
+	border: 1px solid rgb(35, 46, 60);
+    border-radius:5px;
+
+}
+
+
+QTableWidget{
+	color: rgb(255, 255, 255);
+	background-color: rgb(23, 33, 43);
+    border: 1px solid rgb(35, 46, 60);
+    border-radius:7px;
+	
+}
+
+QHeaderView::section{
+	color: rgb(255, 255, 255);
+	background-color: rgb(23, 33, 43);
+    border: 1px solid rgb(35, 46, 60);
+	
+}
+
+
+QTableWidget::item::selected 
+{
+	background-color:rgb(35, 46, 60);
+}
+
+QTableWidget::item::hover 
+{
+	background-color:rgb(35, 46, 60);
+}
+
+

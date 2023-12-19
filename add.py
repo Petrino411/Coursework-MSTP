@@ -110,13 +110,14 @@ class Add:
             else:
                 data = {
                     'date': str(self.dateEdit.date().toPyDate()),
-                    'time': str(self.timeEdit.time().currentTime().toPyTime().strftime('%H:%M:%S')),
+                    'time': str(self.timeEdit.time().toPyTime().strftime('%H:%M:%S')),
                     'title': self.titleLineEdit.text(),
                     'description': str(self.descEdit.toPlainText()),
                     'status': 0 if self.user_id == u_id else 2,
                     'user_id': u_id,
                     'project_id': self.proj_id,
                 }
+
 
                 query = requests.post(f'{BASE_URL}/add', json=data)
                 if self.user_id != u_id:
